@@ -17,7 +17,7 @@ class Galleries {
 		foreach( $files as $file ) {
 			$gallery = new Gallery($file);
 
-			$slug = $gallery->get_config('slug');
+			$slug = $gallery->get_slug();
 
 			if( ! $slug ) continue;
 

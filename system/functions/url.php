@@ -30,3 +30,37 @@ function un_trailing_slash_it( $string ) {
 
 	return $string;
 }
+
+
+function sanitize_string( $string, $keep_file_extension = false ) {
+
+	// remove non-printable ASCII
+	$string = preg_replace('/[\x00-\x1F\x7F]/u', '', $string);
+
+	$string = mb_strtolower($string);
+
+	$string = str_replace(array("ä", "ö", "ü", "ß"), array("ae", "oe", "ue", "ss"), $string);
+
+	if( $keep_file_extension ) {
+		$file_extension = false;
+
+		$string_exp = explode('.', $string);
+
+		if( count($string_exp) > 1 ) {
+			$file_extension = array_pop($string_exp);
+			$string = implode('.', $string_exp);
+		}
+
+	}
+
+	// replace special characters with '-'
+	$string = preg_replace('/[^\p{L}\p{N}]+/u', '-', $string);
+
+	if( $keep_file_extension && $file_extension ) {
+		$string .= '.'. $file_extension;
+	}
+
+	$string = trim($string, '-');
+	
+	return $string;
+}

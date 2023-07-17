@@ -67,6 +67,40 @@ class Gallery {
 	}
 
 
+	function get_title() {
+		$title = $this->get_config('title');
+
+		if( ! $title ) {
+			$title = $this->get_slug();
+		}
+
+		return $title;
+	}
+
+
+	function get_slug() {
+		$slug = $this->get_config('slug');
+
+		if( ! $slug ) {
+			$path = explode('/', $this->path);
+			$path = array_filter($path); // remove empty elements
+			$slug = end($path);
+
+		}
+
+		$slug = sanitize_string($slug);
+		
+		return $slug;
+	}
+
+
+	function get_url() {
+		$slug = $this->get_slug();
+
+		return url($slug);
+	}
+
+
 	function get_images() {
 
 		if( $this->images == NULL ) $this->load_images();
@@ -79,9 +113,20 @@ class Gallery {
 
 		$folder = new Folder( $this->path, 'extension=jpg,jpeg' );
 
-		$images = $folder->get();
+		$files = $folder->get();
 
-		asort($images);
+		$images = [];
+
+		foreach( $files as $file ) {
+
+			$image = new Image($file, $this);
+
+			$slug = $image->get_slug();
+
+			$images[$slug] = $image;
+		}
+
+		ksort($images);
 
 		$this->images = $images;
 

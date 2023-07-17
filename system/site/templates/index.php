@@ -10,13 +10,10 @@ echo '<h1>Hello World.</h1>';
 $galleries = $core->galleries->get();
 
 echo '<ul>';
-foreach( $galleries as $slug => $gallery ) {
-	$title = $gallery->get_config('title');
-
+foreach( $galleries as $gallery ) {
 	echo '<li>';
-		echo '<a href="'.url($slug).'">';
-			if( $title ) echo $title;
-			else echo $slug;
+		echo '<a href="'.$gallery->get_url().'">';
+			echo $gallery->get_title();
 		echo '</a>';
 	echo '</li>';
 }

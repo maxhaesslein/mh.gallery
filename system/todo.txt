@@ -1,8 +1,13 @@
 
 this list is not complete
 
-- gallery display
+- overview template
+- image template
+- 404 template
+- hidden galleries with secret link (hash as link)
 - image download - single files & zip (add config option to disable)
 - image previews in the correct dimensions
+	- maybe /image/gallery-path/image-name?width={width}&height={height} ?
+	- with blurry background loading image
 - favicon
 - maybe theme support?

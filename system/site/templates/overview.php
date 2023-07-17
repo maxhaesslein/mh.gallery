@@ -10,8 +10,15 @@ echo '<h1>Overview</h1>';
 $gallery_slug = $core->route->get_route('request')[0];
 $gallery = $core->galleries->get_gallery($gallery_slug);
 $images = $gallery->get_images();
-echo' <pre>';
-var_dump($images);
-echo' </pre>';
+
+echo '<ul>';
+foreach( $images as $image ) {
+	echo '<li>';
+
+	snippet( 'thumbnail', [ 'image' => $image ] );
+
+	echo '</li>';
+}
+echo' </ul>';
 
 snippet( 'footer' );
