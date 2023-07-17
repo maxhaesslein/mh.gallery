@@ -11,10 +11,9 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-	<?php head(); ?>
+<?php head(); ?>
 
 </head>
 <body class="nojs">
-<script type="text/javascript">
-document.body.classList.remove('nojs');
-</script>
+<script type="text/javascript">document.body.classList.remove('nojs');</script>
+
