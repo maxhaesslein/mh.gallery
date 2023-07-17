@@ -1,7 +1,6 @@
 <?php
 
 function debug( ...$messages ) {
-	global $core;
 
 	if( ! get_config('debug') ) return;
 

@@ -1,1 +1,4 @@
 /custom/*.php
+/content/
+/cache/
+/.htaccess
