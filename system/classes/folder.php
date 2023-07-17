@@ -44,8 +44,11 @@ class Folder {
 
 				} elseif( str_starts_with($filter, 'extension=') ) {
 
-					$file_extension = pathinfo( get_abspath($path.$filename), PATHINFO_EXTENSION );
-					if( strtolower($file_extension) != strtolower(str_replace('extension=', '', $filter)) ) {
+					$file_extension = strtolower(pathinfo( get_abspath($path.$filename), PATHINFO_EXTENSION ));
+					$possible_extensions = explode(',', str_replace('extension=', '', $filter));
+					$possible_extensions = array_map( 'strtolower', $possible_extensions );
+
+					if( ! in_array($file_extension, $possible_extensions) ) {
 						continue;
 					}
 

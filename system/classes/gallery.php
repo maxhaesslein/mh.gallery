@@ -5,10 +5,11 @@ class Gallery {
 	private $gallery_file;
 	private $path;
 	private $settings;
+	private $images = NULL;
 
 	function __construct( $gallery_file ) {
 
-		$path = get_abspath( str_replace( 'gallery.txt', '', $gallery_file) );
+		$path = str_replace( 'gallery.txt', '', $gallery_file);
 
 		$this->path = $path;
 		$this->gallery_file = $gallery_file;
@@ -63,6 +64,28 @@ class Gallery {
 		}
 
 		return false;
+	}
+
+
+	function get_images() {
+
+		if( $this->images == NULL ) $this->load_images();
+
+		return $this->images;
+	}
+
+
+	function load_images() {
+
+		$folder = new Folder( $this->path, 'extension=jpg,jpeg' );
+
+		$images = $folder->get();
+
+		asort($images);
+
+		$this->images = $images;
+
+		return $this;
 	}
 	
 }
