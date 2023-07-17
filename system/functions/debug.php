@@ -3,7 +3,7 @@
 function debug( ...$messages ) {
 	global $core;
 
-	if( ! $core->config->get('debug') ) return;
+	if( ! get_config('debug') ) return;
 
 	echo '<div class="debugmessage"><strong class="debugmessage-head">DEBUGMESSAGE</strong><pre>';
 	$first = true;

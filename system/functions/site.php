@@ -34,6 +34,6 @@ function head() {
 	global $core;
 
 	?>
-	<title><?= $core->config->get('title') ?></title>
+	<title><?= get_config('title') ?></title>
 	<?php	
 }

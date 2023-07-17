@@ -1,10 +1,16 @@
 <?php
 
+function get_config( $option, $fallback = false ) {
+	global $core;
+
+	return $core->config->get( $option, $fallback );
+}
+
+
 function get_abspath( $path = false ) {
 	global $core;
 
 	return $core->get_abspath( $path );
-
 }
 
 
@@ -12,7 +18,6 @@ function get_basefolder( $path = false ) {
 	global $core;
 
 	return $core->get_basefolder( $path );
-
 }
 
 
@@ -20,7 +25,6 @@ function get_baseurl( $path = false ) {
 	global $core;
 
 	return $core->get_baseurl( $path );
-
 }
 
 
