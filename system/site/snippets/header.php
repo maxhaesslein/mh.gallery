@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+<?php
+
+if( ! $core ) exit; ?><!DOCTYPE html>
 <!--
         _                _ _              
   _ __ | |_    __ _ __ _| | |___ _ _ _  _ 

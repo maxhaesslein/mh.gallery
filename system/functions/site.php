@@ -38,25 +38,38 @@ function head() {
 <?php
 
 	// CSS
-	$css_path = 'system/site/assets/css/';
-	$css_folder = new Folder( $css_path, 'css' );
-	$css_files = $css_folder->order()->get();
-	foreach( $css_files as $css_file ) {
-		$file_url = url($css_path.$css_file, false);
-		?>
-	<link rel="stylesheet" href="<?= $file_url ?>?v=<?= get_version() ?>" type="text/css" media="all">
-<?php
+	$css_filter = 'css';
+	$css_tag = '
+	<link rel="stylesheet" href="{url}" type="text/css" media="all">';
+	if( get_config('system_css') ) {
+		$css_system_path = 'system/site/assets/css/';
+		head_load_files( $css_system_path, $css_filter, $css_tag );
 	}
+
+	$css_custom_path = 'custom/assets/css/';
+	head_load_files( $css_custom_path, $css_filter, $css_tag );
 
 	// JS
-	$js_path = 'system/site/assets/js/';
-	$js_folder = new Folder( $js_path, 'js' );
-	$js_files = $js_folder->order()->get();
-	foreach( $js_files as $js_file ) {
-		$file_url = url($js_path.$js_file, false);
-		?>
-	<script async src="<?= $file_url ?>?v=<?= get_version() ?>"></script>
-<?php
+	$js_filter = 'js';
+	$js_tag = '
+	<script async src="{url}"></script>';
+	if( get_config('system_js') ) {
+		$js_system_path = 'system/site/assets/js/';
+		head_load_files( $js_system_path, $js_filter, $js_tag );
 	}
+	
+	$js_custom_path = 'custom/assets/js/';
+	head_load_files( $js_custom_path, $js_filter, $js_tag );
 
+}
+
+
+function head_load_files( $path, $filter, $tag ) {
+	$folder = new Folder( $path, $filter );
+	$files = $folder->order()->get();
+	foreach( $files as $file ) {
+		$url = url($path.$file, false).'?v='.get_version();
+
+		echo str_replace( '{url}', $url, $tag );
+	}
 }

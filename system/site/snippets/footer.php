@@ -1,3 +1,8 @@
+<?php
+
+if( $core ) exit;
+
+?>
 
 
 <footer>

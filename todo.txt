@@ -2,9 +2,7 @@
 this list is not complete
 
 - favicon
-- function to append css & js, function to add css/js tags to head()
 - content/ folder, protected so it can't be opened directly
 - cache/ folder, autocreate if it does not exist
 - image previews in the correct dimensions
-- autoload custom/assets/css/*.css and custom/assets/js/*.js
 - maybe theme support?
