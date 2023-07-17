@@ -1,6 +1,6 @@
 # mh.gallery
 
-A simple PHP gallery site, without any dependencies.
+A simple and lightweight PHP gallery, without any dependencies.
 
 This is a very early version, expect things to not work or change. This readme will be expanded later.
 
