@@ -15,6 +15,19 @@ This is a very early version, expect things to not work or change. This readme w
 
 Download the latest release .zip file, extract it, upload it to a folder on your webserver and open the URL to this folder in a browser. Missing files and folders will be automatically created.
 
+## Create Galleries
+
+in the `content/` folder, add subfolders for your galleries. You can also organize them in additional subfolders, like  `content/2023/gallery-name/`. In each gallery folder, create a new text file called  `gallery.txt`. This file is needed to detect this folder as a gallery, you can also add some additional information to this file:
+
+```txt
+title: my cool gallery
+slug: my-cool-gallery
+```
+
+If you ommit the title or slug, it gets automatically generated based on the folder name.
+
+Add `.jpg` files into the gallery folder, the images get detected automatically. Currently, only the `.jpg` and `.jpeg` file extensions are supported.
+
 ## Update
 
 Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `README.md`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folder!)
