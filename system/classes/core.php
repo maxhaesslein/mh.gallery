@@ -28,9 +28,9 @@ class Core {
 		$baseurl .= $basefolder;
 		$this->baseurl = $baseurl;
 
-		$this->check_required_files_and_folders();
-
 		$this->config = new Config();
+
+		$this->check_required_files_and_folders();
 
 		$this->route = new Route();
 

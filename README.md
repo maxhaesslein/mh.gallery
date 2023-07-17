@@ -11,6 +11,14 @@ This is a very early version, expect things to not work or change. This readme w
 - mod_rewrite support
 - maybe more? this list will be expanded later
 
+## Installation
+
+Download the latest release .zip file, extract it, upload it to a folder on your webserver and open the URL to this folder in a browser. Missing files and folders will be automatically created.
+
+## Update
+
+Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `changelog.txt`, `README.md`, `todo.txt`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folder!)
+
 ## Customiation
 
 This will be expanded later.

@@ -1,7 +1,8 @@
 
 this list is not complete
 
-- update instructions in readme (git & zip)
+- gallery display
+- image download - single files & zip (add config option to disable)
 - image previews in the correct dimensions
 - favicon
 - maybe theme support?
