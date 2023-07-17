@@ -34,7 +34,7 @@ function head() {
 	global $core;
 
 	?>
-	<title><?= get_config('title') ?></title>
+	<title><?= get_config('site_title') ?></title>
 <?php
 
 	// CSS

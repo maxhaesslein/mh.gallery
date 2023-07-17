@@ -8,7 +8,7 @@ if( ! $core ) exit; ?><!DOCTYPE html>
  |_|_|_|_||_(_)__, \__,_|_|_\___|_|  \_, |
               |___/                  |__/ 
 -->
-<html lang="en">
+<html lang="<?= get_config( 'site_lang' ) ?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
