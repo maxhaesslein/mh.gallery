@@ -2,11 +2,12 @@
 
 class Core {
 	
-	protected $abspath;
-	protected $basefolder;
-	protected $baseurl;
+	private $abspath;
+	private $basefolder;
+	private $baseurl;
 
 	public $config;
+	public $galleries;
 	public $route;
 
 	function __construct( $abspath ){
@@ -28,9 +29,11 @@ class Core {
 		$baseurl .= $basefolder;
 		$this->baseurl = $baseurl;
 
-		$this->config = new Config();
+		$this->config = new Config(); // needs to be there before check_required_files_and_folders()
 
 		$this->check_required_files_and_folders();
+
+		$this->galleries = new Galleries(); // needs to be there before new Route()
 
 		$this->route = new Route();
 

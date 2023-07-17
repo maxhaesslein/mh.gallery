@@ -2,9 +2,7 @@
 
 class Route {
 
-	protected $route;
-	protected $request;
-	protected $query;
+	private $route;
 	
 	function __construct() {
 		global $core;
@@ -14,15 +12,28 @@ class Route {
 
 		$request = explode( '?', $request_string );
 		$request = $request[0];
-
 		$request = explode( '/', $request );
+		$request = array_filter($request); // remove empty elements
 
-		$this->query = $_REQUEST;
 
-		$this->request = $request;
+		$template_name = 'index';
 
-		$template_name = 'index'; // for now, always display index ..
+		if( count($request) > 0 ) {
 
+			$slug = $request[0];
+
+			$secret = false;
+			if( ! empty($request[1]) ) {
+				$secret = $request[1]; // TODO: check secret
+			}
+
+			if( $core->galleries->exists($slug) ) {
+				$template_name = 'overview';
+			} else {
+				$template_name = '404';
+			}
+
+		}
 
 		$template_path = 'templates/'.$template_name.'.php';
 
@@ -36,20 +47,22 @@ class Route {
 		$this->route = array(
 			'template_name' => $template_name,
 			'template_include' => $include_path,
+			'request' => $request,
+			'query' => $_REQUEST
 		);
 
 	}
 
-	function get_route() {
+	function get_route( $option = false ) {
+
+		if( $option ) {
+			if( array_key_exists($option, $this->route) ) {
+				return $this->route[$option];
+			}
+			return false;
+		}
+
 		return $this->route;
-	}
-
-	function get_request() {
-		return $this->request;
-	}
-
-	function get_quety() {
-		return $this->query;
 	}
 
 }

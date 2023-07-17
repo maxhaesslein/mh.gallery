@@ -2,7 +2,7 @@
 
 class Config {
 
-	protected $options = [];
+	private $options = [];
 
 	function __construct() {
 

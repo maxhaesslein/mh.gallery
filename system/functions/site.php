@@ -38,7 +38,7 @@ function head() {
 <?php
 
 	// CSS
-	$css_filter = 'css';
+	$css_filter = 'extension=css';
 	$css_tag = '
 	<link rel="stylesheet" href="{url}" type="text/css" media="all">';
 	if( get_config('system_css') ) {
@@ -50,7 +50,7 @@ function head() {
 	head_load_files( $css_custom_path, $css_filter, $css_tag );
 
 	// JS
-	$js_filter = 'js';
+	$js_filter = 'extension=js';
 	$js_tag = '
 	<script async src="{url}"></script>';
 	if( get_config('system_js') ) {
@@ -66,9 +66,9 @@ function head() {
 
 function head_load_files( $path, $filter, $tag ) {
 	$folder = new Folder( $path, $filter );
-	$files = $folder->order()->get();
+	$files = $folder->get();
 	foreach( $files as $file ) {
-		$url = url($path.$file, false).'?v='.get_version();
+		$url = url($file, false).'?v='.get_version();
 
 		echo str_replace( '{url}', $url, $tag );
 	}
