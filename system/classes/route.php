@@ -9,6 +9,8 @@ class Route {
 
 		$request_string = $_SERVER['REQUEST_URI'];
 		$request_string = preg_replace( '/^'.preg_quote(get_basefolder(), '/').'/', '', $request_string );
+		
+		$request_string = urldecode($request_string);
 
 		$request = explode( '?', $request_string );
 		$request = $request[0];
