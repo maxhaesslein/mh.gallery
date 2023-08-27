@@ -5,6 +5,10 @@ this list is not complete
 - image template
 - 404 template
 - hidden galleries with secret link (hash as link)
+	- maybe have a 'content/hidden/' folder?
+	- if no secret hash exists, create one and save it into the gallery.txt on first access?
+	- allow multiple secret hashes per gallery, and the removal of links
+	- images need to be protected by the hash as well; the hash should not be in the image url, but should be in a session variable, but the name of this variable should be based on the gallery slug (so we can have multiple galleries open in different tabs at the same time)
 - image download - single files & zip (add config option to disable)
 - image previews
 	- cache resized images
