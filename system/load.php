@@ -8,6 +8,4 @@ include_once( $abspath.'system/classes.php' );
 
 $core = new Core( $abspath );
 
-$route = $core->route->get_route();
-
-include( $route['template_include'] );
+include( $core->route->get('template_include') );

@@ -53,7 +53,7 @@ class Route {
 
 	}
 
-	function get_route( $option = false ) {
+	function get( $option = false ) {
 
 		if( $option ) {
 			if( array_key_exists($option, $this->route) ) {
