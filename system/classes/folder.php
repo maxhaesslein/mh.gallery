@@ -18,7 +18,9 @@ class Folder {
 	}
 
 
-	function read_folder( $path, $filter = false, $recursive = false ) {
+	function read_folder( $path = false, $filter = false, $recursive = false ) {
+
+		if( ! $path ) $path = $this->path;
 
 		$path = trailing_slash_it($path);
 

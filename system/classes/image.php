@@ -22,15 +22,13 @@ class Image {
 
 	function __construct( $path, $gallery = false ) {
 
-		$this->path = $path;
+		$this->path = get_abspath($path);
 
 		$path_exp = explode('/', $path);
 		$filename = array_pop($path_exp);
 
 		$path_exp[0] = 'image'; # this replaces 'content/'
 		$this->img_path = implode('/', $path_exp).'/'.$filename;
-
-		$this->path = $path;
 
 		$this->filename = $filename;
 
@@ -47,7 +45,7 @@ class Image {
 
 	function load_image_meta() {
 
-		$filepath = get_abspath($this->path);
+		$filepath = $this->path;
 
 		if( ! file_exists($filepath) ) {
 			debug("image file not found", $filepath);
@@ -81,6 +79,17 @@ class Image {
 			$this->format = 'portrait';
 		} else {
 			$this->format = 'square';
+		}
+
+		if( $this->image_type == IMAGETYPE_JPEG
+		 || (get_config('image_png_to_jpg') && $this->image_type == IMAGETYPE_PNG) ) {
+			$this->mime_type = 'image/jpeg';
+		} elseif( $this->image_type == IMAGETYPE_PNG ) {
+			$this->mime_type = 'image/png';
+		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+			$this->mime_type = 'image/webp';
+		} else {
+			debug( 'unknown image type '.$this->image_type);
 		}
 
 		$this->width = $this->src_width;
@@ -237,8 +246,28 @@ class Image {
 	function output() {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
-		// TODO: cache resized images!
+		$filesize = filesize( $this->path );
+		$jpg_quality = get_config( 'jpg_quality' );
+		$png_to_jpg = get_config( 'image_png_to_jpg' );		
 
+		$this->src_width = $this->src_width;
+		$this->src_height = $this->src_height;
+
+		$width = $this->width;
+		$height = $this->height;
+
+		$cache_string = $this->path.$filesize.$width.$height.$jpg_quality;
+
+		$cache = new Cache( 'image', $cache_string );
+		$cache_content = $cache->get_data();
+		if( $cache_content ) {
+			// return cached file, then end
+			$cache->refresh_lifetime();
+			header("Content-Type: ".$this->mime_type);
+			header("Content-Length: ".$cache->get_filesize());
+			echo $cache_content;
+			exit;
+		}
 
 		$image_blob = $this->read_image();
 		if( ! $image_blob ) {
@@ -246,20 +275,9 @@ class Image {
 			exit;
 		}
 
+		list( $image_blob, $this->src_width, $this->src_height ) = $this->image_rotate( $image_blob, $this->src_width, $this->src_height );
 
-		$src_width = $this->src_width;
-		$src_height = $this->src_height;
-
-		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
-
-		$width = $this->width;
-		$height = $this->height;
-
-
-		$jpg_quality = get_config( 'jpg_quality' );
-		$png_to_jpg = get_config( 'image_png_to_jpg' );		
-
-		if( $src_width > $width || $src_height > $height ) {
+		if( $this->src_width > $width || $this->src_height > $height ) {
 
 			if( $this->rotated ) {
 				$tmp_width = $width;
@@ -279,14 +297,14 @@ class Image {
 
 			// NOTE: currently, we just center the image on crop
 			// TODO: maybe at a 'region of interest' option, somehow ..
-			$src_width_cropped = $src_width;
+			$src_width_cropped = $this->src_width;
 			$src_height_cropped = round($src_width_cropped * $height/$width);
-			if( $src_height_cropped > $src_height ) {
-				$src_height_cropped = $src_height;
+			if( $src_height_cropped > $this->src_height ) {
+				$src_height_cropped = $this->src_height;
 				$src_width_cropped = round($src_height_cropped * $width/$height);
 			}
-			$src_x = (int) round(($src_width - $src_width_cropped)/2);
-			$src_y = (int) round(($src_height - $src_height_cropped)/2);
+			$src_x = (int) round(($this->src_width - $src_width_cropped)/2);
+			$src_y = (int) round(($this->src_height - $src_height_cropped)/2);
 
 			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
 
@@ -299,8 +317,6 @@ class Image {
 		}
 
 
-
-
 		if( $this->image_type == IMAGETYPE_JPEG
 		 || ($png_to_jpg && $this->image_type == IMAGETYPE_PNG) ) {
 
@@ -308,7 +324,7 @@ class Image {
 			imagejpeg( $image_blob, NULL, $jpg_quality );
 			$data = ob_get_contents();
 			ob_end_clean();
-			//$cache->add_data( $data );
+			$cache->add_data( $data );
 
 			header( 'Content-Type: image/jpeg' );
 			echo $data;
@@ -319,7 +335,7 @@ class Image {
 			imagepng( $image_blob );
 			$data = ob_get_contents();
 			ob_end_clean();
-			//$cache->add_data( $data );
+			$cache->add_data( $data );
 
 			header( 'Content-Type: image/png' );
 			echo $data;
@@ -330,7 +346,7 @@ class Image {
 			imagewebp( $image_blob );
 			$data = ob_get_contents();
 			ob_end_clean();
-			//$cache->add_data( $data );
+			$cache->add_data( $data );
 
 			header( 'Content-Type: image/webp' );
 			echo $data;

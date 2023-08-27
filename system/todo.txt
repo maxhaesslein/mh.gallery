@@ -11,11 +11,13 @@ this list is not complete
 	- images need to be protected by the hash as well; the hash should not be in the image url, but should be in a session variable, but the name of this variable should be based on the gallery slug (so we can have multiple galleries open in different tabs at the same time)
 - image download - single files & zip (add config option to disable)
 - image previews
-	- cache resized images
-	- convert non-jpg to jpg?
 	- srcset
 	- additional webp & avif, if available?
-	- with blurry background loading image
+	- with blurry background loading image? or color background?
+	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
+- caching
+	- make sure, that 'cache_disabled = true' works correctly
+	- make sure, that '?refresh' works correctly
 - favicon
 - support for image alt tag
 - maybe theme support?

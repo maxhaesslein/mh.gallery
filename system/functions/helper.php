@@ -11,3 +11,14 @@ function get_class_attribute( $classes ) {
 
 	return ' class="'.implode( ' ', $classes ).'"';
 }
+
+function get_hash( $input ) {
+	// NOTE: this hash is for data validation, NOT cryptography!
+	// DO NOT USE FOR CRYPTOGRAPHIC PURPOSES
+
+
+	// TODO: check if we want to create the hash like this
+	$hash = hash( 'tiger128,3', $input );
+
+	return $hash;
+}
