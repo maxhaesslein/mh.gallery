@@ -277,7 +277,18 @@ class Image {
 				imageSaveAlpha( $image_blob_resized, true );
 			}
 
-			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, 0, 0, $width, $height, $src_width, $src_height );
+			// NOTE: currently, we just center the image on crop
+			// TODO: maybe at a 'region of interest' option, somehow ..
+			$src_width_cropped = $src_width;
+			$src_height_cropped = round($src_width_cropped * $height/$width);
+			if( $src_height_cropped > $src_height ) {
+				$src_height_cropped = $src_height;
+				$src_width_cropped = round($src_height_cropped * $width/$height);
+			}
+			$src_x = (int) round(($src_width - $src_width_cropped)/2);
+			$src_y = (int) round(($src_height - $src_height_cropped)/2);
+
+			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
 
 			imagedestroy($image_blob);
 
@@ -288,7 +299,6 @@ class Image {
 		}
 
 
-		// TODO: handle crop correctly
 
 
 		if( $this->image_type == IMAGETYPE_JPEG
