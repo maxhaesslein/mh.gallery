@@ -1,5 +1,6 @@
 <?php
 
+
 function get_config( $option, $fallback = false ) {
 	global $core;
 

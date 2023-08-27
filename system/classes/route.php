@@ -17,10 +17,13 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-
 		$template_name = 'index';
 
-		if( count($request) > 0 ) {
+		if( ! empty($request[0]) & $request[0] == 'image' ) {
+
+			$template_name = 'image';
+
+		} elseif( count($request) > 0 ) {
 
 			$slug = $request[0];
 

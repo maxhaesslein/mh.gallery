@@ -6,7 +6,13 @@ $image = $args['image'];
 
 $url = $image->get_url();
 
+$width = 300; // TODO
+$height = 200; // TODO
+$crop = true;
+
+$thumbnail_html = $image->resize( $width, $height, $crop )->get_html();
+
 ?>
 <a href="<?= $url ?>">
-	<?= $url ?>
+	<?= $thumbnail_html ?>
 </a>

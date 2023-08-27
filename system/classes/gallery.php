@@ -78,6 +78,11 @@ class Gallery {
 	}
 
 
+	function get_path() {
+		return $this->path;
+	}
+
+
 	function get_slug() {
 		$slug = $this->get_config('slug');
 
@@ -85,7 +90,6 @@ class Gallery {
 			$path = explode('/', $this->path);
 			$path = array_filter($path); // remove empty elements
 			$slug = end($path);
-
 		}
 
 		$slug = sanitize_string($slug);

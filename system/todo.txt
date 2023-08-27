@@ -6,8 +6,12 @@ this list is not complete
 - 404 template
 - hidden galleries with secret link (hash as link)
 - image download - single files & zip (add config option to disable)
-- image previews in the correct dimensions
-	- maybe /image/gallery-path/image-name?width={width}&height={height} ?
+- image previews
+	- cache resized images
+	- convert non-jpg to jpg?
+	- srcset
+	- additional webp & avif, if available?
 	- with blurry background loading image
 - favicon
+- support for image alt tag
 - maybe theme support?
