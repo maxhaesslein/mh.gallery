@@ -182,12 +182,14 @@ class Image {
 			// set transparent background to specific color, because for now we don't support transparent png
 			$image = $this->fill_with_backgroundcolor( $image );
 
-		}
+		} // TODO: add avif
+
 
 		if( ! $image ) {
 			debug( 'could not load image with mime-type '.$this->image_type );
 			return false;
 		}
+
 
 		return $image;
 	}
@@ -207,28 +209,93 @@ class Image {
 	}
 
 
+	function image_rotate( $image, $src_width, $src_height ) {
+
+		$width = $src_width;
+		$height = $src_height;
+
+		$degrees = false;
+		// NOTE: we ignore mirrored images (4, 5, 7) for now, and just rotate them like they would be non-mirrored (3, 6, 8)
+		if( $this->orientation == 3 || $this->orientation == 4 ) {
+			$degrees = 180;
+		} elseif( $this->orientation == 6 || $this->orientation == 5 ) {
+			$degrees = 270;
+			$width = $src_height;
+			$height = $src_width;
+		} elseif( $this->orientation == 8 || $this->orientation == 7 ) {
+			$degrees = 90;
+			$width = $src_height;
+			$height = $src_width;
+		}
+
+		if( $degrees ) $image = imagerotate( $image, $degrees, 0 );
+
+		return [ $image, $width, $height ];
+	}
+
+
 	function output() {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
 		// TODO: cache resized images!
 
 
-		$src_image = $this->read_image();
-		if( ! $src_image ) {
+		$image_blob = $this->read_image();
+		if( ! $image_blob ) {
 			debug('could not load image', $image);
 			exit;
 		}
 
-		// TODO: $png_to_jpg = get_config( 'image_png_to_jpg' );
-		// TODO: resize image
+
+		$src_width = $this->src_width;
+		$src_height = $this->src_height;
+
+		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
+
+		$width = $this->width;
+		$height = $this->height;
+
 
 		$jpg_quality = get_config( 'jpg_quality' );
+		$png_to_jpg = get_config( 'image_png_to_jpg' );		
+
+		if( $src_width > $width || $src_height > $height ) {
+
+			if( $this->rotated ) {
+				$tmp_width = $width;
+				$width = $height;
+				$height = $tmp_width;
+			}
+
+			$image_blob_resized = imagecreatetruecolor( $width, $height );
+
+			if( ( ! $png_to_jpg && $this->image_type == IMAGETYPE_PNG ) 
+				|| $this->image_type == IMAGETYPE_WEBP 
+			) {
+				// handle alpha channel
+				imageAlphaBlending( $image_blob_resized, false );
+				imageSaveAlpha( $image_blob_resized, true );
+			}
+
+			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, 0, 0, $width, $height, $src_width, $src_height );
+
+			imagedestroy($image_blob);
+
+			$image_blob = $image_blob_resized;
+
+		} else {
+			$image_blob_resized = $image_blob;
+		}
+
+
+		// TODO: handle crop correctly
+
 
 		if( $this->image_type == IMAGETYPE_JPEG
 		 || ($png_to_jpg && $this->image_type == IMAGETYPE_PNG) ) {
 
 			ob_start();
-			imagejpeg( $src_image, NULL, $jpg_quality );
+			imagejpeg( $image_blob, NULL, $jpg_quality );
 			$data = ob_get_contents();
 			ob_end_clean();
 			//$cache->add_data( $data );
@@ -239,7 +306,7 @@ class Image {
 		} elseif( $this->image_type == IMAGETYPE_PNG ) {
 
 			ob_start();
-			imagepng( $src_image );
+			imagepng( $image_blob );
 			$data = ob_get_contents();
 			ob_end_clean();
 			//$cache->add_data( $data );
@@ -250,7 +317,7 @@ class Image {
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
 
 			ob_start();
-			imagewebp( $src_image );
+			imagewebp( $image_blob );
 			$data = ob_get_contents();
 			ob_end_clean();
 			//$cache->add_data( $data );
@@ -260,7 +327,7 @@ class Image {
 
 		} // TODO: add avif
 
-		imagedestroy( $src_image );
+		imagedestroy( $image_blob );
 		exit;
 	}
 
