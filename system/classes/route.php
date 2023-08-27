@@ -19,7 +19,7 @@ class Route {
 
 		$template_name = 'index';
 
-		if( ! empty($request[0]) & $request[0] == 'image' ) {
+		if( ! empty($request[0]) && $request[0] == 'image' ) {
 
 			$template_name = 'image';
 
