@@ -3,7 +3,6 @@
 if( ! $core ) exit;
 
 $request = $core->route->get('request');
-$request[0] = 'content';
 $filepath = implode('/', $request);
 
 // TODO: get gallery

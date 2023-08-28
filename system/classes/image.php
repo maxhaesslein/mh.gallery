@@ -2,8 +2,8 @@
 
 class Image {
 	
+	private $image_path;
 	private $path;
-	private $img_path;
 	private $gallery;
 	private $slug;
 
@@ -24,13 +24,11 @@ class Image {
 
 	function __construct( $path, $gallery = false ) {
 
+		$this->image_path = $path;
 		$this->path = get_abspath($path);
 
 		$path_exp = explode('/', $path);
 		$filename = array_pop($path_exp);
-
-		$path_exp[0] = 'image'; # this replaces 'content/'
-		$this->img_path = implode('/', $path_exp).'/'.$filename;
 
 		$this->filename = $filename;
 
@@ -144,7 +142,7 @@ class Image {
 
 	function get_image_url( $query ) {
 
-		$url = get_baseurl($this->img_path).'?'.http_build_query($query);
+		$url = get_baseurl($this->image_path).'?'.http_build_query($query);
 
 		return $url;
 	}
