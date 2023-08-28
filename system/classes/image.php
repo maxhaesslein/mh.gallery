@@ -18,6 +18,8 @@ class Image {
 	private $width;
 	private $height;
 	private $crop = false;
+	private $quality;
+	private $output_type;
 
 
 	function __construct( $path, $gallery = false ) {
@@ -37,6 +39,8 @@ class Image {
 		}
 
 		$this->slug = sanitize_string($filename, true);
+
+		$this->quality = get_config( 'default_image_quality' );
 
 		$this->load_image_meta();
 
@@ -63,6 +67,7 @@ class Image {
 		$this->src_height = $image_meta[1];
 		$this->image_type = $image_meta[2];
 
+
 		$exif = @exif_read_data( $filepath );
 		if( $exif && ! empty($exif['Orientation']) ) {
 			$this->orientation = $exif['Orientation'];
@@ -81,16 +86,19 @@ class Image {
 			$this->format = 'square';
 		}
 
-		if( $this->image_type == IMAGETYPE_JPEG
-		 || (get_config('image_png_to_jpg') && $this->image_type == IMAGETYPE_PNG) ) {
+		if( $this->image_type == IMAGETYPE_JPEG ) {
 			$this->mime_type = 'image/jpeg';
+			$this->output_type = 'jpg';
 		} elseif( $this->image_type == IMAGETYPE_PNG ) {
 			$this->mime_type = 'image/png';
+			$this->output_type = 'png';
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
 			$this->mime_type = 'image/webp';
+			$this->output_type = 'webp';
 		} else {
 			debug( 'unknown image type '.$this->image_type);
 		}
+		// TODO: support avif, if PHP >= 8.2
 
 		$this->width = $this->src_width;
 		$this->height = $this->src_height;
@@ -134,28 +142,166 @@ class Image {
 	}
 
 
+	function get_image_url( $query ) {
+
+		$url = get_baseurl($this->img_path).'?'.http_build_query($query);
+
+		return $url;
+	}
+
+
 	function get_html( $lazyloading = true ) {
 
 		$classes = [ 'image', 'image-'.$this->format ];
 
-		$query = [
-			'width' => $this->width,
-			'height' => $this->height,
-			'crop' => $this->crop,
-		];
-
-		$src = get_baseurl($this->img_path).'?'.http_build_query($query);
 		$width = $this->width;
 		$height = $this->height;
-		$alt = $this->alt;
 
-		$lazy = '  loading="lazy"';
-		if( ! $lazyloading ) $lazy = '';
+		$mobile_width = $width/2; // TODO: check, how we want to set the mobile width and breakpoint
+		$mobile_height = (int) round($mobile_width * $height / $width);
 
-		// TODO: srcset
-		$html = '<img'.get_class_attribute($classes).' src="'.$src.'" width="'.$width.'" height="'.$height.'" alt="'.$alt.'"'.$lazy.'>';
+		$picture = [
+			[
+				'mimetype' => 'image/avif',
+				'media' => '(max-width: '.$mobile_width.'px)',
+				'srcset' => [
+					'1x' => [
+						'width' => $mobile_width,
+						'height' => $mobile_height,
+						'quality' => 70,
+						'type' => 'avif',
+					],
+					'2x' => [
+						'width' => (int) ceil($mobile_width*1.75),
+						'height' => (int) ceil($mobile_width*1.75 * $height/$width),
+						'quality' => 60,
+						'type' => 'avif',
+					],
+					'3x' => [
+						'width' => (int) ceil($mobile_width*2.5),
+						'height' => (int) ceil($mobile_width*2.5 * $height/$width),
+						'quality' => 60,
+						'type' => 'avif',
+					],
+				]
+			],
+			[
+				'mimetype' => 'image/webp',
+				'media' => '(max-width: '.$mobile_width.'px)',
+				'srcset' => [
+					'1x' => [
+						'width' => $mobile_width,
+						'height' => $mobile_height,
+						'quality' => 70,
+						'type' => 'webp',
+					],
+					'2x' => [
+						'width' => (int) ceil($mobile_width*1.75),
+						'height' => (int) ceil($mobile_width*1.75 * $height/$width),
+						'quality' => 60,
+						'type' => 'webp',
+					],
+					'3x' => [
+						'width' => (int) ceil($mobile_width*2.5),
+						'height' => (int) ceil($mobile_width*2.5 * $height/$width),
+						'quality' => 60,
+						'type' => 'webp',
+					],
+				],
+			],
+			[
+				'mimetype' => 'image/avif',
+				'media' => '(min-width: '.$mobile_width.'px)',
+				'srcset' => [
+					'1x' => [
+						'width' => $width,
+						'height' => $height,
+						'quality' => 80,
+						'type' => 'avif',
+					],
+					'2x' => [
+						'width' => (int) ceil($width*1.75),
+						'height' => (int) ceil($width*1.75 * $height/$width),
+						'quality' => 60,
+						'type' => 'avif',
+					],
+				],
+			],
+			[
+				'mimetype' => 'image/webp',
+				'media' => '(min-width: '.$mobile_width.'px)',
+				'srcset' => [
+					'1x' => [
+						'width' => $width,
+						'height' => $height,
+						'quality' => 80,
+						'type' => 'webp',
+					],
+					'2x' => [
+						'width' => (int) ceil($width*1.75),
+						'height' => (int) ceil($width*1.75 * $height/$width),
+						'quality' => 60,
+						'type' => 'webp',
+					],
+				],
+			],
+		];
+
+		$html = '<picture'.get_class_attribute($classes).'>'; // TODO: backgroundcolor
+
+			foreach( $picture as $source ) {
+				$images = [];
+				foreach( $source['srcset'] as $size => $query ) {
+					$images[] = $this->get_image_url($query).' '.$size;
+				}
+				$html .= '<source media="'.$source['media'].'" srcset="'.implode(', ',$images).'" type="'.$source['mimetype'].'">';
+			}
+
+			$src = $this->get_image_url([
+				'width' => $this->width,
+				'height' => $this->height,
+				'crop' => $this->crop,
+			]);
+			$alt = $this->alt;
+
+			$html .= '<img src="'.$src.'" width="'.$width.'" height="'.$height.'"';
+				if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
+				else $html .= ' fetchpriority="high" decoding="sync"';
+			$html .= ' alt="'.$alt.'">';
+
+		$html .= '</picture>';
 
 		return $html;
+	}
+
+
+	function set_image_type( $new_type ) {
+
+		if( $new_type == 'jpg' ) {
+			$this->mime_type = 'image/jpeg';
+			$this->output_type = $new_type;
+
+		} elseif( $new_type == 'png' ) {
+			$this->mime_type = 'image/png';
+			$this->output_type = $new_type;
+
+		} elseif( $new_type == 'webp' ) {
+			$this->mime_type = 'image/webp';
+			$this->output_type = $new_type;
+
+		}
+
+		// TODO: add support for avif if PHP >= 8.2
+
+		return $this;
+	}
+
+
+	function set_quality( $new_quality ) {
+
+		$this->quality = $new_quality;
+
+		return $this;
 	}
 
 
@@ -174,11 +320,6 @@ class Image {
 			// handle transparency loading:
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
-		
-			if( get_config( 'png_to_jpg' ) ) {
-				// set transparent background to specific color, when converting to jpg:
-				$image = $this->fill_with_backgroundcolor( $image );
-			}
 
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
 
@@ -187,15 +328,12 @@ class Image {
 			// handle transparency loading:
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
-		
-			// set transparent background to specific color, because for now we don't support transparent png
-			$image = $this->fill_with_backgroundcolor( $image );
 
-		} // TODO: add avif
+		} // TODO: read avif files, if PHP >= 8.2
 
 
 		if( ! $image ) {
-			debug( 'could not load image with mime-type '.$this->image_type );
+			debug( 'could not load image with image-type '.$this->image_type );
 			return false;
 		}
 
@@ -204,9 +342,8 @@ class Image {
 	}
 
 
-	function fill_with_backgroundcolor( $image ) {
+	function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
 
-		$transparent_color = get_config( 'image_background_color' );
 		$background_image = imagecreatetruecolor( $this->src_width, $this->src_height );
 		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
 		imagefill( $background_image, 0, 0, $background_color );
@@ -247,8 +384,9 @@ class Image {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
 		$filesize = filesize( $this->path );
-		$jpg_quality = get_config( 'jpg_quality' );
-		$png_to_jpg = get_config( 'image_png_to_jpg' );		
+
+		$quality = $this->quality;
+		$type = $this->output_type;
 
 		$this->src_width = $this->src_width;
 		$this->src_height = $this->src_height;
@@ -256,7 +394,7 @@ class Image {
 		$width = $this->width;
 		$height = $this->height;
 
-		$cache_string = $this->path.$filesize.$width.$height.$jpg_quality;
+		$cache_string = $this->path.$filesize.$width.$height.$quality.$type;
 
 		$cache = new Cache( 'image', $cache_string );
 		$cache_content = $cache->get_data();
@@ -287,7 +425,11 @@ class Image {
 
 			$image_blob_resized = imagecreatetruecolor( $width, $height );
 
-			if( ( ! $png_to_jpg && $this->image_type == IMAGETYPE_PNG ) 
+			if( $type == 'jpg' ) {
+
+				$image_blob = $this->fill_with_backgroundcolor( $image_blob );
+
+			} elseif( ( $this->image_type == IMAGETYPE_PNG ) 
 				|| $this->image_type == IMAGETYPE_WEBP 
 			) {
 				// handle alpha channel
@@ -317,11 +459,10 @@ class Image {
 		}
 
 
-		if( $this->image_type == IMAGETYPE_JPEG
-		 || ($png_to_jpg && $this->image_type == IMAGETYPE_PNG) ) {
+		if( $type == 'jpg' ) {
 
 			ob_start();
-			imagejpeg( $image_blob, NULL, $jpg_quality );
+			imagejpeg( $image_blob, NULL, $quality );
 			$data = ob_get_contents();
 			ob_end_clean();
 			$cache->add_data( $data );
@@ -329,7 +470,7 @@ class Image {
 			header( 'Content-Type: image/jpeg' );
 			echo $data;
 
-		} elseif( $this->image_type == IMAGETYPE_PNG ) {
+		} elseif( $type == 'png' ) {
 
 			ob_start();
 			imagepng( $image_blob );
@@ -340,7 +481,7 @@ class Image {
 			header( 'Content-Type: image/png' );
 			echo $data;
 
-		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+		} elseif( $type == 'webp' ) {
 
 			ob_start();
 			imagewebp( $image_blob );
@@ -351,7 +492,8 @@ class Image {
 			header( 'Content-Type: image/webp' );
 			echo $data;
 
-		} // TODO: add avif
+		}
+		// TODO: add avif
 
 		imagedestroy( $image_blob );
 		exit;
