@@ -115,6 +115,16 @@ class Gallery {
 	}
 
 
+	function get_image( $slug ) {
+
+		if( $this->images == NULL ) $this->load_images();
+
+		if( ! array_key_exists($slug, $this->images) ) return false;
+
+		return $this->images[$slug];
+	}
+
+
 	function load_images() {
 
 		$folder = new Folder( $this->path, 'extension=jpg,jpeg' );

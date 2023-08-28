@@ -2,7 +2,6 @@
 
 class Image {
 	
-	private $image_path;
 	private $path;
 	private $gallery;
 	private $slug;
@@ -27,12 +26,11 @@ class Image {
 		$this->filename = $filename;
 		$this->gallery = $gallery;
 
-		$this->image_path = trailing_slash_it($gallery->get_path()).$filename;
-
 		$this->path = get_abspath(trailing_slash_it($gallery->get_path()).$filename);
 
-		$this->slug = $filename;
-		//$this->slug = sanitize_string($filename, true);
+		$slug = explode('.', $filename);
+		unset($slug[count($slug)-1]);
+		$this->slug = sanitize_string(implode('.', $slug));
 
 		$this->quality = get_config( 'default_image_quality' );
 
@@ -112,7 +110,7 @@ class Image {
 
 		if( ! $this->gallery ) return false;
 
-		$url = $this->gallery->get_url().$this->slug;
+		$url = trailing_slash_it($this->gallery->get_url().$this->slug);
 
 		return $url;
 	}
@@ -136,9 +134,29 @@ class Image {
 	}
 
 
+	function get_filename( $query = [] ) {
+
+		$defaults = [
+			'width' => $this->width,
+			'height' => $this->height,
+			'crop' => $this->crop,
+			'type' => $this->output_type,
+			'quality' => $this->quality,
+		];
+
+		$args = array_merge($defaults, $query);
+
+		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
+		if( $args['crop'] ) $filename .= '-crop';
+		$filename .= '-'.$args['quality'].'.'.$args['type'];
+
+		return $filename;
+	}
+
+
 	function get_image_url( $query ) {
 
-		$url = get_baseurl('img/').trailing_slash_it($this->gallery->get_url(false)).$this->slug.'?'.http_build_query($query);
+		$url = get_baseurl('img/').trailing_slash_it($this->gallery->get_url(false)).$this->get_filename($query);
 
 		return $url;
 	}
@@ -293,6 +311,8 @@ class Image {
 
 	function set_quality( $new_quality ) {
 
+		if( ! $new_quality ) return $this;
+
 		$this->quality = $new_quality;
 
 		return $this;
@@ -388,9 +408,7 @@ class Image {
 		$width = $this->width;
 		$height = $this->height;
 
-		$cache_string = $this->path.$filesize.$width.$height.$quality.$type;
-
-		$cache = new Cache( 'image', $cache_string );
+		$cache = new Cache( 'image', $this->get_filename() );
 		$cache_content = $cache->get_data();
 		if( $cache_content ) {
 			// return cached file, then end

@@ -8,16 +8,13 @@ this list is not complete
 	- maybe have a 'content/hidden/' folder?
 	- if no secret hash exists, create one and save it into the gallery.txt on first access?
 	- allow multiple secret hashes per gallery, and the removal of links
-	- images need to be protected by the hash as well; the hash should not be in the image url, but should be in a session variable, but the name of this variable should be based on the gallery slug (so we can have multiple galleries open in different tabs at the same time)
 - image download - single files & zip (add config option to disable)
-- image previews
-	- use gallery slug instead of gallery folder name
-	- put query args into filename; use file extension as type; "img001_640x-1_80.webp" or "img001_640x480.png" ..
+- image display
 	- avif support
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
+	- support for image alt tag
 - caching
 	- make sure, that 'cache_disabled = true' works correctly
 	- make sure, that '?refresh' works correctly
 - favicon
-- support for image alt tag
 - maybe theme support?

@@ -10,41 +10,33 @@ $gallery_slug = implode('/', $request);
 
 $gallery = $core->galleries->get_gallery($gallery_slug);
 
-$image = new Image($image_name, $gallery);
+$image_name = explode('.', $image_name);
+$type = array_pop($image_name);
+$image_name = explode('_', implode('.', $image_name));
+$args = array_pop($image_name);
+$image_name = implode('_', $image_name);
 
-$query = $_REQUEST;
+$args = explode('-', $args);
 
-$width = false;
-$height = false;
-$quality = false;
-$type = false;
-$crop = false;
+$size = array_shift($args);
+$size = explode('x', $size);
 
-if( ! empty($query['width']) ) {
-	$width = (int) $query['width'];
-	if( $width <= 0 ) $width = false;
+$width = (int) $size[0];
+$height = (int) $size[1];
+
+$crop = array_shift($args);
+if( $crop == 'crop' ) {
+	$quality = array_pop($args);
+	$crop = true;
+} else {
+	$quality = $crop;
+	$crop = false;
 }
 
-if( ! empty($query['height']) ) {
-	$height = (int) $query['height'];
-	if( $height <= 0 ) $height = false;
-}
+$quality = (int) $quality;
+if( $quality <= 0 ) $quality = false;
 
-if( ! empty($query['quality']) ) {
-	$quality = (int) $query['quality'];
-	if( $quality <= 0 ) $quality = false;
-}
-
-if( ! empty($query['type']) ) {
-	$type = $query['type'];
-}
-
-if( ! empty($query['crop']) ) {
-	$crop = $query['crop'];
-	if( $crop == 'false' ) $crop = false;
-	$crop = !! $crop;
-}
-
+$image = $gallery->get_image($image_name);
 
 if( $width || $height ) {
 	$image->resize($width, $height, $crop);
