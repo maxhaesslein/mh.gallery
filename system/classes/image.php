@@ -22,21 +22,17 @@ class Image {
 	private $output_type;
 
 
-	function __construct( $path, $gallery = false ) {
-
-		$this->image_path = $path;
-		$this->path = get_abspath($path);
-
-		$path_exp = explode('/', $path);
-		$filename = array_pop($path_exp);
+	function __construct( $filename, $gallery ) {
 
 		$this->filename = $filename;
+		$this->gallery = $gallery;
 
-		if( $gallery ) {
-			$this->gallery = $gallery;
-		}
+		$this->image_path = trailing_slash_it($gallery->get_path()).$filename;
 
-		$this->slug = sanitize_string($filename, true);
+		$this->path = get_abspath(trailing_slash_it($gallery->get_path()).$filename);
+
+		$this->slug = $filename;
+		//$this->slug = sanitize_string($filename, true);
 
 		$this->quality = get_config( 'default_image_quality' );
 
@@ -112,7 +108,7 @@ class Image {
 	}
 
 
-	function get_url() {
+	function get_link() {
 
 		if( ! $this->gallery ) return false;
 
@@ -142,7 +138,7 @@ class Image {
 
 	function get_image_url( $query ) {
 
-		$url = get_baseurl($this->image_path).'?'.http_build_query($query);
+		$url = get_baseurl('img/').trailing_slash_it($this->gallery->get_url(false)).$this->slug.'?'.http_build_query($query);
 
 		return $url;
 	}

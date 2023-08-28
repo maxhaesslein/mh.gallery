@@ -3,12 +3,14 @@
 if( ! $core ) exit;
 
 $request = $core->route->get('request');
-$filepath = implode('/', $request);
 
-// TODO: get gallery
-$gallery = false;
+unset($request[0]); // remove img/ route from request
+$image_name = array_pop($request);
+$gallery_slug = implode('/', $request);
 
-$image = new Image($filepath, $gallery);
+$gallery = $core->galleries->get_gallery($gallery_slug);
+
+$image = new Image($image_name, $gallery);
 
 $query = $_REQUEST;
 

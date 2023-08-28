@@ -98,10 +98,12 @@ class Gallery {
 	}
 
 
-	function get_url() {
-		$slug = $this->get_slug();
+	function get_url( $full_url = true ) {
+		$url = $this->get_slug();
 
-		return url($slug);
+		if( $full_url ) $url = url($url);
+
+		return $url;
 	}
 
 
@@ -123,7 +125,10 @@ class Gallery {
 
 		foreach( $files as $file ) {
 
-			$image = new Image($file, $this);
+			$file = explode('/', $file);
+			$filename = end($file);
+			
+			$image = new Image($filename, $this);
 
 			$slug = $image->get_slug();
 

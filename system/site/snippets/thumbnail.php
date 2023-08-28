@@ -4,7 +4,7 @@ if( ! $core ) exit;
 
 $image = $args['image'];
 
-$url = $image->get_url();
+$url = $image->get_link();
 
 $width = 300; // TODO
 $height = 200; // TODO
