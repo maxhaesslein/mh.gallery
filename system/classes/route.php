@@ -21,7 +21,7 @@ class Route {
 
 		if( ! empty($request[0]) && $request[0] == 'img' ) {
 
-			$template_name = 'image';
+			$template_name = 'img-output';
 
 		} elseif( count($request) > 0 ) {
 
