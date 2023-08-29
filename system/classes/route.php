@@ -17,7 +17,11 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		$template_name = 'index';
+		if( get_config('allow_overview') ) {
+			$template_name = 'index';
+		} else {
+			$template_name = '404';
+		}
 
 		if( ! empty($request[0]) && $request[0] == 'img' ) {
 
@@ -32,7 +36,7 @@ class Route {
 			if( $core->galleries->exists($slug) ) {
 
 				$template_name = 'overview';
-				
+
 				if( ! empty($request[1]) ) {
 					$image_slug = $request[1];
 					$template_name = 'image';

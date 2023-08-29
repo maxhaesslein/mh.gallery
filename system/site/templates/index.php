@@ -2,12 +2,12 @@
 
 if( ! $core ) exit;
 
+// TODO: move this to route
+$galleries = $core->galleries->get();
+
 snippet( 'header' );
 
-echo '<h1>Hello World.</h1>';
-
-// TODO
-$galleries = $core->galleries->get();
+echo '<h1>'.get_config('site_title').'</h1>';
 
 echo '<ul>';
 foreach( $galleries as $gallery ) {

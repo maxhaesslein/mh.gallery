@@ -4,7 +4,7 @@ if( ! $core ) exit;
 
 snippet( 'header' );
 
-echo '<h1>Gallery not found.</h1>';
-// TODO
+echo '<h1>Not found.</h1>';
+echo '<p>This page does not exist.</p>';
 
 snippet( 'footer' );
