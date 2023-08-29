@@ -127,7 +127,9 @@ class Gallery {
 
 	function load_images() {
 
-		$folder = new Folder( $this->path, 'extension=jpg,jpeg' );
+		$extensions = get_config('image_extensions');
+
+		$folder = new Folder( $this->path, 'extension='.implode(',', $extensions) );
 
 		$files = $folder->get();
 
