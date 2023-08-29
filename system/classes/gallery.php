@@ -125,6 +125,38 @@ class Gallery {
 	}
 
 
+	function get_image_link( $slug ) {
+
+		if( $this->images == NULL ) $this->load_images();
+
+		if( ! array_key_exists($slug, $this->images) ) return false;
+
+		return $this->images[$slug]->get_link();
+	}
+
+
+	function get_adjacent_image_slug( $current_image_slug, $direction = 'next' ) {
+
+		if( $this->images == NULL ) $this->load_images();
+
+		$indexes = array_keys($this->images);
+
+		$current_index = array_search($current_image_slug, $indexes);
+
+		if( $direction == 'next' ) {
+			$next_index = $current_index+1;
+			if( $next_index >= count($indexes) ) return false;
+		} elseif( $direction == 'prev' ) {
+			$next_index = $current_index-1;
+			if( $next_index < 0 ) return false;
+		} else {
+			return false;
+		}
+
+		return $indexes[$next_index];
+	}
+
+
 	function load_images() {
 
 		$extensions = get_config('image_extensions');
