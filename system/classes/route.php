@@ -27,13 +27,17 @@ class Route {
 
 			$slug = $request[0];
 
-			$secret = false;
-			if( ! empty($request[1]) ) {
-				$secret = $request[1]; // TODO: check secret
-			}
+			// TODO: check secret; the secret should be part of the slug, like 'gallery_name-secret'
 
 			if( $core->galleries->exists($slug) ) {
+
 				$template_name = 'overview';
+				
+				if( ! empty($request[1]) ) {
+					$image_slug = $request[1];
+					$template_name = 'image';
+				}
+
 			} else {
 				$template_name = '404';
 			}
