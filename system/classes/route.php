@@ -17,34 +17,95 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		if( get_config('allow_overview') ) {
-			$template_name = 'index';
-		} else {
-			$template_name = '404';
-		}
+		$template_name = '404';
+
+		$gallery = false;
+		$image = false;
+		$args = [];
 
 		if( ! empty($request[0]) && $request[0] == 'img' ) {
 
-			$template_name = 'img-output';
+			unset($request[0]); // remove img/ route from request
+			$image_name = array_pop($request);
+			$gallery_slug = implode('/', $request);
+
+			$gallery = $core->galleries->get_gallery($gallery_slug);
+			if( $gallery ) {
+
+				$image_name = explode('.', $image_name);
+				$type = array_pop($image_name);
+				$image_name = explode('_', implode('.', $image_name));
+				$image_args = array_pop($image_name);
+				$image_name = implode('_', $image_name);
+
+				$image = $gallery->get_image($image_name);
+				if( $image ) {
+
+					$image_args = explode('-', $image_args);
+
+					$size = array_shift($image_args);
+					$size = explode('x', $size);
+
+					$width = (int) $size[0];
+					$height = (int) $size[1];
+
+					$crop = array_shift($image_args);
+					if( $crop == 'crop' ) {
+						$quality = array_pop($image_args);
+						$crop = true;
+					} else {
+						$quality = $crop;
+						$crop = false;
+					}
+
+					$quality = (int) $quality;
+					if( $quality <= 0 ) $quality = false;
+
+					$args = [
+						'width' => $width,
+						'height' => $height,
+						'crop' => $crop,
+						'quality' => $quality,
+						'type' => $type,
+					];
+
+					$template_name = 'img-output';
+				}
+			}
 
 		} elseif( count($request) > 0 ) {
 
-			$slug = $request[0];
+			$gallery_slug = $request[0];
 
 			// TODO: check secret; the secret should be part of the slug, like 'gallery_name-secret'
 
-			if( $core->galleries->exists($slug) ) {
+			if( $core->galleries->exists($gallery_slug) ) {
 
-				$template_name = 'overview';
+				$gallery = $core->galleries->get_gallery($gallery_slug);
 
-				if( ! empty($request[1]) ) {
-					$image_slug = $request[1];
-					$template_name = 'image';
+				if( $gallery ) {
+
+					$template_name = 'overview';
+
+					if( ! empty($request[1]) ) {
+						$image_slug = $request[1];
+						$image = $gallery->get_image($image_slug);
+
+						if( $image ) {
+							$template_name = 'image';
+						} else {
+							$template_name = '404';
+						}
+
+					}
+
 				}
 
-			} else {
-				$template_name = '404';
 			}
+
+		} elseif( get_config('allow_overview') ) {
+
+			$template_name = 'index';
 
 		}
 
@@ -61,7 +122,10 @@ class Route {
 			'template_name' => $template_name,
 			'template_include' => $include_path,
 			'request' => $request,
-			'query' => $_REQUEST
+			'query' => $_REQUEST,
+			'gallery' => $gallery,
+			'image' => $image,
+			'args' => $args,
 		);
 
 	}

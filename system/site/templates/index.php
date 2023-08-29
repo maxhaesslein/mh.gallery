@@ -2,7 +2,6 @@
 
 if( ! $core ) exit;
 
-// TODO: move this to route
 $galleries = $core->galleries->get();
 
 snippet( 'header' );

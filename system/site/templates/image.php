@@ -2,17 +2,10 @@
 
 if( ! $core ) exit;
 
+$gallery = $core->route->get('gallery');
+$image = $core->route->get('image');
 
-
-// TODO
-$gallery_slug = $core->route->get('request')[0];
-// TODO: gallery should be loaded in the route? we may want to use it for the image and the single route as well; then we can load the 404 template, if the image does not exist.
-$gallery = $core->galleries->get_gallery($gallery_slug);
-
-
-$image_slug = $core->route->get('request')[1];
-$image = $gallery->get_image($image_slug);
-
+$image_slug = $image->get_slug();
 
 
 snippet( 'header' );
