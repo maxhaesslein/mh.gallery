@@ -1,12 +1,12 @@
 <?php
 
-if( $core ) exit;
+if( ! $core ) exit;
 
 ?>
 
 
 <footer>
-	<p>mh.gallery v.<?= get_version() ?></p>
+	<a href="https://github.com/maxhaesslein/mh.gallery/" target="_blank" rel="noopener">mh.gallery v.<?= get_version() ?></a>
 </footer>
 
 </body>
