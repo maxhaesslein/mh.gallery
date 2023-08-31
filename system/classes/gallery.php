@@ -104,7 +104,7 @@ class Gallery {
 	}
 
 
-	function get_slug( $skip_secret = true ) {
+	function get_slug( $skip_secret = false ) {
 		$slug = $this->get_config('slug');
 
 		if( ! $slug ) {
