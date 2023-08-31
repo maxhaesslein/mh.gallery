@@ -12,5 +12,5 @@ return [
 	'default_image_quality' => 88,
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
 	'cache_disabled' => false,
-	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif'] // search for these extensions while loading gallery images
+	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'] // search for these extensions while loading gallery images; TODO: add avif
 ];
