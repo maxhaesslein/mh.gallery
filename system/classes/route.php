@@ -77,8 +77,6 @@ class Route {
 
 			$gallery_slug = $request[0];
 
-			// TODO: check secret; the secret should be part of the slug, like 'gallery_name-secret'
-
 			if( $core->galleries->exists($gallery_slug) ) {
 
 				$gallery = $core->galleries->get_gallery($gallery_slug);

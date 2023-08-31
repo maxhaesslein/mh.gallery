@@ -22,11 +22,17 @@ in the `content/` folder, add subfolders for your galleries. You can also organi
 ```txt
 title: my cool gallery
 slug: my-cool-gallery
+hidden: true
+secret: 1234
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name.
 
 Add `.jpg` files into the gallery folder, the images get detected automatically. Currently, only the `.jpg` and `.jpeg` file extensions are supported.
+
+Setting `hidden: true` will hide this gallery from the index (homepage).
+
+Setting a `secret` will hide this gallery from the index, and only make the url accessible with the secret appenden to the slug.
 
 ## Update
 

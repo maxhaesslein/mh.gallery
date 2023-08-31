@@ -4,11 +4,13 @@ this list is not complete
 - design
 	- maybe theme support?
 - hidden galleries with secret link (hash as link)
-	- secret link should be part of the gallery slug, for example 'gallery01-hash'?
 	- maybe have a 'content/hidden/' folder?
 	- if no secret hash exists, create one and save it into the gallery.txt on first access?
-	- allow multiple secret hashes per gallery, and the removal of links
+	- allow multiple secret hashes per gallery, and the removal of links/secrets (could be: secret: 12345, 54321, abc)
+	- sanitize secret for URL?
 - image download - single files & zip (add config option to disable)
+- next/prev navigation via ajax
+- navigation via keyboard
 - image display
 	- avif support
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file

@@ -7,6 +7,7 @@ class Gallery {
 	private $settings;
 	private $images = NULL;
 	private $hidden = false;
+	private $secret = false;
 
 	function __construct( $gallery_file ) {
 
@@ -27,6 +28,8 @@ class Gallery {
 		slug: this-is-my-gallery-slug
 		title: this is the gallery title: it can also have a colon in the title.
 		this line will be ignored
+		hidden: true
+		secret: 12345
 		*/
 
 		$file = $this->gallery_file;
@@ -61,6 +64,11 @@ class Gallery {
 			$this->hidden = $hidden;
 		}
 
+		if( ! empty($settings['secret']) ) {
+			$this->secret = $settings['secret'];
+			$this->hidden = true; // force gallery to be hidden, if a secret is set
+		}
+
 		return $this;
 	}
 
@@ -84,7 +92,7 @@ class Gallery {
 		$title = $this->get_config('title');
 
 		if( ! $title ) {
-			$title = $this->get_slug();
+			$title = $this->get_slug( true );
 		}
 
 		return $title;
@@ -96,7 +104,7 @@ class Gallery {
 	}
 
 
-	function get_slug() {
+	function get_slug( $skip_secret = true ) {
 		$slug = $this->get_config('slug');
 
 		if( ! $slug ) {
@@ -106,6 +114,10 @@ class Gallery {
 		}
 
 		$slug = sanitize_string($slug);
+
+		if( ! $skip_secret && $this->secret ) {
+			$slug .= '-'.trim($this->secret);
+		}
 		
 		return $slug;
 	}
