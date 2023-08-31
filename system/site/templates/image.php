@@ -28,6 +28,9 @@ if( $next_image_slug ) $next_link = $gallery->get_image_link( $next_image_slug )
 	if( $next_link ) echo '<li><a href="'.$next_link.'">next</a></li>';
 	?>
 </ul>
+<ul class="info">
+	<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
+</ul>
 <?php
 
 $image->resize(2000);

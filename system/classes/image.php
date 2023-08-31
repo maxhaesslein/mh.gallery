@@ -116,6 +116,27 @@ class Image {
 	}
 
 
+	function get_index() {
+
+		if( ! $this->gallery ) return false;
+
+		$indexes = array_keys($this->gallery->get_images());
+
+		$index = array_search($this->slug, $indexes);
+
+		return $index;
+	}
+
+
+	function get_number() {
+		$index = $this->get_index();
+
+		if( $index === false ) return false;
+
+		return $index+1;
+	}
+
+
 	function resize( $width = false, $height = false, $crop = false ) {
 
 		if( ! $crop ) {

@@ -160,6 +160,14 @@ class Gallery {
 	}
 
 
+	function get_image_count() {
+
+		if( $this->images == NULL ) $this->load_images();
+
+		return count($this->images);
+	}
+
+
 	function get_adjacent_image_slug( $current_image_slug, $direction = 'next' ) {
 
 		if( $this->images == NULL ) $this->load_images();
