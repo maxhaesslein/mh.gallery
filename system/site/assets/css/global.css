@@ -3,8 +3,8 @@ button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}[type=
 
 :root {
 
-	--color-black: #000;
-	--color-white: #fff;
+	--color-black: #111;
+	--color-white: #eee;
 
 	--color-background: #252525;
 	--color-text: var(--color-white);
@@ -30,6 +30,11 @@ body {
 
 main {
 	min-height: calc(100vh - 2.8em);
+}
+
+picture {
+	display: block;
+	background: var(--color-black);
 }
 
 a {
