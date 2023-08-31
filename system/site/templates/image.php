@@ -7,9 +7,6 @@ $image = $core->route->get('image');
 
 $image_slug = $image->get_slug();
 
-
-snippet( 'header' );
-
 $overview_link = $gallery->get_url();
 $prev_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'prev' );
 $next_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'next' );
@@ -40,36 +37,40 @@ if( $gallery->is_download_gallery_enabled() ) {
 
 $image->resize(2000);
 
+snippet( 'header' );
+
 ?>
-<div class="meta">
-	<ul class="info">
-		<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
-	</ul>
-	<ul class="navigation">
-		<?php
-		if( $prev_link ) echo '<li><a href="'.$prev_link.'">prev</a></li>';
-		echo '<li><a href="'.$overview_link.'">overview</a></li>';
-		if( $next_link ) echo '<li><a href="'.$next_link.'">next</a></li>';
-		?>
-	</ul>
-	<ul class="action">
-		<?php
-		if( $download_image_url ) {
-			?>
-			<li><a href="<?= $download_image_url ?>" download="<?= $download_image_filename ?>">download image</a></li>
+<main>
+	<div class="meta">
+		<ul class="info">
+			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
+		</ul>
+		<ul class="navigation">
 			<?php
-		}
-		if( $download_gallery_url ) {
+			if( $prev_link ) echo '<li><a href="'.$prev_link.'">prev</a></li>';
+			echo '<li><a href="'.$overview_link.'">overview</a></li>';
+			if( $next_link ) echo '<li><a href="'.$next_link.'">next</a></li>';
 			?>
-			<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
+		</ul>
+		<ul class="action">
 			<?php
-		}
-		?>
-	</ul>
-</div>
-<div class="image-wrapper">
-	<?= $image->get_html() ?>
-</div>
+			if( $download_image_url ) {
+				?>
+				<li><a href="<?= $download_image_url ?>" download="<?= $download_image_filename ?>">download image</a></li>
+				<?php
+			}
+			if( $download_gallery_url ) {
+				?>
+				<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
+				<?php
+			}
+			?>
+		</ul>
+	</div>
+	<div class="image-wrapper">
+		<?= $image->get_html() ?>
+	</div>
+</main>
 <?php
 
 snippet( 'footer' );

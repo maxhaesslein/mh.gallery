@@ -4,7 +4,11 @@ if( ! $core ) exit;
 
 snippet( 'header' );
 
-echo '<h1>Not found.</h1>';
-echo '<p>This page does not exist.</p>';
+?>
+<main>
+	<h1>Not found.</h1>
+	<p>This page does not exist.</p>
+</main>
+<?php
 
 snippet( 'footer' );

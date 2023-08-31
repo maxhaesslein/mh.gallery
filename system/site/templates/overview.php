@@ -14,37 +14,41 @@ if( $gallery->is_download_gallery_enabled() ) {
 }
 
 ?>
-<h1><?= $gallery->get_title() ?></h1>
+<main>
 
-<div class="meta">
-	<ul class="info">
-		<li><?= $gallery->get_image_count() ?> images</li>
-	</ul>
-	<ul class="action">
-		<?php
-		if( $download_gallery_url ) {
+	<h1><?= $gallery->get_title() ?></h1>
+
+	<div class="meta">
+		<ul class="info">
+			<li><?= $gallery->get_image_count() ?> images</li>
+		</ul>
+		<ul class="action">
+			<?php
+			if( $download_gallery_url ) {
+				?>
+				<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
+				<?php
+			}
 			?>
-			<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
+		</ul>
+	</div>
+
+	<ul class="gallery-list">
+		<?php
+		foreach( $images as $image ) {
+			$url = $image->get_link();
+			?>
+			<li>
+				<a href="<?= $url ?>">
+					<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+				</a>
+			</li>
 			<?php
 		}
 		?>
 	</ul>
-</div>
 
-<ul class="gallery-list">
-	<?php
-	foreach( $images as $image ) {
-		$url = $image->get_link();
-		?>
-		<li>
-			<a href="<?= $url ?>">
-				<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
-			</a>
-		</li>
-		<?php
-	}
-	?>
-</ul>
+</main>
 <?php
 
 snippet( 'footer' );

@@ -28,6 +28,10 @@ body {
 	padding: 1em;
 }
 
+main {
+	min-height: calc(100vh - 2.8em);
+}
+
 a {
 	color: inherit;
 	text-decoration: underline;
