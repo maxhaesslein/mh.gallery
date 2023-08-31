@@ -12,7 +12,7 @@ class Cache {
 	private $filesize;
 	private $lifetime;
 	
-	function __construct( $type, $input, $input_is_hash = false ) {
+	function __construct( $type, $input, $input_is_hash = false, $lifetime = false ) {
 
 		if( ! $type && ! $input ) return;
 
@@ -28,9 +28,13 @@ class Cache {
 			$this->hash = get_hash( $input );
 		}
 
-		$this->lifetime = get_config( 'cache_lifetime' );
+		if( ! $lifetime ) {
+			$lifetime = get_config( 'cache_lifetime' );
+		}
+		$this->lifetime = $lifetime;
+
 		$this->cache_file_name = $this->get_file_name();
-		$this->cache_file = $this->cache_folder.$this->cache_file_name;
+		$this->cache_file = $this->get_file_path();
 
 	}
 
@@ -62,6 +66,11 @@ class Cache {
 		$filename = $this->hash.'_'.$target_timestamp;
 
 		return $filename;
+	}
+
+
+	function get_file_path(){
+		return $this->cache_folder.$this->cache_file_name;
 	}
 
 

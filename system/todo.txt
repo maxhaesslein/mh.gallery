@@ -8,7 +8,8 @@ this list is not complete
 	- allow multiple secret hashes per gallery, and the removal of links/secrets (could be: secret: 12345, 54321, abc)
 	- sanitize secret for URL?
 - image download - zip
-	- cache zip file, but only for 7 days (?)
+	- currently, the first download may fail with larger galleries, and the zip file may be corrupted if we run into a timeout
+	- show a page, while the zip file gets created, add files in batches of 10, then automatically start the download once its done
 - next/prev navigation via ajax
 - navigation via keyboard
 - image display

@@ -284,5 +284,54 @@ class Gallery {
 
 		return $this;
 	}
+
+
+	function output_zip_file() {
+		// NOTE: this assumes we did not output any headers or HTML yet!
+
+		if( ! $this->is_download_gallery_enabled() ) {
+			return false;
+		}
+
+		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
+		$cache_filename = $this->get_zip_filename().$this->get_image_count();
+
+		$cache_lifetime = get_config( 'zip_lifetime' );
+		$cache = new Cache( 'zip', $cache_filename, false, $cache_lifetime );
+		$cache_content = $cache->get_data();
+		
+		if( ! $cache_content ) {
+
+			// no cached zip file, create a new one
+
+			$zip_target = get_abspath($cache->get_file_path());
+			$zip = new ZipArchive;
+			if( $zip->open($zip_target, ZipArchive::CREATE) !== TRUE ) {
+				debug("could not create zip file");
+				exit;
+			}
+
+			$images = $this->get_images();
+			if( ! count($images) ) {
+				debug("no images in this gallery");
+				exit;
+			}
+
+			foreach( $images as $image ) {
+				$zip->addFile( $image->get_original_filepath(), '/'.$image->get_original_filename() );
+			}
+
+			$zip->close();			
+		}
+
+
+		// return cached file, then end
+		$cache->refresh_lifetime();
+		header("Content-Type: application/zip");
+		header("Content-Length: ".$cache->get_filesize());
+		echo $cache_content;
+		exit;
+		
+	}
 	
 }

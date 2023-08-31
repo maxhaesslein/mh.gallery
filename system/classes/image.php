@@ -160,6 +160,11 @@ class Image {
 	}
 
 
+	function get_original_filepath(){
+		return $this->path;
+	}
+
+
 	function get_filename( $query = [] ) {
 
 		$defaults = [
