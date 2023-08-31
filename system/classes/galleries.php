@@ -30,7 +30,7 @@ class Galleries {
 
 	function exists( $slug ) {
 		
-		if( array_key_exists($slug, $this->galleries) ) {
+		if( $this->get_gallery($slug) ) {
 			return true;
 		}
 
@@ -38,6 +38,7 @@ class Galleries {
 	}
 	
 	function get_gallery( $slug ) {
+		
 		if( ! array_key_exists($slug, $this->galleries) ) {
 			return false;
 		}

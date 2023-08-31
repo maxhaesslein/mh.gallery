@@ -6,6 +6,7 @@ class Gallery {
 	private $path;
 	private $settings;
 	private $images = NULL;
+	private $hidden = false;
 
 	function __construct( $gallery_file ) {
 
@@ -53,7 +54,19 @@ class Gallery {
 
 		$this->settings = $settings;
 
+		if( ! empty($settings['hidden']) ) {
+			$hidden = $settings['hidden'];
+			if( $hidden == 'false' || $hidden == '0' ) $hidden = false;
+			$hidden = !! $hidden; // make bool
+			$this->hidden = $hidden;
+		}
+
 		return $this;
+	}
+
+
+	function is_hidden(){
+		return $this->hidden;
 	}
 
 
