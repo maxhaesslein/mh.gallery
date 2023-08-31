@@ -69,8 +69,6 @@ class Cache {
 
 		if( ! file_exists(get_abspath($this->cache_file)) ) return false;
 
-		if( isset($_GET['refresh']) ) return false; // force a refresh
-
 		if( get_config('cache_disabled') ) return false; // cache is disabled
 
 		$cache_content = file_get_contents(get_abspath($this->cache_file));
