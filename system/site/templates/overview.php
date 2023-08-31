@@ -10,7 +10,6 @@ snippet( 'header' );
 $download_gallery_url = false;
 if( $gallery->is_download_gallery_enabled() ) {
 	$download_gallery_url = $gallery->get_zip_url();
-	$download_gallery_filename = $gallery->get_zip_filename();
 }
 
 ?>
@@ -26,7 +25,7 @@ if( $gallery->is_download_gallery_enabled() ) {
 			<?php
 			if( $download_gallery_url ) {
 				?>
-				<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
+				<li><a href="<?= $download_gallery_url ?>">download gallery</a></li>
 				<?php
 			}
 			?>

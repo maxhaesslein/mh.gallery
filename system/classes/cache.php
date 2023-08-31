@@ -74,9 +74,17 @@ class Cache {
 	}
 
 
+	function exists() {
+		
+		if( ! file_exists(get_abspath($this->cache_file)) ) return false;
+
+		return true;
+	}
+
+
 	function get_data() {
 
-		if( ! file_exists(get_abspath($this->cache_file)) ) return false;
+		if( ! $this->exists() ) return false;
 
 		if( get_config('cache_disabled') ) return false; // cache is disabled
 
@@ -111,14 +119,14 @@ class Cache {
 
 
 	function remove() {
-		if( ! file_exists(get_abspath($this->cache_file)) ) return;
+		if( ! $this->exists() ) return;
 
 		unlink(get_abspath($this->cache_file));
 	}
 
 
 	function refresh_lifetime() {
-		if( ! file_exists(get_abspath($this->cache_file)) ) return $this;
+		if( ! $this->exists() ) return $this;
 
 		$old_filename = $this->get_file_name();
 		$new_filename = $this->get_file_name(true);

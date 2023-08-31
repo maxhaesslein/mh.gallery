@@ -180,3 +180,11 @@ h1 {
 .template-404 {
 	text-align: center;
 }
+
+.template-zip-output main {
+	text-align: center;
+}
+	
+	body:not(.nojs).template-zip-output .refresh-link-wrapper {
+		display: none;
+	}

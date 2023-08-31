@@ -286,52 +286,102 @@ class Gallery {
 	}
 
 
-	function output_zip_file() {
+	function get_zip_cache() {
+		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
+		$cache_filename = $this->get_zip_filename().$this->get_image_count();
+
+		$cache_lifetime = get_config( 'zip_lifetime' );
+		$cache = new Cache( 'zip', $cache_filename, false, $cache_lifetime );
+		
+		return $cache;
+	}
+
+
+	function get_missing_zip_images() {
+
+		$expected_images = $this->get_images();
+
+		$cache = $this->get_zip_cache();
+
+		if( ! $cache->exists() ) {
+			return $expected_images;
+		}
+
+		$zip_target = get_abspath($cache->get_file_path());
+
+		$zip = new ZipArchive;
+		$zip->open( $zip_target );
+
+		$missing_images = [];
+		foreach( $expected_images as $image ) {
+			if( $zip->locateName('/'.$image->get_original_filename()) !== false ) continue;
+
+			$missing_images[] = $image;
+		}
+
+		return $missing_images;
+	}
+
+
+	function is_zipfile_ready() {
+
+		if( count($this->get_missing_zip_images()) > 0 ) return false;
+
+		return true;
+	}
+
+
+	function add_batch_to_zip() {
+
+		$cache = $this->get_zip_cache();
+
+		$missing_images = $this->get_missing_zip_images();
+
+		$images_per_batch = 10;
+
+		$missing_images = array_slice($missing_images, 0, $images_per_batch, true);
+
+		$zip_target = get_abspath($cache->get_file_path());
+		$zip = new ZipArchive;
+		if( $zip->open($zip_target, ZipArchive::CREATE) !== TRUE ) {
+			debug("could not create zip file");
+			exit;
+		}
+
+		foreach( $missing_images as $image ) {
+			$zip->addFile( $image->get_original_filepath(), '/'.$image->get_original_filename() );
+		}
+
+		$zip->close();
+
+		return count($this->get_missing_zip_images());
+	}
+
+
+	function output_zipfile() {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
 		if( ! $this->is_download_gallery_enabled() ) {
 			return false;
 		}
 
-		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
-		$cache_filename = $this->get_zip_filename().$this->get_image_count();
-
-		$cache_lifetime = get_config( 'zip_lifetime' );
-		$cache = new Cache( 'zip', $cache_filename, false, $cache_lifetime );
-		$cache_content = $cache->get_data();
-		
-		if( ! $cache_content ) {
-
-			// no cached zip file, create a new one
-
-			$zip_target = get_abspath($cache->get_file_path());
-			$zip = new ZipArchive;
-			if( $zip->open($zip_target, ZipArchive::CREATE) !== TRUE ) {
-				debug("could not create zip file");
-				exit;
-			}
-
-			$images = $this->get_images();
-			if( ! count($images) ) {
-				debug("no images in this gallery");
-				exit;
-			}
-
-			foreach( $images as $image ) {
-				$zip->addFile( $image->get_original_filepath(), '/'.$image->get_original_filename() );
-			}
-
-			$zip->close();			
-		}
+		$cache = $this->get_zip_cache();
 
 
-		// return cached file, then end
 		$cache->refresh_lifetime();
-		header("Content-Type: application/zip");
-		header("Content-Length: ".$cache->get_filesize());
-		echo $cache_content;
+
+		$filename = $this->get_zip_filename();
+		$filesize = filesize($filepath);
+		$filepath = get_abspath($cache->get_file_path());
+
+		header("Content-Description: File Transfer");
+		header("Content-Type: application/octet-stream");
+		header("Content-Transfer-Encoding: Binary");
+		header("Content-Disposition: attachment; filename=\"".$filename."\"");
+		header("Content-Length: ".$filesize);
+
+		readfile($filepath);
 		exit;
-		
 	}
 	
 }
