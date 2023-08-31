@@ -22,3 +22,13 @@ function get_hash( $input ) {
 
 	return $hash;
 }
+
+
+function format_filesize( $raw_size ) {
+
+	$units = [ 'B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB' ];
+
+	$power = $raw_size > 0 ? floor(log($raw_size, 1024)) : 0;
+
+	return number_format($raw_size / pow(1024, $power), 2, '.', ',' ).$units[$power];
+}

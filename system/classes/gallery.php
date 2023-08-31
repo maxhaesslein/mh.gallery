@@ -117,8 +117,16 @@ class Gallery {
 	}
 
 
+	function get_zip_download_url() {
+
+		$url = get_baseurl('download/').un_trailing_slash_it($this->get_url(false)).'.zip';
+
+		return $url;
+	}
+
+
 	function get_zip_filename() {
-		return $this->get_slug().".zip";
+		return $this->get_slug( true ).".zip";
 	}
 
 
@@ -328,6 +336,18 @@ class Gallery {
 		if( count($this->get_missing_zip_images()) > 0 ) return false;
 
 		return true;
+	}
+
+
+	function get_zip_size() {
+		
+		$cache = $this->get_zip_cache();
+
+		$size = filesize(get_abspath($cache->get_file_path()));
+
+		$size = format_filesize($size);
+
+		return $size;
 	}
 
 

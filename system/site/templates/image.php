@@ -31,7 +31,7 @@ if( $gallery->is_download_image_enabled() ) {
 
 $download_gallery_url = false;
 if( $gallery->is_download_gallery_enabled() ) {
-	$download_gallery_url = $gallery->get_zip_url();
+	$download_gallery_url = $gallery->get_zip_download_url();
 }
 
 $image->resize(2000);
