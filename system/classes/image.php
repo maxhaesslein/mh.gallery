@@ -408,7 +408,8 @@ class Image {
 		$width = $this->width;
 		$height = $this->height;
 
-		$cache = new Cache( 'image', $this->get_filename() );
+		$cache_filename = $this->get_filename().$filesize;
+		$cache = new Cache( 'image', $cache_filename );
 		$cache_content = $cache->get_data();
 		if( $cache_content ) {
 			// return cached file, then end
