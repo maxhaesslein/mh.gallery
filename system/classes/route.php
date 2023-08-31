@@ -73,6 +73,20 @@ class Route {
 				}
 			}
 
+		} elseif( ! empty($request[0]) && $request[0] == 'zip' ) {
+
+			unset($request[0]); // remove zip/ route from request
+			$gallery_slug = implode('/', $request);
+
+			$gallery_slug = explode('.', $gallery_slug);
+			unset($gallery_slug[count($gallery_slug)-1]);
+			$gallery_slug = implode('.', $gallery_slug);
+
+			$gallery = $core->galleries->get_gallery($gallery_slug);
+			if( $gallery && $gallery->is_download_gallery_enabled() ) {
+				$template_name = 'zip-output';
+			}
+
 		} elseif( count($request) > 0 ) {
 
 			$gallery_slug = $request[0];

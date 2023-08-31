@@ -109,6 +109,19 @@ class Gallery {
 	}
 
 
+	function get_zip_url() {
+
+		$url = get_baseurl('zip/').un_trailing_slash_it($this->get_url(false)).'.zip';
+
+		return $url;
+	}
+
+
+	function get_zip_filename() {
+		return $this->get_slug().".zip";
+	}
+
+
 	function get_config( $option ) {
 
 		if( array_key_exists($option, $this->settings) ) {

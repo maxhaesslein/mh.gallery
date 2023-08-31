@@ -20,22 +20,25 @@ $next_link = false;
 if( $prev_image_slug ) $prev_link = $gallery->get_image_link( $prev_image_slug );
 if( $next_image_slug ) $next_link = $gallery->get_image_link( $next_image_slug );
 
-$download_url = false;
+$download_image_url = false;
 if( $gallery->is_download_image_enabled() ) {
-	$download_filename = $image->get_original_filename();
-	$download_image = new Image( $download_filename, $gallery );
+	$download_image_filename = $image->get_original_filename();
+	$download_image = new Image( $download_image_filename, $gallery );
 	$download_filetype = get_config( 'download_filetype' );
 	$query = [];
 	if( $download_filetype ) {
 		$query['type'] = $download_filetype;
 	}
-	$download_url = $download_image->get_image_url( $query );
+	$download_image_url = $download_image->get_image_url( $query );
 }
 
-$download_gallery = false;
+$download_gallery_url = false;
 if( $gallery->is_download_gallery_enabled() ) {
-	$download_gallery = true; // TODO
+	$download_gallery_url = $gallery->get_zip_url();
+	$download_gallery_filename = $gallery->get_zip_filename();
 }
+
+$image->resize(2000);
 
 ?>
 <div class="meta">
@@ -51,24 +54,19 @@ if( $gallery->is_download_gallery_enabled() ) {
 	</ul>
 	<ul class="action">
 		<?php
-		if( $download_url ) {
+		if( $download_image_url ) {
 			?>
-			<li><a href="<?= $download_url ?>" download="<?= $download_filename ?>">download image</a></li>
+			<li><a href="<?= $download_image_url ?>" download="<?= $download_image_filename ?>">download image</a></li>
 			<?php
 		}
-		if( $download_gallery ) {
+		if( $download_gallery_url ) {
 			?>
-			<li><a href="<?= url('not-implemented') ?>">download gallery</a></li>
+			<li><a href="<?= $download_gallery_url ?>" download="<?= $download_gallery_filename ?>">download gallery</a></li>
 			<?php
 		}
 		?>
 	</ul>
 </div>
-<?php
-
-$image->resize(2000);
-
-?>
 <div class="image-wrapper">
 	<?= $image->get_html() ?>
 </div>

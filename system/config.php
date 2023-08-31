@@ -14,6 +14,6 @@ return [
 	'cache_disabled' => false,
 	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'], // search for these extensions while loading gallery images; TODO: add avif
 	'download_image_enabled' => true, // set to false to disable download of single images
-	'download_gallery_enabled' => false, // set to false to disable download of the whole gallery; TODO: set to true
+	'download_gallery_enabled' => true, // set to false to disable download of the whole gallery
 	'download_filetype' => 'jpg', // set to false to use original filetype
 ];
