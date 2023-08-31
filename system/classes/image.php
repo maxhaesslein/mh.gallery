@@ -155,6 +155,11 @@ class Image {
 	}
 
 
+	function get_original_filename(){
+		return $this->filename;
+	}
+
+
 	function get_filename( $query = [] ) {
 
 		$defaults = [
@@ -175,7 +180,7 @@ class Image {
 	}
 
 
-	function get_image_url( $query ) {
+	function get_image_url( $query = [] ) {
 
 		$url = get_baseurl('img/').trailing_slash_it($this->gallery->get_url(false)).$this->get_filename($query);
 

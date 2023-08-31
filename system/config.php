@@ -12,5 +12,8 @@ return [
 	'default_image_quality' => 88,
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
 	'cache_disabled' => false,
-	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'] // search for these extensions while loading gallery images; TODO: add avif
+	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'], // search for these extensions while loading gallery images; TODO: add avif
+	'download_image_enabled' => true, // set to false to disable download of single images
+	'download_gallery_enabled' => false, // set to false to disable download of the whole gallery; TODO: set to true
+	'download_filetype' => 'jpg', // set to false to use original filetype
 ];

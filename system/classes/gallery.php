@@ -8,6 +8,8 @@ class Gallery {
 	private $images = NULL;
 	private $hidden = false;
 	private $secret = false;
+	private $download_image_enabled;
+	private $download_gallery_enabled;
 
 	function __construct( $gallery_file ) {
 
@@ -57,17 +59,36 @@ class Gallery {
 
 		$this->settings = $settings;
 
-		if( ! empty($settings['hidden']) ) {
+		if( isset($settings['hidden']) ) {
 			$hidden = $settings['hidden'];
 			if( $hidden == 'false' || $hidden == '0' ) $hidden = false;
 			$hidden = !! $hidden; // make bool
 			$this->hidden = $hidden;
 		}
 
-		if( ! empty($settings['secret']) ) {
+		if( isset($settings['secret']) ) {
 			$this->secret = $settings['secret'];
 			$this->hidden = true; // force gallery to be hidden, if a secret is set
 		}
+
+		if( isset($settings['download_image_enabled']) ) {
+			$download_image_enabled = $settings['download_image_enabled'];
+			if( $download_image_enabled == 'false' || $download_image_enabled == '0' ) $download_image_enabled = false;
+			$download_image_enabled = !! $download_image_enabled; // make bool
+		} else {
+			$download_image_enabled = get_config( 'download_image_enabled' );
+		}
+		$this->download_image_enabled = $download_image_enabled;
+
+		if( isset($settings['download_gallery_enabled']) ) {
+			$download_gallery_enabled = $settings['download_gallery_enabled'];
+			if( $download_gallery_enabled == 'false' || $download_gallery_enabled == '0' ) $download_gallery_enabled = false;
+			$download_gallery_enabled = !! $download_gallery_enabled; // make bool
+		} else {
+			$download_gallery_enabled = get_config( 'download_gallery_enabled' );
+		}
+		$this->download_gallery_enabled = $download_gallery_enabled;
+
 
 		return $this;
 	}
@@ -75,6 +96,16 @@ class Gallery {
 
 	function is_hidden(){
 		return $this->hidden;
+	}
+
+
+	function is_download_image_enabled() {
+		return $this->download_image_enabled;
+	}
+
+
+	function is_download_gallery_enabled() {
+		return $this->download_gallery_enabled;
 	}
 
 
