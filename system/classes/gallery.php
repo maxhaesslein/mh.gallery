@@ -150,6 +150,28 @@ class Gallery {
 	}
 
 
+	function get_thumbnail_slug() {
+
+		$images = $this->get_images();
+
+		if( ! count($images) ) return false;
+
+		$thumbnail_slug = $this->get_config('thumbnail');
+		if( $thumbnail_slug ) {
+			$thumbnail_slug = explode('.', $thumbnail_slug);
+			unset($thumbnail_slug[count($thumbnail_slug)-1]);
+			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug));
+			if( array_key_exists($thumbnail_slug, $images) ) {
+				return $thumbnail_slug;
+			}
+		}
+
+		$thumbnail_slug = array_keys($images)[0];
+
+		return $thumbnail_slug;
+	}
+
+
 	function get_image_link( $slug ) {
 
 		if( $this->images == NULL ) $this->load_images();

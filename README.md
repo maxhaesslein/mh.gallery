@@ -24,6 +24,7 @@ title: my cool gallery
 slug: my-cool-gallery
 hidden: true
 secret: 1234
+thumbnail: image-01.jpg
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug and secret should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.

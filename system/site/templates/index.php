@@ -16,9 +16,8 @@ snippet( 'header' );
 
 		$url = $gallery->get_url();
 
-		$images = $gallery->get_images();
-
-		$image = $images[array_keys($images)[0]];
+		$thumbnail_slug = $gallery->get_thumbnail_slug();
+		$image = $gallery->get_image($thumbnail_slug);
 
 		$title = $gallery->get_title();
 
