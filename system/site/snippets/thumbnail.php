@@ -4,15 +4,10 @@ if( ! $core ) exit;
 
 $image = $args['image'];
 
-$url = $image->get_link();
-
-$width = 300; // TODO
-$height = 200; // TODO
+$width = 640;
+$height = (int) round($width * 2/3);
 $crop = true;
 
 $thumbnail_html = $image->resize( $width, $height, $crop )->get_html();
 
-?>
-<a href="<?= $url ?>">
-	<?= $thumbnail_html ?>
-</a>
+echo $thumbnail_html;

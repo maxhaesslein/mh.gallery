@@ -7,16 +7,23 @@ $images = $gallery->get_images();
 
 snippet( 'header' );
 
-echo '<h1>'.$gallery->get_title().'</h1>';
+?>
+<h1><?= $gallery->get_title() ?></h1>
 
-echo '<ul>';
-foreach( $images as $image ) {
-	echo '<li>';
-
-	snippet( 'thumbnail', [ 'image' => $image ] );
-
-	echo '</li>';
-}
-echo' </ul>';
+<ul class="gallery-list">
+	<?php
+	foreach( $images as $image ) {
+		$url = $image->get_link();
+		?>
+		<li>
+			<a href="<?= $url ?>">
+				<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+			</a>
+		</li>
+		<?php
+	}
+	?>
+</ul>
+<?php
 
 snippet( 'footer' );

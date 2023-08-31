@@ -1,6 +1,12 @@
 <?php
 
-if( ! $core ) exit; ?><!DOCTYPE html>
+if( ! $core ) exit;
+
+$template_name = $core->route->get('template_name');
+
+$classes = [ 'nojs', 'template-'.$template_name ];
+
+?><!DOCTYPE html>
 <!--
         _                _ _              
   _ __ | |_    __ _ __ _| | |___ _ _ _  _ 
@@ -16,6 +22,6 @@ if( ! $core ) exit; ?><!DOCTYPE html>
 <?php head(); ?>
 
 </head>
-<body class="nojs">
+<body<?= get_class_attribute($classes) ?>>
 <script type="text/javascript">document.body.classList.remove('nojs');</script>
 

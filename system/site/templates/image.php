@@ -10,8 +10,6 @@ $image_slug = $image->get_slug();
 
 snippet( 'header' );
 
-echo '<h1>'.$gallery->get_title().'</h1>';
-
 $overview_link = $gallery->get_url();
 $prev_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'prev' );
 $next_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'next' );
@@ -32,8 +30,12 @@ if( $next_image_slug ) $next_link = $gallery->get_image_link( $next_image_slug )
 </ul>
 <?php
 
-$image->resize(1200);
-echo $image->get_html();
+$image->resize(2000);
 
+?>
+<div class="image-wrapper">
+	<?= $image->get_html() ?>
+</div>
+<?php
 
 snippet( 'footer' );
