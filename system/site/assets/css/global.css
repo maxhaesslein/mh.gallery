@@ -170,6 +170,10 @@ h1 {
 			text-align: right;
 		}
 
+	body.nojs .meta .action-js {
+		display: none;
+	}
+
 	.meta a {
 		display: inline-block;
 		padding: 5px;

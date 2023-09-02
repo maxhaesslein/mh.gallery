@@ -39,7 +39,7 @@ $image->resize(2000);
 snippet( 'header' );
 
 ?>
-<main>
+<main id="fullscreen-target">
 	<div class="meta">
 		<ul class="info">
 			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
@@ -52,6 +52,7 @@ snippet( 'header' );
 			?>
 		</ul>
 		<ul class="action">
+			<li class="action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
 			if( $download_image_url ) {
 				?>

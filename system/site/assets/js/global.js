@@ -57,9 +57,39 @@ var keyboardNavigation = {
 };
 
 
+var fullscreenButton = {
+
+	init: function(){
+		var button = document.getElementById('action-fullscreen');
+
+		if( ! button ) return;
+
+		button.addEventListener( 'click', fullscreenButton.toggle );
+
+	},
+
+	toggle: function( e ){
+
+		e.preventDefault();
+
+		var target = document.getElementById('fullscreen-target');
+
+		if( ! target ) return;
+
+		if( ! document.fullscreenElement ) {
+			document.documentElement.requestFullscreen( target );
+		} else if ( document.exitFullscreen ) {
+			document.exitFullscreen();
+		}
+	}
+
+}
+
+
 function init() {
 	hideCursor.init();
 	keyboardNavigation.init();
+	fullscreenButton.init();
 };
 
 
