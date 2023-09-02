@@ -20,7 +20,25 @@ var Ajax = {
 				if( Ajax.navigate(this) ) e.preventDefault();
 			});
 		}
+
+		window.addEventListener( "popstate", Ajax.urlNavigation );
 		
+	},
+
+	urlNavigation: function( e ) {
+
+		var state = e.state;
+
+		console.log(state)
+
+		if( ! state ) return;
+
+		var url = state.url;
+
+		if( ! url ) return;
+
+		window.location.href = url;
+
 	},
 
 	navigate: function( el ) {
@@ -46,6 +64,11 @@ var Ajax = {
 			if( request.status === 200 ) {
 
 				var response = request.response;
+
+				var url = el.href;
+				if( url ) {
+					history.pushState( {url: url}, false, url );
+				}
 
 				if( ! response ) {
 					// TODO: handle error case
