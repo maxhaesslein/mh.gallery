@@ -46,9 +46,9 @@ snippet( 'header' );
 		</ul>
 		<ul class="navigation">
 			<?php
-			if( $prev_link ) echo '<li><a href="'.$prev_link.'">prev</a></li>';
+			if( $prev_link ) echo '<li><a id="navigate-prev" href="'.$prev_link.'">prev</a></li>';
 			echo '<li><a href="'.$overview_link.'">overview</a></li>';
-			if( $next_link ) echo '<li><a href="'.$next_link.'">next</a></li>';
+			if( $next_link ) echo '<li><a id="navigate-next" href="'.$next_link.'">next</a></li>';
 			?>
 		</ul>
 		<ul class="action">

@@ -1,5 +1,6 @@
 (function(){
-	
+
+
 var hideCursor = {
 
 	delay: 2000,
@@ -26,8 +27,39 @@ var hideCursor = {
 
 };
 
+
+var keyboardNavigation = {
+
+	init: function(){
+		if( ! document.body.classList.contains('template-image') ) return;
+
+		document.addEventListener( 'keydown', keyboardNavigation.navigate );
+	},
+
+	navigate: function(e){
+
+		var target = false;
+
+		if( e.key == 'ArrowDown' || e.key == 'ArrowRight' ) {
+			target = document.getElementById('navigate-next');
+			e.preventDefault();
+		} else if( e.key == 'ArrowUp' || e.key == 'ArrowLeft' ) {
+			target = document.getElementById('navigate-prev');
+			e.preventDefault();
+		}
+
+		if( ! target || ! target.href ) return;
+		
+		window.location.href = target.href;
+
+	}
+
+};
+
+
 function init() {
 	hideCursor.init();
+	keyboardNavigation.init();
 };
 
 
