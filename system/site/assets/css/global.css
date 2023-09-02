@@ -15,18 +15,27 @@ html, body {
 	margin: 0;
 }
 
-footer {
-	position: absolute;
-	right: 1em;
-	font-size: 0.7rem;
-	opacity: 0.4;
-}
-
 body {
 	background: var(--color-background);
 	color: var(--color-text);
 	font-size: 18px;
 	padding: 1em;
+	min-width: 320px;
+}
+
+	@media ( max-width: 580px ) {
+
+		body {
+			font-size: 16px;
+		}
+
+	}
+
+footer {
+	position: absolute;
+	right: 1em;
+	font-size: 0.7rem;
+	opacity: 0.4;
 }
 
 hr {
@@ -142,7 +151,9 @@ h1 {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	padding-bottom: 0.8em;
+	width: 100%;
+	padding: 0.3em;
+	box-sizing: border-box;
 
 	-webkit-transition: opacity 500ms ease-in-out;
 	-moz-transition: opacity 500ms ease-in-out;
@@ -152,23 +163,13 @@ h1 {
 }
 
 	.meta ul {
-		width: 400px;
 		margin: 0;
 		padding: 0;
-		text-align: center;
 		list-style-type: none;
 	}
 
 		.meta ul li {
 			display: inline;
-		}
-
-		.meta ul:first-child {
-			text-align: left;
-		}
-
-		.meta ul:last-child {
-			text-align: right;
 		}
 
 	body.nojs .meta .action-js {
@@ -180,17 +181,37 @@ h1 {
 		padding: 5px;
 	}
 
-	.template-image .meta {
-		position: fixed;
-		left: 0;
-		top: 0;
-		width: 100%;
-		padding: 0.3em;
-		box-sizing: border-box;
-	}
-
 	body.cursor-hidden.template-image .meta {
 		opacity: 0;
+	}
+
+	@media ( max-width: 580px ) {
+
+		.meta a {
+			padding: 0 5px;
+		}
+
+	}
+
+body.template-image {
+	padding: 0;
+}
+
+	.template-image main {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		align-items: stretch;
+	}
+
+	.template-image .meta {
+		height: 50px;
+	}
+
+	.template-image footer {
+		position: fixed;
+		bottom: 0.7em;
+		z-index: 50;
 	}
 
 .image-wrapper {
@@ -199,7 +220,7 @@ h1 {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: calc(100vh - 2em);
+	height: calc(100vh - 50px - 50px);
 }
 
 	.image-wrapper picture,
@@ -208,7 +229,7 @@ h1 {
 		width: auto;
 		height: auto;
 		max-width: calc(100vw - 2em);
-		max-height: calc(100vh - 5em);
+		max-height: 100%;
 	}
 
 	body.cursor-hidden.template-image .image-wrapper {
