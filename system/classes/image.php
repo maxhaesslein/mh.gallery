@@ -290,7 +290,7 @@ class Image {
 			],
 		];
 
-		$html = '<picture'.get_class_attribute($classes).'>'; // TODO: backgroundcolor
+		$html = '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.'">'; // TODO: backgroundcolor
 
 			foreach( $picture as $source ) {
 				$images = [];
