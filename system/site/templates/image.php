@@ -5,6 +5,7 @@ if( ! $core ) exit;
 $gallery = $core->route->get('gallery');
 $image = $core->route->get('image');
 
+$gallery_slug = $gallery->get_slug();
 $image_slug = $image->get_slug();
 
 $overview_link = $gallery->get_url();
@@ -34,21 +35,25 @@ if( $gallery->is_download_gallery_enabled() ) {
 	$download_gallery_url = $gallery->get_zip_download_url();
 }
 
-$image->resize(2000);
+$image->resize(get_config('default_image_size'));
 
 snippet( 'header' );
 
+if( ! doing_ajax() ) {
+	?>
+	<main id="fullscreen-target">
+	<?php
+}
 ?>
-<main id="fullscreen-target">
 	<div class="meta">
 		<ul class="info">
 			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
 		</ul>
 		<ul class="navigation">
 			<?php
-			if( $prev_link ) echo '<li><a id="navigate-prev" href="'.$prev_link.'">prev</a></li>';
+			if( $prev_link ) echo '<li><a id="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image_slug.'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
 			echo '<li><a href="'.$overview_link.'">overview</a></li>';
-			if( $next_link ) echo '<li><a id="navigate-next" href="'.$next_link.'">next</a></li>';
+			if( $next_link ) echo '<li><a id="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image_slug.'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
 			?>
 		</ul>
 		<ul class="action">
@@ -70,7 +75,11 @@ snippet( 'header' );
 	<div class="image-wrapper">
 		<?= $image->get_html() ?>
 	</div>
-</main>
 <?php
+if( ! doing_ajax() ) {
+	?>
+	</main>
+	<?php
+}
 
 snippet( 'footer' );

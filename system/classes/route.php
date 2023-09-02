@@ -87,6 +87,27 @@ class Route {
 				$template_name = 'download';
 			}
 
+		} elseif( count($request) >= 3 && $request[0] == 'api' ) {
+
+			$gallery_slug = $request[1];
+
+			if( $core->galleries->exists($gallery_slug) ) {
+
+				$gallery = $core->galleries->get_gallery($gallery_slug);
+
+				if( $gallery ) {
+					$image_slug = $request[2];
+
+					$image = $gallery->get_image($image_slug);
+
+					if( $image ) {
+						$template_name = 'api-output';
+					}
+
+				}
+
+			}
+
 		} elseif( count($request) > 0 ) {
 
 			$gallery_slug = $request[0];

@@ -19,6 +19,7 @@ footer {
 	position: absolute;
 	right: 1em;
 	font-size: 0.7rem;
+	opacity: 0.4;
 }
 
 body {

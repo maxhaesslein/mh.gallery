@@ -10,6 +10,7 @@ return [
 	'system_js' => true, // set to false to disable the systems js files
 	'allow_overview' => true, // set to false to disable overview page with index of public galleries
 	'default_image_quality' => 88,
+	'default_image_size' => 2000,
 	'cache_disabled' => false,
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
 	'zip_lifetime' => 60*60*24*7, // cache time of gallery zip files; 7 days in seconds

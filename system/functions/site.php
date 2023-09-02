@@ -56,6 +56,14 @@ function head() {
 	if( get_config('system_js') ) {
 		$js_system_path = 'system/site/assets/js/';
 		head_load_files( $js_system_path, $js_filter, $js_tag );
+
+		?>
+		<script type="text/javascript">
+			GALLERY = {
+				'apiUrl': '<?= url('api') ?>',
+			};
+		</script>
+		<?php
 	}
 	
 	$js_custom_path = 'custom/assets/js/';
@@ -72,4 +80,11 @@ function head_load_files( $path, $filter, $tag ) {
 
 		echo str_replace( '{url}', $url, $tag );
 	}
+}
+
+
+function doing_ajax() {
+	if( ! defined('DOING_AJAX') ) return false;
+
+	return DOING_AJAX;
 }

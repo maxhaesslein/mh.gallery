@@ -2,6 +2,8 @@
 
 if( ! $core ) exit;
 
+if( doing_ajax() ) return;
+
 ?>
 
 

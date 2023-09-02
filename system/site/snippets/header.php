@@ -2,6 +2,8 @@
 
 if( ! $core ) exit;
 
+if( doing_ajax() ) return;
+
 $template_name = $core->route->get('template_name');
 
 $classes = [ 'nojs', 'template-'.$template_name ];

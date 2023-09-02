@@ -1,39 +1,109 @@
 (function(){
 
 
-var hideCursor = {
+var Ajax = {
+
+	init: function(){
+
+		if( ! document.body.classList.contains('template-image') ) return;
+
+		var next = document.getElementById('navigate-next');
+		if( next ) {
+			next.addEventListener('click', function(e){
+				if( Ajax.navigate(this) ) e.preventDefault();
+			});
+		}
+
+		var prev = document.getElementById('navigate-prev');
+		if( prev ) {
+			prev.addEventListener('click', function(e){
+				if( Ajax.navigate(this) ) e.preventDefault();
+			});
+		}
+		
+	},
+
+	navigate: function( el ) {
+
+		var imageSlug = false;
+		if( el.id == 'navigate-next' ) {
+			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.nextImageSlug;
+		} else if( el.id == 'navigate-prev' ) {
+			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.prevImageSlug;
+		} else {
+			return false;
+		}
+
+		requestUrl = GALLERY.apiUrl+imageSlug+'/';
+
+		var request = new XMLHttpRequest();
+		request.open( 'GET', requestUrl );
+
+		request.onreadystatechange = function(){
+
+			if( request.readyState !== XMLHttpRequest.DONE ) return;
+
+			if( request.status === 200 ) {
+
+				var response = request.response;
+
+				if( ! response ) {
+					// TODO: handle error case
+					console.warn( 'AJAX request failed.', request ); // DEBUG
+				}
+
+				document.getElementById('fullscreen-target').innerHTML = response;
+
+				init(); // re-init all event listeners
+
+			} else {
+				// something went wrong …
+				// TODO: handle error case
+				console.warn( 'AJAX request failed.', request ); // DEBUG
+			}
+
+		}
+		request.send();
+
+		return true;
+	}
+
+};
+
+
+var HideCursor = {
 
 	delay: 2000,
 	timer: false,
 
 	init: function(){
 
-		hideCursor.startTimeout();
+		HideCursor.startTimeout();
 
-		document.addEventListener( 'mousemove', hideCursor.showCursor );
+		document.addEventListener( 'mousemove', HideCursor.showCursor );
 	},
 
 	startTimeout: function(){
-		hideCursor.timer = setTimeout(function(){
+		HideCursor.timer = setTimeout(function(){
 			document.body.classList.add('cursor-hidden');
-		}, hideCursor.delay);
+		}, HideCursor.delay);
 	},
 
 	showCursor: function(){
-		clearTimeout(hideCursor.timer);
+		clearTimeout(HideCursor.timer);
 		document.body.classList.remove('cursor-hidden');
-		hideCursor.startTimeout();
+		HideCursor.startTimeout();
 	}
 
 };
 
 
-var keyboardNavigation = {
+var KeyboardNavigation = {
 
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
 
-		document.addEventListener( 'keydown', keyboardNavigation.navigate );
+		document.addEventListener( 'keydown', KeyboardNavigation.navigate );
 	},
 
 	navigate: function(e){
@@ -48,23 +118,23 @@ var keyboardNavigation = {
 			e.preventDefault();
 		}
 
-		if( ! target || ! target.href ) return;
+		if( ! target ) return;
 		
-		window.location.href = target.href;
+		target.click();
 
 	}
 
 };
 
 
-var fullscreenButton = {
+var FullscreenButton = {
 
 	init: function(){
 		var button = document.getElementById('action-fullscreen');
 
 		if( ! button ) return;
 
-		button.addEventListener( 'click', fullscreenButton.toggle );
+		button.addEventListener( 'click', FullscreenButton.toggle );
 
 	},
 
@@ -83,13 +153,14 @@ var fullscreenButton = {
 		}
 	}
 
-}
+};
 
 
 function init() {
-	hideCursor.init();
-	keyboardNavigation.init();
-	fullscreenButton.init();
+	Ajax.init();
+	HideCursor.init();
+	KeyboardNavigation.init();
+	FullscreenButton.init();
 };
 
 
