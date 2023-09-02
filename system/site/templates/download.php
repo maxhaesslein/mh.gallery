@@ -41,7 +41,7 @@ snippet( 'header' );
 	} else {
 		?>
 		<hr>
-		<p><a href="<?= $download_url ?>">click here download <em><?= $filename ?></em> (<?= $size ?>)</a></p>
+		<p><a href="<?= $download_url ?>" download="<?= $filename ?>">click here download <em><?= $filename ?></em> (<?= $size ?>)</a></p>
 		<?php
 	}
 	?>

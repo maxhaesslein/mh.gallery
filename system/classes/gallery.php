@@ -111,7 +111,18 @@ class Gallery {
 
 	function get_zip_url() {
 
-		$url = get_baseurl('zip/').un_trailing_slash_it($this->get_url(false)).'.zip';
+		if( ! $this->is_download_gallery_enabled() ) {
+			return false;
+		}
+
+		$cache = $this->get_zip_cache();
+
+
+		$cache->refresh_lifetime();
+
+		$filename = $cache->get_file_name();
+
+		$url = get_baseurl('zip/').un_trailing_slash_it($filename).'.zip';
 
 		return $url;
 	}
@@ -377,31 +388,5 @@ class Gallery {
 		return count($this->get_missing_zip_images());
 	}
 
-
-	function output_zipfile() {
-		// NOTE: this assumes we did not output any headers or HTML yet!
-
-		if( ! $this->is_download_gallery_enabled() ) {
-			return false;
-		}
-
-		$cache = $this->get_zip_cache();
-
-
-		$cache->refresh_lifetime();
-
-		$filename = $this->get_zip_filename();
-		$filesize = filesize($filepath);
-		$filepath = get_abspath($cache->get_file_path());
-
-		header("Content-Description: File Transfer");
-		header("Content-Type: application/octet-stream");
-		header("Content-Transfer-Encoding: Binary");
-		header("Content-Disposition: attachment; filename=\"".$filename."\"");
-		header("Content-Length: ".$filesize);
-
-		readfile($filepath);
-		exit;
-	}
 	
 }
