@@ -37,6 +37,8 @@ class Core {
 
 		$this->route = new Route();
 
+		$this->refresh_cache();
+
 	}
 
 
@@ -118,6 +120,15 @@ class Core {
 		}
 
 		return $baseurl;
+	}
+
+
+	function refresh_cache(){
+
+		$cache = new Cache( false, false );
+
+		$cache->clear_cache_folder();
+		
 	}
 
 
