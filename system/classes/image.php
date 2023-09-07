@@ -79,18 +79,16 @@ class Image {
 		}
 
 		if( $this->image_type == IMAGETYPE_JPEG ) {
-			$this->mime_type = 'image/jpeg';
-			$this->output_type = 'jpg';
+			$this->set_image_type('jpg');
 		} elseif( $this->image_type == IMAGETYPE_PNG ) {
-			$this->mime_type = 'image/png';
-			$this->output_type = 'png';
+			$this->set_image_type('png');
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
-			$this->mime_type = 'image/webp';
-			$this->output_type = 'webp';
+			$this->set_image_type('webp');
+		} elseif( $this->avif_supported() && $this->image_type == IMAGETYPE_AVIF ) {
+			$this->set_image_type('avif');
 		} else {
 			debug( 'unknown image type '.$this->image_type);
 		}
-		// TODO: support avif, if PHP >= 8.2
 
 		$this->width = $this->src_width;
 		$this->height = $this->src_height;
@@ -98,6 +96,18 @@ class Image {
 		$this->alt = false; // TODO: add support for alt tag
 
 		return $this;
+	}
+
+
+	function avif_supported() {
+
+		if( ! defined('IMAGETYPE_AVIF') ) return false;
+
+		if( ! function_exists('imagecreatefromavif') ) return false;
+
+		if( ! function_exists('imageavif') ) return false;
+
+		return true;
 	}
 
 
@@ -322,19 +332,17 @@ class Image {
 
 		if( $new_type == 'jpg' ) {
 			$this->mime_type = 'image/jpeg';
-			$this->output_type = $new_type;
-
+			$this->output_type = 'jpg';
 		} elseif( $new_type == 'png' ) {
 			$this->mime_type = 'image/png';
-			$this->output_type = $new_type;
-
+			$this->output_type = 'png';
 		} elseif( $new_type == 'webp' ) {
 			$this->mime_type = 'image/webp';
-			$this->output_type = $new_type;
-
+			$this->output_type = 'webp';
+		} elseif( $this->avif_supported() && $new_type == 'avif' ) {
+			$this->mime_type = 'image/avif';
+			$this->output_type = 'avif';
 		}
-
-		// TODO: add support for avif if PHP >= 8.2
 
 		return $this;
 	}
@@ -374,7 +382,15 @@ class Image {
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
 
-		} // TODO: read avif files, if PHP >= 8.2
+		} elseif( $this->avif_supported() && $this->image_type == IMAGETYPE_AVIF ) {
+
+			$image = imagecreatefromavif( $this->path );
+
+			// handle transparency loading:
+			imageAlphaBlending( $image, false );
+			imageSaveAlpha( $image, true );
+
+		}
 
 
 		if( ! $image ) {
@@ -536,8 +552,18 @@ class Image {
 			header( 'Content-Type: image/webp' );
 			echo $data;
 
+		} elseif( $this->avif_supported() && $type == 'avif' ) {
+
+			ob_start();
+			imageavif( $image_blob );
+			$data = ob_get_contents();
+			ob_end_clean();
+			$cache->add_data( $data );
+
+			header( 'Content-Type: image/avif' );
+			echo $data;			
+
 		}
-		// TODO: add avif
 
 		imagedestroy( $image_blob );
 		exit;
