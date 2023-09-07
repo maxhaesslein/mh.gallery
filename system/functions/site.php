@@ -75,8 +75,13 @@ function head() {
 function head_load_files( $path, $filter, $tag ) {
 	$folder = new Folder( $path, $filter );
 	$files = $folder->get();
+
+	$version = get_version();
+	if( get_config('debug') ) $version .= '.'.time(); // cache buster
+
 	foreach( $files as $file ) {
-		$url = url($file, false).'?v='.get_version();
+
+		$url = url($file, false).'?v='.$version;
 
 		echo str_replace( '{url}', $url, $tag );
 	}
