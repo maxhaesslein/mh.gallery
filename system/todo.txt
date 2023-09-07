@@ -15,3 +15,4 @@ this list is not complete
 - preload next and prev image?
 - favicon
 - maybe theme support?
+- add license file
