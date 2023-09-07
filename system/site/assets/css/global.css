@@ -206,6 +206,13 @@ body.template-image {
 		z-index: 50;
 	}
 
+	.template-image .meta-bottom {
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		height: auto;
+	}
+
 .image-wrapper {
 	display: block;
 	box-sizing: border-box;
@@ -214,11 +221,15 @@ body.template-image {
 	align-items: center;
 	padding: 0 20px;
 	height: calc(100vh - 50px - 50px);
+	max-height: -webkit-fill-available;
 	width: 100%;
+	overflow: hidden;
 }
 
 	.image-wrapper picture {
-		display: block;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		width: auto;
 		height: auto;
 		max-width: 100%;
@@ -229,6 +240,7 @@ body.template-image {
 		display: block;
 		max-width: 100%;
 		max-height: 100%;
+		max-height: -webkit-fill-available; /* bugfix for mobile safari */
 		object-fit: contain;
 	}
 

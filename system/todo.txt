@@ -1,8 +1,7 @@
 
 this list is not complete
 
-- mobile enhancements
-	- slide navigation
+- mobile navigation via touch/slide
 - hidden galleries with secret link
 	- if no secret hash exists, create one and save it into the gallery.txt on first access?
 	- allow multiple secret hashes per gallery, and the removal of links/secrets (could be: secret: 12345, 54321, abc)
