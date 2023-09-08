@@ -190,14 +190,7 @@ body.template-image {
 }
 
 	.template-image main {
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		align-items: stretch;
-	}
-
-	.template-image .meta {
-		height: 50px;
+		min-height: unset;
 	}
 
 	.template-image footer {
@@ -206,23 +199,32 @@ body.template-image {
 		z-index: 50;
 	}
 
-	.template-image .meta-bottom {
+	.template-image .meta {
 		position: fixed;
 		left: 0;
-		bottom: 0;
-		height: auto;
+		z-index: 50;
 	}
 
+		.template-image .meta-top {
+			top: 0;
+		}
+
+		.template-image .meta-bottom {
+			bottom: 0;
+		}
+
 .image-wrapper {
-	display: block;
-	box-sizing: border-box;
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 30;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	padding: 0 20px;
-	height: calc(100vh - 50px - 50px);
-	max-height: -webkit-fill-available;
-	width: 100%;
+	padding: 2.3em 20px;
+	box-sizing: border-box;
 	overflow: hidden;
 }
 
