@@ -62,7 +62,7 @@ if( ! doing_ajax() ) {
 	<div class="meta meta-bottom">
 		<ul class="action">
 			<li><a href="<?= $overview_link ?>">overview</a></li>
-			<li class="action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
+			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
 			if( $download_image_url ) {
 				?>

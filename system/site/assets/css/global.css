@@ -266,3 +266,11 @@ body.template-image {
 	body:not(.nojs).template-download .refresh-link-wrapper {
 		display: none;
 	}
+
+@media ( max-width: 640px ) {
+
+	.meta .button-fullscreen {
+		display: none;
+	}
+
+}
