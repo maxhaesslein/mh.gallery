@@ -1,1 +1,20 @@
-v.0.0.1
+v.0.1.0
+
+initial release.
+
+- add multiple galleries; subfolders possible
+- custom/config.php for a per-website configuration
+- gallery.txt for a per-gallery configuration
+- index/homepage can list all public galleries, or can be disabled
+- galleries can be public (listed on the index page), hidden (only people with the link can view the gallery) or have a secret hash (only people with the link, containing the hash, can view the gallery)
+- the gallery slug can be changed via gallery.txt
+- the gallery title can be changed via gallery.txt
+- the thumbnail can be changed via gallery.txt
+- support for jpg, png, webp, avif
+- download of single images, or the whole gallery as .zip (can be disabled via custom/config.php or on a per-gallery-basis via gallery.txt)
+- fullscreen function
+- keyboard navigation via the arrow keys (if JavaScript is enabled)
+- basic responsive design for mobile phones
+- (almost) everything can be used with disabled JavaScript
+
+for planned features and fixes, see the system/todo.txt
