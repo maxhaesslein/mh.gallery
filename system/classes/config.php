@@ -10,7 +10,9 @@ class Config {
 		$this->load_config_file( get_abspath('system/config.php') );
 
 		// overwrite with custom local config
-		$this->load_config_file( get_abspath('custom/config.php') );
+		if( file_exists(get_abspath('custom/config.php')) ) {
+			$this->load_config_file( get_abspath('custom/config.php') );
+		}
 
 	}
 
