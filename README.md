@@ -8,7 +8,9 @@ This is a very early version, expect things to not work or change. This readme w
 
 - PHP 8.0 or higher
 - write access to the folder where it's installed
-- mod_rewrite support
+- .htaccess with mod_rewrite support
+- php-mbstring
+- php-gd
 - maybe more? this list will be expanded later
 
 ## Installation
