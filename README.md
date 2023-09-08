@@ -2,7 +2,7 @@
 
 A simple and lightweight PHP gallery, without any dependencies.
 
-This is a very early version, expect things to not work or change. This readme will be expanded later.
+This is an early version, expect things to not work or change.
 
 ## Requirements
 
