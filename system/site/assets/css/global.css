@@ -271,7 +271,7 @@ body.template-image {
 		display: none;
 	}
 
-@media ( max-width: 640px ) {
+@media ( pointer: none ), ( pointer: coarse ) {
 
 	.meta .button-fullscreen {
 		display: none;
