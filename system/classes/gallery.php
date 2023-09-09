@@ -333,7 +333,7 @@ class Gallery {
 
 		$missing_images = [];
 		foreach( $expected_images as $image ) {
-			if( $zip->locateName('/'.$image->get_original_filename()) !== false ) continue;
+			if( $zip->locateName($image->get_original_filename()) !== false ) continue;
 
 			$missing_images[] = $image;
 		}
@@ -380,7 +380,7 @@ class Gallery {
 		}
 
 		foreach( $missing_images as $image ) {
-			$zip->addFile( $image->get_original_filepath(), '/'.$image->get_original_filename() );
+			$zip->addFile( $image->get_original_filepath(), $image->get_original_filename() );
 		}
 
 		$zip->close();
