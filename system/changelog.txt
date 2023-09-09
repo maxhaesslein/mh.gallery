@@ -1,3 +1,10 @@
+v.0.1.1
+
+- text updates
+- in image view, use Escape key to go back to the image overview
+- better detection for when to show the fullscreen button
+
+
 v.0.1.0
 
 initial release.
