@@ -29,8 +29,6 @@ var Ajax = {
 
 		var state = e.state;
 
-		console.log(state)
-
 		if( ! state ) return;
 
 		var url = state.url;
