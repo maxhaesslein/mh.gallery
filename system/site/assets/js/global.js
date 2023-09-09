@@ -137,6 +137,9 @@ var KeyboardNavigation = {
 		} else if( e.key == 'ArrowUp' || e.key == 'ArrowLeft' ) {
 			target = document.getElementById('navigate-prev');
 			e.preventDefault();
+		} else if( e.key == 'Escape' ) {
+			target = document.getElementById('navigate-overview');
+			e.preventDefault();
 		}
 
 		if( ! target ) return;
