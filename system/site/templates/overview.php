@@ -25,7 +25,7 @@ if( $gallery->is_download_gallery_enabled() ) {
 			<?php
 			if( $download_gallery_url ) {
 				?>
-				<li><a href="<?= $download_gallery_url ?>">download gallery</a></li>
+				<li><a href="<?= $download_gallery_url ?>">download all</a></li>
 				<?php
 			}
 			?>
