@@ -185,6 +185,10 @@ h1 {
 
 	}
 
+.template-overview .meta .info li + li:before {
+	content: '/';
+}
+
 body.template-image {
 	padding: 0;
 	position: fixed;

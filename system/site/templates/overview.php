@@ -20,8 +20,6 @@ if( $gallery->is_download_gallery_enabled() ) {
 	<div class="meta">
 		<ul class="info">
 			<li><?= $gallery->get_image_count() ?> images</li>
-		</ul>
-		<ul class="action">
 			<?php
 			if( $download_gallery_url ) {
 				?>
