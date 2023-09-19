@@ -212,7 +212,17 @@ body.template-image {
 		position: fixed;
 		bottom: 0.7em;
 		z-index: 50;
+
+		-webkit-transition: opacity 500ms ease-in-out;
+		-moz-transition: opacity 500ms ease-in-out;
+		-o-transition: opacity 500ms ease-in-out;
+		-ms-transition: opacity 500ms ease-in-out;
+		transition: opacity 500ms ease-in-out;
 	}
+
+		body.cursor-hidden.template-image footer {
+			opacity: 0;
+		}
 
 	.template-image .meta {
 		position: fixed;
