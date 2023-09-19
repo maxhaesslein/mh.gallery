@@ -1,6 +1,6 @@
 v.0.1.2
 
-- ..
+- add gallery name to HTML title tag
 
 
 v.0.1.1
