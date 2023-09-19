@@ -46,22 +46,10 @@ if( ! doing_ajax() ) {
 }
 ?>
 	<div class="meta meta-top">
-		<ul class="info">
-			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
-		</ul>
-		<ul class="navigation">
-			<?php
-			if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image_slug.'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
-			if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image_slug.'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
-			?>
-		</ul>
-	</div>
-	<div class="image-wrapper">
-		<?= $image->get_html() ?>
-	</div>
-	<div class="meta meta-bottom">
 		<ul class="action">
-			<li><a id="navigate-overview" href="<?= $overview_link ?>">overview</a></li>
+			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
+		</ul>
+		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
 			if( $download_image_url ) {
@@ -75,6 +63,20 @@ if( ! doing_ajax() ) {
 				<?php
 			}
 			?>
+		</ul>
+	</div>
+	<ul class="navigation">
+		<?php
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image_slug.'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
+		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image_slug.'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
+		?>
+	</ul>
+	<div class="image-wrapper">
+		<?= $image->get_html() ?>
+	</div>
+	<div class="meta meta-bottom">
+		<ul class="info">
+			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
 		</ul>
 	</div>
 <?php
