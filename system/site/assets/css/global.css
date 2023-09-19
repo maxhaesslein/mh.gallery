@@ -250,6 +250,44 @@ body.template-image {
 			bottom: 0;
 		}
 
+	.template-image .navigation a {
+		display: block;
+		position: fixed;
+		top: 0;
+		margin: 0;
+		color: transparent;
+		width: 30%;
+		min-width: 50px;
+		height: 100%;
+		background: no-repeat center center / 20px auto;
+	}
+	
+		.template-image .navigation a.navigate-prev {
+			left: 0;
+			background-position: left 40px center;
+			background-image: url(../img/arrow-left_white.svg);
+		}
+
+		.template-image .navigation a.navigate-next {
+			right: 0;
+			background-position: right 40px center;
+			background-image: url(../img/arrow-right_white.svg);
+		}
+
+		@media( max-width: 480px ) {
+
+			.template-image .navigation a.navigate-prev {
+				background-position: left 10px center;
+				background-size: 15px auto;
+			}
+
+			.template-image .navigation a.navigate-next {
+				background-position: right 10px center;
+				background-size: 15px auto;
+			}
+
+		}
+
 .image-wrapper {
 	position: fixed;
 	left: 0;
