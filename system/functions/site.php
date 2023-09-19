@@ -47,9 +47,53 @@ function get_site_title() {
 
 	$title = array_reverse( $title );
 
-	$title = implode( ' ·  ', $title );
+	$title = implode( ' · ', $title );
 
 	return $title;
+}
+
+
+function get_site_sharing_tags() {
+
+	if( ! get_config('site_sharing_tags') ) return;
+
+	global $core;
+
+	$gallery = $core->route->get('gallery');
+	$image = $core->route->get('image');
+
+	if( ! $image && $gallery ) {
+		$thumbnail_slug = $gallery->get_thumbnail_slug();
+		$image = $gallery->get_image( $thumbnail_slug );
+	}
+
+	$description = false; // TODO: allow gallery description
+	
+	$thumbnail = false;
+	if( $image ) {
+		$thumbnail = $image->get_image_url( [ 'width' => 1200, 'height' => 1200, 'crop' => false, 'type' => 'jpg'] );
+	}
+
+	$sharing_tags = [];
+
+	$sharing_tags[] = '<meta property="og:site_name" content="'.get_config('site_title').'">';
+	$sharing_tags[] = '<meta property="og:url" content="'.url().'">';
+	$sharing_tags[] = '<meta property="og:type" content="website">';
+	$sharing_tags[] = '<meta property="og:title" content="'.get_site_title().'">';
+
+	if( $thumbnail ) {
+		$sharing_tags[] = '<meta name="twitter:card" content="summary_large_image">';
+		$sharing_tags[] = '<meta property="og:image" content="'.$thumbnail.'">';
+	}
+
+	if( $description ) {
+		$sharing_tags[] = '<meta name="description" content="'.$description.'">';
+		$sharing_tags[] = '<meta property="og:description" content="'.$description.'">';
+	}
+
+	$sharing_tags = implode( "\n	", $sharing_tags );
+
+	return $sharing_tags;
 }
 
 
@@ -58,6 +102,7 @@ function head() {
 
 	?>
 	<title><?= get_site_title() ?></title>
+	<?= get_site_sharing_tags() ?>
 <?php
 
 	// CSS
@@ -80,13 +125,13 @@ function head() {
 		$js_system_path = 'system/site/assets/js/';
 		head_load_files( $js_system_path, $js_filter, $js_tag );
 
-		?>
-		<script type="text/javascript">
-			GALLERY = {
-				'apiUrl': '<?= url('api') ?>',
-			};
-		</script>
-		<?php
+	?>
+
+	<script type="text/javascript">
+		GALLERY = {
+			'apiUrl': '<?= url('api') ?>',
+		};
+	</script><?php
 	}
 	
 	$js_custom_path = 'custom/assets/js/';

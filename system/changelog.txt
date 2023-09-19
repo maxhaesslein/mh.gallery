@@ -1,6 +1,7 @@
 v.0.1.2
 
 - add gallery name to HTML title tag
+- add social sharing tags (Open Graph tags) to HTML head (can be disabled via 'site_sharing_tags' config option)
 
 
 v.0.1.1

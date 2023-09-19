@@ -18,4 +18,5 @@ return [
 	'download_image_enabled' => true, // set to false to disable download of single images
 	'download_gallery_enabled' => true, // set to false to disable download of the whole gallery
 	'download_filetype' => 'jpg', // set to false to use original filetype
+	'site_sharing_tags' => true, // add OpenGraph sharing tags to HTML head, for better link previews
 ];
