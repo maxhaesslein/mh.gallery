@@ -2,6 +2,7 @@ v.0.1.2
 
 - add gallery name to HTML title tag
 - add social sharing tags (Open Graph tags) to HTML head (can be disabled via 'site_sharing_tags' config option)
+- galleries can now have descriptions (add 'description: Lorem Ipsum ..' to a gallery.txt file); descriptions appear in the gallery overview and are added to the social sharing tags
 
 
 v.0.1.1

@@ -12,10 +12,18 @@ if( $gallery->is_download_gallery_enabled() ) {
 	$download_gallery_url = $gallery->get_zip_download_url();
 }
 
+$description = $gallery->get_description();
+
 ?>
 <main>
 
 	<h1><?= $gallery->get_title() ?></h1>
+
+	<?php
+	if( $description ) {
+		echo '<p class="description">'.$description.'</p>';
+	}
+	?>
 
 	<div class="meta">
 		<ul class="info">

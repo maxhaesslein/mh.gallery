@@ -67,8 +67,11 @@ function get_site_sharing_tags() {
 		$image = $gallery->get_image( $thumbnail_slug );
 	}
 
-	$description = false; // TODO: allow gallery description
-	
+	$description = false;
+	if( $gallery ) {
+		$description = $gallery->get_description();
+	}
+
 	$thumbnail = false;
 	if( $image ) {
 		$thumbnail = $image->get_image_url( [ 'width' => 1200, 'height' => 1200, 'crop' => false, 'type' => 'jpg'] );

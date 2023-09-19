@@ -24,6 +24,7 @@ create a `content/` folder and add subfolders for your galleries. You can also o
 ```txt
 title: my cool gallery
 slug: my-cool-gallery
+description: this was a very nice and sunny day, and I took some pictures.
 hidden: true
 secret: 1234
 thumbnail: image-01.jpg

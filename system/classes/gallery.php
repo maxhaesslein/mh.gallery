@@ -162,6 +162,13 @@ class Gallery {
 	}
 
 
+	function get_description(){
+		$description = $this->get_config('description');
+
+		return $description;
+	}
+
+
 	function get_path() {
 		return $this->path;
 	}

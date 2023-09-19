@@ -68,6 +68,12 @@ h1 {
 	margin: 0.2em 0 0.8em;
 }
 
+.description {
+	text-align: center;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
 .galleries-list {
 	list-style-type: disc;
 	padding: 1em;
