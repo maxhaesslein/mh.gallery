@@ -147,7 +147,7 @@ class Gallery {
 			return $this->settings[$option];
 		}
 
-		return false;
+		return NULL;
 	}
 
 
@@ -212,11 +212,13 @@ class Gallery {
 
 	function get_image( $slug ) {
 
+		// NOTE: in our $this->images array, the key of an image is their slug, but with a trailing '.'; this is important to have the key exist as a string, instead of an int. when receiving the image, we need to append the '.' again.
+
 		if( $this->images == NULL ) $this->load_images();
 
-		if( ! array_key_exists($slug, $this->images) ) return false;
+		if( ! array_key_exists($slug.'.', $this->images) ) return false;
 
-		return $this->images[$slug];
+		return $this->images[$slug.'.'];
 	}
 
 
@@ -290,7 +292,10 @@ class Gallery {
 
 		$files = $folder->get();
 
+		$sort_order = get_config( 'sort_order', $this );
+
 		$images = [];
+		$images_sort = [];
 
 		foreach( $files as $file ) {
 
@@ -299,12 +304,22 @@ class Gallery {
 			
 			$image = new Image($filename, $this);
 
-			$slug = $image->get_slug();
+			if( $sort_order == 'filedate' ) {
+				$sort = $image->get_filedate();
+			} else {
+				// filename
+				$sort = $image->get_slug();
+			}
 
-			$images[$slug] = $image;
+			$images_sort[] = $sort;
+
+			$key = $image->get_slug().'.';
+			// NOTE: in our $this->images array, the key of an image is their slug, but with a trailing '.'; this is important to have the key exist as a string, instead of an int. when receiving the image, we need to append the '.' again.
+
+			$images[$key] = $image;
 		}
 
-		ksort($images);
+		array_multisort($images_sort, $images);
 
 		$this->images = $images;
 

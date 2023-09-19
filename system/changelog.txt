@@ -1,5 +1,6 @@
 v.0.1.3
 
+- allow sorting of images by filedate (via config.php or gallery.txt)
 - arrow icons for prev/next link
 - moved single image navigation around
 - small layout tweaks

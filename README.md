@@ -30,6 +30,7 @@ secret: 1234
 thumbnail: image-01.jpg
 download_image_enabled: true
 download_gallery_enabled: true
+sort_order: filename
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug and secret should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
@@ -39,6 +40,8 @@ Add `.jpg` files into the gallery folder, the images get detected automatically.
 Setting `hidden: true` will hide this gallery from the index (homepage). You can also disable the index with a config option, see 'Customization' below.
 
 Setting a `secret` will hide this gallery from the index, and only make the url accessible with the secret appenden to the slug. For example, if the slug is `gallery-01` and the secret is set to `secret: a1b2c3`, the URL to open the gallery will be `https://www.example.com/gallery-01-a1b2c3`.
+
+The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename` or `filedate` (file modification date).
 
 ## Update
 

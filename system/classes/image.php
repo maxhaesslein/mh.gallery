@@ -20,6 +20,8 @@ class Image {
 	private $quality;
 	private $output_type;
 
+	private $file_mod_time = NULL;
+
 
 	function __construct( $filename, $gallery ) {
 
@@ -113,6 +115,16 @@ class Image {
 
 	function get_slug() {
 		return $this->slug;
+	}
+
+
+	function get_filedate() {
+
+		if( $this->file_mod_time === NULL ) {
+			$this->file_mod_time = filemtime( $this->path );
+		}
+
+		return $this->file_mod_time;
 	}
 
 

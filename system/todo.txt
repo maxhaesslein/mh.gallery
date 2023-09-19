@@ -12,9 +12,6 @@ this list is not complete
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
 	- support for image alt tag
 - allow image sorting (configurable via gallery.txt)
-	- by filename (current default)
-	- by file create date
-	- by file edit date
 	- by exif date
 	- by .BridgeSort file
 - preload next and prev image?
