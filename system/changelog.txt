@@ -1,6 +1,8 @@
 v.0.1.3
 
-- ..
+- arrow icons for prev/next link
+- moved single image navigation around
+- small layout tweaks
 
 
 v.0.1.2
