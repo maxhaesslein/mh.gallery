@@ -21,6 +21,7 @@ class Image {
 	private $output_type;
 
 	private $file_mod_time = NULL;
+	private $exif_data = NULL;
 
 
 	function __construct( $filename, $gallery ) {
@@ -125,6 +126,24 @@ class Image {
 		}
 
 		return $this->file_mod_time;
+	}
+
+
+	function get_exif_data( $field_key, $group_key = 'EXIF' ) {
+
+		if( $this->exif_data === NULL ) {
+			$this->exif_data = exif_read_data( $this->path, false, true );
+		}
+
+		if( ! array_key_exists($group_key, $this->exif_data) ) {
+			return false;
+		}
+
+		$group = $this->exif_data[$group_key];
+
+		if( ! array_key_exists($field_key, $group) ) return false;
+
+		return $group[$field_key];
 	}
 
 

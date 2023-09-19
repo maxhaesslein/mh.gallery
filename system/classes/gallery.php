@@ -306,6 +306,18 @@ class Gallery {
 
 			if( $sort_order == 'filedate' ) {
 				$sort = $image->get_filedate();
+			} elseif( $sort_order == 'exifdate') {
+
+				$sort = $image->get_exif_data('DateTimeOriginal');
+				if( ! $sort ) $sort = $image->get_exif_data('DateTime');
+				if( ! $sort ) $sort = $image->get_exif_data('DateTimeDigitized');
+
+				if( $sort ) {
+					$sort = strtotime( $sort );
+				} else {
+					$sort = $image->get_filedate(); // fallback to file modification date
+				}
+
 			} else {
 				// filename
 				$sort = $image->get_slug();

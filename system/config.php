@@ -19,5 +19,5 @@ return [
 	'download_gallery_enabled' => true, // set to false to disable download of the whole gallery
 	'download_filetype' => 'jpg', // set to false to use original filetype
 	'site_sharing_tags' => true, // add OpenGraph sharing tags to HTML head, for better link previews
-	'sort_order' => 'filename', // can be 'filename' or 'filedate'; can be overwritten via gallery.txt
+	'sort_order' => 'filename', // can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
 ];
