@@ -55,7 +55,7 @@ main {
 
 picture {
 	display: block;
-	background: var(--color-black);
+	background: var(--color-black) url(../img/loading_white.svg) no-repeat center center / 40px auto;
 }
 
 a {
