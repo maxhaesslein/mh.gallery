@@ -71,9 +71,18 @@ var Ajax = {
 				if( ! response ) {
 					// TODO: handle error case
 					console.warn( 'AJAX request failed.', request ); // DEBUG
+					return false;
 				}
 
-				document.getElementById('fullscreen-target').innerHTML = response;
+				response = JSON.parse(response);
+				if( response.content ) {
+					document.getElementById('fullscreen-target').innerHTML = response.content;
+				}
+
+				if( response.title ) {
+					title = response.title;
+					Ajax.updateTitle( title );
+				}
 
 				init(); // re-init all event listeners
 
@@ -87,6 +96,10 @@ var Ajax = {
 		request.send();
 
 		return true;
+	},
+
+	updateTitle: function( newTitle ) {
+		document.title = newTitle;
 	}
 
 };

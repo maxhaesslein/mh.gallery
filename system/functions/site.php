@@ -39,11 +39,8 @@ function get_site_title() {
 	$gallery = $core->route->get('gallery');
 	if( $gallery ) $title[] = $gallery->get_title();
 
-/*
-// TODO: add image number + count; this needs also be added to the AJAX navigation via js
 	$image = $core->route->get('image');
 	if( $image ) $title[] = $image->get_number().'/'.$gallery->get_image_count();
-*/
 
 	$title = array_reverse( $title );
 
