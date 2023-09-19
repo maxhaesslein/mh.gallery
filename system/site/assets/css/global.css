@@ -58,6 +58,18 @@ picture {
 	background: var(--color-black) url(../img/loading_white.svg) no-repeat center center / 40px auto;
 }
 
+	@media ( max-width: 740px ) {
+
+		picture {
+			background-size: 12% auto;
+		}
+
+		.template-image picture {
+			background-size: 30px auto;
+		}
+
+	}
+
 a {
 	color: inherit;
 	text-decoration: underline;
