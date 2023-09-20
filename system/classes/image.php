@@ -2,6 +2,7 @@
 
 class Image {
 	
+	private $filename;
 	private $path;
 	private $gallery;
 	private $slug;
@@ -144,6 +145,17 @@ class Image {
 		if( ! array_key_exists($field_key, $group) ) return false;
 
 		return $group[$field_key];
+	}
+
+
+	function get_bridge_position() {
+		// NOTE: images may be sorted in Adobe Bridge; this creates a .BridgeSort file. We can use this file, to determine the position of this image
+
+		$bridge_sort_order = $this->gallery->get_bridge_sort_order();
+
+		if( ! $bridge_sort_order ) return false;
+
+		return array_search($this->filename, $bridge_sort_order); // if image is not found, this returns false, otherwise the position in the array
 	}
 
 

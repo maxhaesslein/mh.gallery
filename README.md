@@ -11,6 +11,7 @@ This is an early version, expect things to not work or change.
 - .htaccess with mod_rewrite support
 - php-mbstring
 - php-gd
+- simplexml, if you want to sort by a .BridgeSort file
 - maybe more? this list will be expanded later
 
 ## Installation
@@ -41,7 +42,7 @@ Setting `hidden: true` will hide this gallery from the index (homepage). You can
 
 Setting a `secret` will hide this gallery from the index, and only make the url accessible with the secret appenden to the slug. For example, if the slug is `gallery-01` and the secret is set to `secret: a1b2c3`, the URL to open the gallery will be `https://www.example.com/gallery-01-a1b2c3`.
 
-The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date) or `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise).
+The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
 
 ## Update
 

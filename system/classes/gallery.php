@@ -10,6 +10,7 @@ class Gallery {
 	private $secret = false;
 	private $download_image_enabled;
 	private $download_gallery_enabled;
+	private $bridge_sort_order = NULL;
 
 	function __construct( $gallery_file ) {
 
@@ -305,8 +306,10 @@ class Gallery {
 			$image = new Image($filename, $this);
 
 			if( $sort_order == 'filedate' ) {
+
 				$sort = $image->get_filedate();
-			} elseif( $sort_order == 'exifdate') {
+
+			} elseif( $sort_order == 'exifdate' ) {
 
 				$sort = $image->get_exif_data('DateTimeOriginal');
 				if( ! $sort ) $sort = $image->get_exif_data('DateTime');
@@ -318,9 +321,21 @@ class Gallery {
 					$sort = $image->get_filedate(); // fallback to file modification date
 				}
 
+			} elseif( $sort_order == 'bridge' ) {
+
+				$bridge_position = $image->get_bridge_position();
+
+				if( $bridge_position === false ) {
+					$bridge_position = 999999999999; // TODO: check, how we want to handle this
+				}
+
+				$sort = str_pad( $bridge_position, 6, 0, STR_PAD_LEFT ); // add leading zeros
+
 			} else {
+
 				// filename
 				$sort = $image->get_slug();
+
 			}
 
 			$images_sort[] = $sort;
@@ -336,6 +351,40 @@ class Gallery {
 		$this->images = $images;
 
 		return $this;
+	}
+
+
+	function get_bridge_sort_order() {
+
+		// NOTE: images may be sorted in Adobe Bridge; this creates a .BridgeSort file. We can use this file, to determine the position of the images in this gallery
+
+		if( $this->bridge_sort_order === NULL ) {
+
+			$bridge_file = get_abspath($this->path.'.BridgeSort');
+
+			if( ! file_exists($bridge_file) ) return false;
+
+			$bridge = simplexml_load_file($bridge_file);
+
+			if( $bridge === false ) return false;
+
+			$bridge_sort_order = [];
+
+			foreach( $bridge->files->item as $item ) {
+				$item_name = (string) $item['key'];
+
+				// names have the modification date (?) appended to them, so we need to remove it;
+				// this changes '01.jpg20230908174751' to '01.jpg'
+				$item_name = substr($item_name, 0, -14);
+
+				$bridge_sort_order[] = $item_name;
+			}
+
+			$this->bridge_sort_order = $bridge_sort_order;
+
+		}
+
+		return $this->bridge_sort_order;
 	}
 
 
