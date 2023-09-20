@@ -3,6 +3,7 @@ this list is not complete
 
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
+	- fix zooming on mobile (triggers next/prev image at the moment)
 - hidden galleries with secret link
 	- secret links should be added via /{secret} or ?secret={secret}, and then converted into a session variable and removed from the URL, so only the original link will contain the secret
 	- if no secret hash exists, create one and save it into the gallery.txt on first access?
