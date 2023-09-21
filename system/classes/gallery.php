@@ -234,12 +234,14 @@ class Gallery {
 			$thumbnail_slug = explode('.', $thumbnail_slug);
 			unset($thumbnail_slug[count($thumbnail_slug)-1]);
 			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug));
-			if( array_key_exists($thumbnail_slug, $images) ) {
+			if( array_key_exists($thumbnail_slug.'.', $images) ) {
 				return $thumbnail_slug;
 			}
 		}
 
 		$thumbnail_slug = array_keys($images)[0];
+
+		$thumbnail_slug = substr($thumbnail_slug, 0, -1); // removed additional dot from slug
 
 		return $thumbnail_slug;
 	}
