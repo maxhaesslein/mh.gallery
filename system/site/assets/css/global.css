@@ -39,6 +39,14 @@ footer {
 	opacity: 0.4;
 }
 
+	footer a {
+		text-decoration: none;
+	}
+
+		footer a:hover {
+			text-decoration: underline;
+		}
+
 hr {
 	width: 100%;
 	max-width: 10em;
