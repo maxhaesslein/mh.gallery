@@ -180,6 +180,14 @@ h1 {
 			display: inline;
 		}
 
+	.meta a {
+		text-decoration: none;
+	}
+
+		.meta a:hover {
+			text-decoration: underline;
+		}
+
 	body.nojs .meta .action-js {
 		display: none;
 	}
@@ -191,6 +199,65 @@ h1 {
 
 	body.cursor-hidden.template-image .meta {
 		opacity: 0;
+	}
+
+	.meta .more-menu-wrapper {
+		position: relative;
+		width: 22px;
+		height: 30px;
+		margin-left: 5px;
+		display: inline-block;
+	}
+
+	.meta .button-more {
+		display: inline-block;
+		color: transparent;
+		width: 22px;
+		height: 22px;
+		overflow: hidden;
+		vertical-align: middle;
+		background: url(../img/more.svg) no-repeat center center / contain;
+		cursor: pointer;
+	}
+
+		.meta .more-menu {
+			position: absolute;
+			right: -5px;
+			top: 26px;
+			white-space: nowrap;
+			display: none;
+		}
+
+			.meta .more-menu-wrapper:hover .more-menu {
+				display: block;
+			}
+
+			.meta .more-menu li {
+				display: block;
+				text-align: right;
+			}
+
+				.meta .more-menu li a {
+					display: block;
+					padding: 5px;
+				}
+
+	.meta .button-fullscreen {
+		display: inline-block;
+		color: transparent;
+		width: 20px;
+		height: 20px;
+		overflow: hidden;
+		vertical-align: middle;
+		background: url(../img/fullscreen.svg) no-repeat center center / contain;
+	}
+
+	@media ( pointer: none ), ( pointer: coarse ) {
+
+		.meta .button-fullscreen {
+			display: none;
+		}
+
 	}
 
 	@media ( max-width: 640px ) {
@@ -350,11 +417,3 @@ body.template-image {
 	body:not(.nojs).template-download .refresh-link-wrapper {
 		display: none;
 	}
-
-@media ( pointer: none ), ( pointer: coarse ) {
-
-	.meta .button-fullscreen {
-		display: none;
-	}
-
-}

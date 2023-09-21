@@ -39,6 +39,16 @@ $image->resize(get_config('default_image_size'));
 
 snippet( 'header' );
 
+
+$more_menu = [];
+if( $download_image_url ) {
+	$more_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'">download image</a>';
+}
+if( $download_gallery_url ) {
+	$more_menu[] = '<a href="'.$download_gallery_url.'">download all</a>';
+}
+
+
 if( ! doing_ajax() ) {
 	?>
 	<main id="fullscreen-target">
@@ -52,14 +62,20 @@ if( ! doing_ajax() ) {
 		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
-			if( $download_image_url ) {
+			if( count($more_menu) ) {
 				?>
-				<li><a href="<?= $download_image_url ?>" download="<?= $download_image_filename ?>">download image</a></li>
-				<?php
-			}
-			if( $download_gallery_url ) {
-				?>
-				<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+				<li class="more-menu-wrapper">
+					<span class="button-more">more …</span>
+					<ul class="more-menu">
+						<?php
+						foreach( $more_menu as $more_menu_item ) {
+							?>
+							<li><?= $more_menu_item ?></li>
+							<?php
+						}
+						?>
+					</ul>
+				</li>
 				<?php
 			}
 			?>
