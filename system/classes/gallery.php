@@ -251,6 +251,8 @@ class Gallery {
 
 		if( $this->images == NULL ) $this->load_images();
 
+		$slug .= '.';
+
 		if( ! array_key_exists($slug, $this->images) ) return false;
 
 		return $this->images[$slug]->get_link();
@@ -283,7 +285,11 @@ class Gallery {
 			return false;
 		}
 
-		return $indexes[$next_index];
+		$slug = $indexes[$next_index];
+
+		$slug = substr( $slug, 0, -1 );
+
+		return $slug;
 	}
 
 
