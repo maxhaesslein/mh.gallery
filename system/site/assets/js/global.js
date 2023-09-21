@@ -174,13 +174,41 @@ var TouchNavigation = {
 
 		document.addEventListener( 'touchstart', TouchNavigation.navigateStart, false );
 		document.addEventListener( 'touchend', TouchNavigation.navigateEnd, false );
+		document.addEventListener( 'touchcancel', TouchNavigation.navigateCancel, false );
+		document.addEventListener( 'touchmove', TouchNavigation.navigateMove, false );
 		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
-		
 	},
 
 	navigateStart: function(e){
 
-		TouchNavigation.posX = TouchNavigation.unify(e).clientX;
+		var touches = TouchNavigation.getTouches(e);
+
+		if( ! touches || touches.length != 1 ) {
+			TouchNavigation.navigateCancel();
+			return;
+		}
+
+		TouchNavigation.posX = touches[0].clientX;
+
+	},
+
+	navigateCancel: function(e){
+
+		TouchNavigation.posX = false;
+
+	},
+
+	navigateMove: function(e){
+
+		var touches = TouchNavigation.getTouches(e);
+
+		if( ! touches ) return;
+
+		if( touches.length == 1 ) return;
+
+		// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
+
+		TouchNavigation.navigateCancel();
 
 	},
 
@@ -188,7 +216,16 @@ var TouchNavigation = {
 
 		if( TouchNavigation.posX === false ) return;
 
-		var delta = TouchNavigation.unify(e).clientX - TouchNavigation.posX;
+		var touches = TouchNavigation.getTouches(e);
+
+		if( ! touches || touches.length != 1 ) {
+			TouchNavigation.navigateCancel();
+			return;
+		}
+
+		var newClientX = touches[0].clientX;
+
+		var delta = newClientX - TouchNavigation.posX;
 
 		var direction = Math.sign(delta);
 
@@ -216,8 +253,10 @@ var TouchNavigation = {
 
 	},
 
-	unify: function(e){
-		return e.changedTouches ? e.changedTouches[0] : e;
+	getTouches: function(e){
+		if( ! e.changedTouches ) return new Array(e);
+
+		return e.changedTouches;
 	}
 
 };
