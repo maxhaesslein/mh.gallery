@@ -218,6 +218,10 @@ h1 {
 		vertical-align: middle;
 		background: url(../img/more.svg) no-repeat center center / contain;
 		cursor: pointer;
+
+		-webkit-transition: opacity 200ms ease-in-out;
+		-o-transition: opacity 200ms ease-in-out;
+		transition: opacity 200ms ease-in-out;
 	}
 
 		.meta .more-menu {
@@ -250,6 +254,15 @@ h1 {
 		overflow: hidden;
 		vertical-align: middle;
 		background: url(../img/fullscreen.svg) no-repeat center center / contain;
+
+		-webkit-transition: opacity 200ms ease-in-out;
+		-o-transition: opacity 200ms ease-in-out;
+		transition: opacity 200ms ease-in-out;
+	}
+
+	.meta .more-menu-wrapper:hover .button-more,
+	.meta .button-fullscreen:hover {
+		opacity: 0.6;
 	}
 
 	@media ( pointer: none ), ( pointer: coarse ) {
@@ -345,6 +358,10 @@ body.template-image {
 				right: 0;
 				background-position: right 40px center;
 				background-image: url(../img/arrow-right_white.svg);
+			}
+
+			.template-image .navigation a:hover {
+				opacity: 0.6;
 			}
 
 			body.cursor-hidden.template-image .navigation a {
