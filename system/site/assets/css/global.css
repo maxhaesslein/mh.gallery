@@ -294,6 +294,7 @@ h1 {
 }
 
 body.template-image {
+	overflow: hidden;
 	padding: 0;
 	position: fixed;
 	left: 0;
