@@ -3,10 +3,10 @@ button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}[type=
 
 :root {
 
-	--color-black: #111;
+	--color-black: #000;
 	--color-white: #eee;
 
-	--color-background: #252525;
+	--color-background: #181818;
 	--color-text: var(--color-white);
 
 }
