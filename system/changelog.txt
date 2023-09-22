@@ -1,6 +1,6 @@
 v.0.1.4
 
-- ..
+- bugfix for image navigation in some galleries
 
 
 v.0.1.3

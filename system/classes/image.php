@@ -5,7 +5,8 @@ class Image {
 	private $filename;
 	private $path;
 	private $gallery;
-	private $slug;
+	private $slug; // this is the slug for the url
+	private $key; // this is the key this image inside the gallery images array
 
 	private $src_width;
 	private $src_height;
@@ -32,9 +33,10 @@ class Image {
 
 		$this->path = get_abspath(trailing_slash_it($gallery->get_path()).$filename);
 
-		$slug = explode('.', $filename);
-		unset($slug[count($slug)-1]);
-		$this->slug = sanitize_string(implode('.', $slug));
+		$slug = remove_fileextension($filename);
+		$this->slug = sanitize_string($slug);
+
+		$this->key = $this->slug.'.'; // the key needs to be a string, because we use it as a key in a associative array, so we append a '.' to force this to be a string, even if the slug would be '1' (and therefore be cast to an int in the array)
 
 		$this->quality = get_config( 'default_image_quality' );
 
@@ -120,6 +122,11 @@ class Image {
 	}
 
 
+	function get_key() {
+		return $this->key;
+	}
+
+
 	function get_filedate() {
 
 		if( $this->file_mod_time === NULL ) {
@@ -175,7 +182,7 @@ class Image {
 
 		$indexes = array_keys($this->gallery->get_images());
 
-		$index = array_search($this->slug, $indexes);
+		$index = array_search($this->key, $indexes);
 
 		return $index;
 	}

@@ -184,7 +184,7 @@ class Gallery {
 			$slug = end($path);
 		}
 
-		$slug = sanitize_string($slug);
+		$slug = sanitize_string($slug, true);
 
 		if( ! $skip_secret && $this->secret ) {
 			$slug .= '-'.trim($this->secret);
@@ -233,7 +233,7 @@ class Gallery {
 		if( $thumbnail_slug ) {
 			$thumbnail_slug = explode('.', $thumbnail_slug);
 			unset($thumbnail_slug[count($thumbnail_slug)-1]);
-			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug));
+			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
 			if( array_key_exists($thumbnail_slug.'.', $images) ) {
 				return $thumbnail_slug;
 			}
@@ -273,7 +273,7 @@ class Gallery {
 
 		$indexes = array_keys($this->images);
 
-		$current_index = array_search($current_image_slug, $indexes);
+		$current_index = array_search($current_image_slug.'.', $indexes);
 
 		if( $direction == 'next' ) {
 			$next_index = $current_index+1;
@@ -348,8 +348,7 @@ class Gallery {
 
 			$images_sort[] = $sort;
 
-			$key = $image->get_slug().'.';
-			// NOTE: in our $this->images array, the key of an image is their slug, but with a trailing '.'; this is important to have the key exist as a string, instead of an int. when receiving the image, we need to append the '.' again.
+			$key = $image->get_key();
 
 			$images[$key] = $image;
 		}
