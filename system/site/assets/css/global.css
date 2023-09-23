@@ -4,6 +4,7 @@ button,hr,input{overflow:visible}progress,sub,sup{vertical-align:baseline}[type=
 :root {
 
 	--color-black: #000;
+	--color-grey-dark: #333;
 	--color-white: #eee;
 
 	--color-background: #181818;
@@ -188,21 +189,24 @@ h1 {
 			display: inline;
 		}
 
-	.meta a {
+	.meta a,
+	.meta .button-more {
 		text-decoration: none;
+		display: inline-block;
+		background: var(--color-black) no-repeat center center / 70% auto;
+		border-radius: 4px;
+		padding: 5px 10px;
+		box-sizing: border-box;
+		line-height: 1;
 	}
 
-		.meta a:hover {
-			text-decoration: underline;
+		.meta a:hover,
+		.meta li:hover .button-more {
+			background-color: var(--color-grey-dark);
 		}
 
 	body.nojs .meta .action-js {
 		display: none;
-	}
-
-	.meta a {
-		display: inline-block;
-		padding: 5px;
 	}
 
 	body.cursor-hidden.template-image .meta {
@@ -213,7 +217,6 @@ h1 {
 		position: relative;
 		width: 22px;
 		height: 30px;
-		margin-left: 5px;
 		display: inline-block;
 	}
 
@@ -224,17 +227,13 @@ h1 {
 		height: 22px;
 		overflow: hidden;
 		vertical-align: middle;
-		background: url(../img/more.svg) no-repeat center center / contain;
+		background-image: url(../img/more.svg);
 		cursor: pointer;
-
-		-webkit-transition: opacity 200ms ease-in-out;
-		-o-transition: opacity 200ms ease-in-out;
-		transition: opacity 200ms ease-in-out;
 	}
 
 		.meta .more-menu {
 			position: absolute;
-			right: -5px;
+			right: 0;
 			top: 26px;
 			white-space: nowrap;
 			display: none;
@@ -251,26 +250,30 @@ h1 {
 
 				.meta .more-menu li a {
 					display: block;
-					padding: 5px;
 				}
 
-	.meta .button-fullscreen {
+				.meta .more-menu li a {
+					border-radius: 5px 5px 0 0;
+				}
+				
+				.meta .more-menu li + li a {
+					border-top-left-radius: 0;
+					border-top-right-radius: 0;
+				}
+
+				.meta .more-menu li:last-child a {
+					border-bottom-left-radius: 5px;
+					border-bottom-right-radius: 5px;
+				}
+
+	.meta .button-fullscreen a {
 		display: inline-block;
 		color: transparent;
 		width: 20px;
 		height: 20px;
 		overflow: hidden;
 		vertical-align: middle;
-		background: url(../img/fullscreen.svg) no-repeat center center / contain;
-
-		-webkit-transition: opacity 200ms ease-in-out;
-		-o-transition: opacity 200ms ease-in-out;
-		transition: opacity 200ms ease-in-out;
-	}
-
-	.meta .more-menu-wrapper:hover .button-more,
-	.meta .button-fullscreen:hover {
-		opacity: 0.6;
+		background-image: url(../img/fullscreen.svg);
 	}
 
 	@media ( pointer: none ), ( pointer: coarse ) {
@@ -289,8 +292,8 @@ h1 {
 
 	}
 
-.template-overview .meta .info li + li:before {
-	content: '/';
+.template-overview .meta a {
+	margin-left: 5px;
 }
 
 body.template-image {

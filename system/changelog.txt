@@ -1,5 +1,6 @@
 v.0.1.4
 
+- design tweaks
 - bugfix for image navigation in some galleries
 - og:url sharing tag is now the URL to the current page, instead of the URL to the root site
 - gallery title & description: remove HTML tags that are not allowed; use 'allowed_tags' config option to re-define allowed tags (or set to false to allow all tags)
