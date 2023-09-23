@@ -46,6 +46,8 @@ function get_site_title() {
 
 	$title = implode( ' · ', $title );
 
+	$title = strip_tags($title);
+
 	return $title;
 }
 
@@ -76,17 +78,24 @@ function get_site_sharing_tags() {
 
 	$sharing_tags = [];
 
-	$sharing_tags[] = '<meta property="og:site_name" content="'.get_config('site_title').'">';
-	$sharing_tags[] = '<meta property="og:url" content="'.url().'">';
+	$site_title = strip_tags(get_config('site_title'));
+
+	$page_url = url(implode('/',$core->route->get('request')));
+	$page_title = strip_tags(get_site_title());
+
+	$sharing_tags[] = '<meta property="og:site_name" content="'.$site_title.'">';
+	$sharing_tags[] = '<meta property="og:url" content="'.$page_url.'">';
 	$sharing_tags[] = '<meta property="og:type" content="website">';
-	$sharing_tags[] = '<meta property="og:title" content="'.get_site_title().'">';
+	$sharing_tags[] = '<meta property="og:title" content="'.$page_title.'">';
 
 	if( $thumbnail ) {
+		$thumbnail = strip_tags($thumbnail);
 		$sharing_tags[] = '<meta name="twitter:card" content="summary_large_image">';
 		$sharing_tags[] = '<meta property="og:image" content="'.$thumbnail.'">';
 	}
 
 	if( $description ) {
+		$description = strip_tags($description);
 		$sharing_tags[] = '<meta name="description" content="'.$description.'">';
 		$sharing_tags[] = '<meta property="og:description" content="'.$description.'">';
 	}

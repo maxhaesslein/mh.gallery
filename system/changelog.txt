@@ -1,6 +1,7 @@
 v.0.1.4
 
 - bugfix for image navigation in some galleries
+- og:url sharing tag is now the URL to the current page, instead of the URL to the root site
 
 
 v.0.1.3
