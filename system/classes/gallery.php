@@ -159,12 +159,22 @@ class Gallery {
 			$title = $this->get_slug( true );
 		}
 
+		$allowed_tags = get_config('allowed_tags');
+		if( $allowed_tags ) {
+			$title = strip_tags( $title, $allowed_tags );
+		}
+
 		return $title;
 	}
 
 
 	function get_description(){
 		$description = $this->get_config('description');
+
+		$allowed_tags = get_config('allowed_tags');
+		if( $allowed_tags ) {
+			$description = strip_tags( $description, $allowed_tags );
+		}
 
 		return $description;
 	}

@@ -20,4 +20,5 @@ return [
 	'download_filetype' => 'jpg', // set to false to use original filetype
 	'site_sharing_tags' => true, // add OpenGraph sharing tags to HTML head, for better link previews
 	'sort_order' => 'filename', // can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
+	'allowed_tags' => [ 'p', 'ul', 'ol', 'li', 'br', 'i', 'u', 'b', 'em', 'strong' ], // these HTML tags are allowed in text fields, all other tags are stripped (set to false to allow all tags)
 ];
