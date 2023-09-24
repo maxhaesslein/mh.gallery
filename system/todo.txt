@@ -11,7 +11,6 @@ this list is not complete
 - image display
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
 	- support for image alt tag
-- preload next and prev image?
 - function to pre-cache all image sizes and types?
 	- maybe add ?pre-cache to a gallery link?
 	- stepped, like zip creation
