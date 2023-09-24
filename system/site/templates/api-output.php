@@ -6,6 +6,20 @@ define( 'DOING_AJAX', true );
 
 $image = $core->route->get('image');
 
+if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
+
+	$image->resize(get_config('default_image_size'));
+
+	$json = [
+		'content' => $image->get_html( true, true )
+	];
+
+	header("Content-type: application/json");
+	echo json_encode($json);
+
+	exit;
+}
+
 $prev_image = $image->get_adjacent_image('prev');
 $next_image = $image->get_adjacent_image('next');
 

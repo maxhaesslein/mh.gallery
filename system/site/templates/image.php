@@ -87,7 +87,7 @@ if( ! doing_ajax() ) {
 		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">next</a></li>';
 		?>
 	</ul>
-	<div class="image-wrapper">
+	<div id="image-wrapper" class="image-wrapper">
 		<?= $image->get_html() ?>
 	</div>
 	<div class="meta meta-bottom">

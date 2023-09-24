@@ -386,7 +386,7 @@ class Image {
 	}
 
 
-	function get_html( $lazyloading = true ) {
+	function get_html( $lazyloading = true, $skip_container = false ) {
 
 		$classes = [ 'image', 'image-'.$this->format ];
 
@@ -395,7 +395,9 @@ class Image {
 
 		$picture = $this->get_picture_srcset();
 
-		$html = '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">'; // TODO: backgroundcolor
+		$html = '';
+		if( ! $skip_container ) $html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
+		$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">'; // TODO: backgroundcolor
 
 			foreach( $picture as $source ) {
 				$html .= '<source media="'.$source['media'].'" srcset="'.$source['srcset'].'" type="'.$source['mimetype'].'">';
@@ -414,6 +416,7 @@ class Image {
 			$html .= ' alt="'.$alt.'">';
 
 		$html .= '</picture>';
+		if( ! $skip_container ) $html .= '</div>';
 
 		return $html;
 	}

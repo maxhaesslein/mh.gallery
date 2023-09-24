@@ -298,12 +298,84 @@ var FullscreenButton = {
 };
 
 
+var Preload = {
+
+	preloaded: [],
+
+	init: function(){
+
+		if( ! document.body.classList.contains('template-image') ) return;
+
+		var next = document.getElementById('navigate-next');
+		if( next ) {
+			imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug;
+
+			setTimeout(function(){
+				Preload.load(imageSlug);
+			}, 1000);
+		}
+
+	},
+
+	load: function(imageSlug) {
+
+		if( Preload.preloaded.includes(imageSlug) ) return;
+
+		Preload.preloaded.push(imageSlug);
+
+		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
+
+		var request = new XMLHttpRequest();
+		request.open( 'GET', requestUrl );
+
+		request.onreadystatechange = function(){
+
+			if( request.readyState !== XMLHttpRequest.DONE ) return;
+
+			if( request.status === 200 ) {
+
+				var response = request.response;
+
+				if( ! response ) {
+					// ignore error case
+					return;
+				}
+
+				response = JSON.parse(response);
+
+				var oldPreloaders = document.querySelectorAll('.image-preload');
+				for( var oldPreloader of oldPreloaders ) {
+					oldPreloader.remove();
+				}
+
+				var wrapper = document.createElement('div');
+				wrapper.classList.add('image-preload');
+				wrapper.innerHTML = response.content;
+
+				var container = document.getElementById('image-wrapper').querySelector('.image-container');
+				container.appendChild(wrapper);
+
+			} else {
+				// something went wrong …
+				// ignore error case
+				return;
+			}
+
+		}
+		request.send();
+
+	},
+
+};
+
+
 function init() {
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
 	TouchNavigation.init();
 	FullscreenButton.init();
+	Preload.init();
 };
 
 
