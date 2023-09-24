@@ -215,7 +215,7 @@ h1 {
 
 	.meta .more-menu-wrapper {
 		position: relative;
-		width: 22px;
+		width: 26px;
 		height: 30px;
 		display: inline-block;
 	}
@@ -223,13 +223,18 @@ h1 {
 	.meta .button-more {
 		display: inline-block;
 		color: transparent;
-		width: 22px;
-		height: 22px;
+		width: 26px;
+		height: 26px;
 		overflow: hidden;
 		vertical-align: middle;
 		background-image: url(../img/more.svg);
 		cursor: pointer;
 	}
+
+		.meta .more-menu-wrapper:hover .button-more{
+			border-bottom-right-radius: 0;
+			border-bottom-left-radius: 0;
+		}
 
 		.meta .more-menu {
 			position: absolute;
@@ -266,11 +271,15 @@ h1 {
 					border-bottom-right-radius: 5px;
 				}
 
+				.meta .more-menu li:first-child a {
+					border-top-right-radius: 0;
+				}
+
 	.meta .button-fullscreen a {
 		display: inline-block;
 		color: transparent;
-		width: 20px;
-		height: 20px;
+		width: 24px;
+		height: 24px;
 		overflow: hidden;
 		vertical-align: middle;
 		background-image: url(../img/fullscreen.svg);
@@ -283,7 +292,7 @@ h1 {
 		}
 
 	}
-	
+
 .template-overview .meta a {
 	margin-left: 5px;
 }

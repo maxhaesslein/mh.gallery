@@ -1,6 +1,6 @@
 v.0.1.5
 
-- ..
+- small style tweaks
 
 
 v.0.1.4
