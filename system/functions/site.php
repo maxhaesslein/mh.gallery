@@ -155,7 +155,7 @@ function head() {
 		$next_image = $image->get_adjacent_image('next');
 
 		if( $next_image ) {
-			echo '<link id="next-image-preload" rel="prerender" href="'.$next_image->get_link().'" />';
+			echo '<link id="next-image-preload" rel="prefetch" href="'.$next_image->get_link().'" />';
 		}
 		if( $prev_image ) {
 			echo '<link id="prev-image-preload" rel="prefetch" href="'.$prev_image->get_link().'" />';
