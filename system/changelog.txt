@@ -2,6 +2,7 @@ v.0.1.5
 
 - small style tweaks
 - use PHPs build-in autoloader to load class files (thanks to @pwaldhauer for pointing me in that direction)
+- added some prev/next image hints for the browser
 
 
 v.0.1.4
