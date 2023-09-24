@@ -41,6 +41,8 @@ var Ajax = {
 
 	navigate: function( el ) {
 
+		Preload.cancel();
+
 		var imageSlug = false;
 		if( el.id == 'navigate-next' ) {
 			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.nextImageSlug;
@@ -301,6 +303,8 @@ var FullscreenButton = {
 var Preload = {
 
 	preloaded: [],
+	timeout: false,
+	request: false,
 
 	init: function(){
 
@@ -310,11 +314,17 @@ var Preload = {
 		if( next ) {
 			imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug;
 
-			setTimeout(function(){
+			Preload.timeout = setTimeout(function(){
 				Preload.load(imageSlug);
-			}, 1000);
+			}, 500);
 		}
 
+	},
+
+	cancel: function(){
+		clearTimeout(Preload.timeout);
+		Preload.request.abort();
+		Preload.timeout = false;
 	},
 
 	load: function(imageSlug) {
@@ -325,16 +335,16 @@ var Preload = {
 
 		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
 
-		var request = new XMLHttpRequest();
-		request.open( 'GET', requestUrl );
+		Preload.request = new XMLHttpRequest();
+		Preload.request.open( 'GET', requestUrl );
 
-		request.onreadystatechange = function(){
+		Preload.request.onreadystatechange = function(){
 
-			if( request.readyState !== XMLHttpRequest.DONE ) return;
+			if( Preload.request.readyState !== XMLHttpRequest.DONE ) return;
 
-			if( request.status === 200 ) {
+			if( Preload.request.status === 200 ) {
 
-				var response = request.response;
+				var response = Preload.request.response;
 
 				if( ! response ) {
 					// ignore error case
@@ -362,7 +372,7 @@ var Preload = {
 			}
 
 		}
-		request.send();
+		Preload.request.send();
 
 	},
 
