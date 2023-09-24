@@ -154,14 +154,19 @@ function head() {
 		$prev_image = $image->get_adjacent_image('prev');
 		$next_image = $image->get_adjacent_image('next');
 
-		if( $next_image ) {
-			echo '<link id="next-image-preload" rel="prefetch" href="'.$next_image->get_link().'" />';
-		}
-		if( $prev_image ) {
-			echo '<link id="prev-image-preload" rel="prefetch" href="'.$prev_image->get_link().'" />';
-		}
+		$next_link = '';
+		if( $next_image ) $next_link = $next_image->get_link();
+		?>
+	
+	<link id="next-image-preload" rel="prefetch next" href="<?= $next_link ?>"><?php
 
-	}
+		$prev_link = '';
+		if( $prev_image ) $prev_link = $prev_image->get_link();
+		?>
+
+	<link id="prev-image-preload" rel="prefetch prev" href="<?= $prev_link ?>"><?php
+
+	} // $image
 
 	
 	$js_custom_path = 'custom/assets/js/';
