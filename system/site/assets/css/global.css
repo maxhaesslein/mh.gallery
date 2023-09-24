@@ -447,12 +447,3 @@ body.template-image {
 	body:not(.nojs).template-download .refresh-link-wrapper {
 		display: none;
 	}
-
-.image-preload {
-	position: absolute;
-	left: 0;
-	top: 0;
-	opacity: 0;
-	z-index: -20;
-	pointer-events: none;
-}

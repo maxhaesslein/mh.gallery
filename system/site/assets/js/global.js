@@ -298,99 +298,12 @@ var FullscreenButton = {
 };
 
 
-var Preload = {
-
-	preloaded: [],
-
-	init: function(){
-
-		if( ! document.body.classList.contains('template-image') ) return;
-
-		var next = document.getElementById('navigate-next');
-		if( next ) {
-			imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug;
-
-			setTimeout(function(){
-				Preload.load(imageSlug);
-			}, 1000);
-		}
-
-/*
-		var prev = document.getElementById('navigate-prev');
-		if( prev ) {
-			imageSlug = prev.dataset.gallerySlug+'/'+prev.dataset.prevImageSlug;
-			Preload.load(imageSlug);
-		}
-*/
-
-	},
-
-	load: function(imageSlug) {
-
-		if( Preload.preloaded.includes(imageSlug) ) return;
-
-		Preload.preloaded.push(imageSlug);
-
-		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
-
-		var request = new XMLHttpRequest();
-		request.open( 'GET', requestUrl );
-
-		request.onreadystatechange = function(){
-
-			if( request.readyState !== XMLHttpRequest.DONE ) return;
-
-			if( request.status === 200 ) {
-
-				var response = request.response;
-
-				if( ! response ) {
-					// ignore error case
-					return;
-				}
-
-				response = JSON.parse(response);
-
-				var oldPreloaders = document.querySelectorAll('.image-preload');
-				for( var oldPreloader of oldPreloaders ) {
-					oldPreloader.remove();
-				}
-
-				var wrapper = document.createElement('div');
-				wrapper.classList.add('image-preload');
-				wrapper.classList.add('image-wrapper');
-				wrapper.innerHTML = response.content;
-
-				var picture = document.getElementById('image-wrapper').querySelector('picture'),
-					width = picture.clientWidth,
-					height = picture.clientHeight;
-
-				if( width ) wrapper.querySelector('picture').style.width = width+'px';
-				if( height ) wrapper.querySelector('picture').style.height = height+'px';
-
-				document.body.appendChild(wrapper);
-
-			} else {
-				// something went wrong …
-				// ignore error case
-				return;
-			}
-
-		}
-		request.send();
-
-	},
-
-};
-
-
 function init() {
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
 	TouchNavigation.init();
 	FullscreenButton.init();
-	Preload.init();
 };
 
 

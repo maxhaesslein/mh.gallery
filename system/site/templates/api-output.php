@@ -6,18 +6,6 @@ define( 'DOING_AJAX', true );
 
 $image = $core->route->get('image');
 
-if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
-
-	$json = [
-		'content' => $image->get_html()
-	];
-
-	header("Content-type: application/json");
-	echo json_encode($json);
-
-	exit;
-}
-
 $prev_image = $image->get_adjacent_image('prev');
 $next_image = $image->get_adjacent_image('next');
 
