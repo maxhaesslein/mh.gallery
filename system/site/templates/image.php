@@ -9,14 +9,14 @@ $gallery_slug = $gallery->get_slug();
 $image_slug = $image->get_slug();
 
 $overview_link = $gallery->get_url();
-$prev_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'prev' );
-$next_image_slug = $gallery->get_adjacent_image_slug( $image_slug, 'next' );
+
+$prev_image = $image->get_adjacent_image('prev');
+$next_image = $image->get_adjacent_image('next');
 
 $prev_link = false;
 $next_link = false;
-
-if( $prev_image_slug ) $prev_link = $gallery->get_image_link( $prev_image_slug );
-if( $next_image_slug ) $next_link = $gallery->get_image_link( $next_image_slug );
+if( $prev_image ) $prev_link = $prev_image->get_link();
+if( $next_image ) $next_link = $next_image->get_link();
 
 $download_image_url = false;
 if( $gallery->is_download_image_enabled() ) {
@@ -83,8 +83,8 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image_slug.'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
-		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image_slug.'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
+		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
 		?>
 	</ul>
 	<div class="image-wrapper">

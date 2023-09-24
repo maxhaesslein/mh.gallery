@@ -84,6 +84,13 @@ var Ajax = {
 					Ajax.updateTitle( title );
 				}
 
+				if( response.prev_image_url ) {
+					document.getElementById('prev-image-preload').href = response.prev_image_url;
+				}
+				if( response.next_image_url ) {
+					document.getElementById('next-image-preload').href = response.next_image_url;
+				}
+
 				init(); // re-init all event listeners
 
 			} else {

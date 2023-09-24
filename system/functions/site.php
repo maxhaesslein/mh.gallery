@@ -115,7 +115,7 @@ function head() {
 <?php
 	// preload loading animation:
 	?>
-	<link rel="preload" href="<?= url('system/site/assets/img/loading_white.svg', false) ?>" as="image" type="image/svg" crossorigin>
+	<link rel="preload" href="<?= url('system/site/assets/img/loading_white.svg', false) ?>" as="image" type="image/svg+xml" crossorigin>
 	<?php
 
 	// CSS
@@ -137,7 +137,6 @@ function head() {
 	if( get_config('system_js') ) {
 		$js_system_path = 'system/site/assets/js/';
 		head_load_files( $js_system_path, $js_filter, $js_tag );
-
 	?>
 
 	<script type="text/javascript">
@@ -145,7 +144,25 @@ function head() {
 			'apiUrl': '<?= url('api') ?>',
 		};
 	</script><?php
+	} // get_config('system_js')
+
+
+	// prerender/prefetch previous and next image
+	$image = $core->route->get('image');
+	if( $image ) {
+
+		$prev_image = $image->get_adjacent_image('prev');
+		$next_image = $image->get_adjacent_image('next');
+
+		if( $next_image ) {
+			echo '<link id="next-image-preload" rel="prerender" href="'.$next_image->get_link().'" />';
+		}
+		if( $prev_image ) {
+			echo '<link id="prev-image-preload" rel="prefetch" href="'.$prev_image->get_link().'" />';
+		}
+
 	}
+
 	
 	$js_custom_path = 'custom/assets/js/';
 	head_load_files( $js_custom_path, $js_filter, $js_tag );

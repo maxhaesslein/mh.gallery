@@ -22,6 +22,7 @@ class Image {
 	private $quality;
 	private $output_type;
 
+	private $adjacent_image = [];
 	private $file_mod_time = NULL;
 	private $exif_data = NULL;
 
@@ -212,6 +213,28 @@ class Image {
 		$this->crop = $crop;
 
 		return $this;
+	}
+
+
+	function get_adjacent_image( $direction = 'next' ) {
+
+		$adjacent_image = false;
+
+		if( $direction != 'prev' ) $direction = 'next';
+
+		if( array_key_exists($direction, $this->adjacent_image) ) {
+			return $this->adjacent_image[$direction];
+		}
+		
+		$adjacent_image_slug = $this->gallery->get_adjacent_image_slug( $this->get_slug(), $direction );
+
+		if( $adjacent_image_slug ) {
+			$adjacent_image = $this->gallery->get_image($adjacent_image_slug);
+		}
+
+		$this->adjacent_image[$direction] = $adjacent_image;
+
+		return $adjacent_image;
 	}
 
 
