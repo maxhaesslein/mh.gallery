@@ -283,15 +283,7 @@ h1 {
 		}
 
 	}
-
-	@media ( max-width: 640px ) {
-
-		.meta a {
-			padding: 0 5px;
-		}
-
-	}
-
+	
 .template-overview .meta a {
 	margin-left: 5px;
 }
