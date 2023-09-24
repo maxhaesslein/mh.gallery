@@ -83,7 +83,7 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'"data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'">prev</a></li>';
 		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'">next</a></li>';
 		?>
 	</ul>

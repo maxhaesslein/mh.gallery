@@ -276,9 +276,7 @@ class Image {
 	}
 
 
-	function get_html( $lazyloading = true ) {
-
-		$classes = [ 'image', 'image-'.$this->format ];
+	function get_picture_srcset() {
 
 		$width = $this->width;
 		$height = $this->height;
@@ -290,7 +288,7 @@ class Image {
 			[
 				'mimetype' => 'image/avif',
 				'media' => '(max-width: '.$mobile_width.'px)',
-				'srcset' => [
+				'srcset_sizes' => [
 					'1x' => [
 						'width' => $mobile_width,
 						'height' => $mobile_height,
@@ -314,7 +312,7 @@ class Image {
 			[
 				'mimetype' => 'image/webp',
 				'media' => '(max-width: '.$mobile_width.'px)',
-				'srcset' => [
+				'srcset_sizes' => [
 					'1x' => [
 						'width' => $mobile_width,
 						'height' => $mobile_height,
@@ -338,7 +336,7 @@ class Image {
 			[
 				'mimetype' => 'image/avif',
 				'media' => '(min-width: '.$mobile_width.'px)',
-				'srcset' => [
+				'srcset_sizes' => [
 					'1x' => [
 						'width' => $width,
 						'height' => $height,
@@ -356,7 +354,7 @@ class Image {
 			[
 				'mimetype' => 'image/webp',
 				'media' => '(min-width: '.$mobile_width.'px)',
-				'srcset' => [
+				'srcset_sizes' => [
 					'1x' => [
 						'width' => $width,
 						'height' => $height,
@@ -373,14 +371,34 @@ class Image {
 			],
 		];
 
+		for( $i = 0; $i < count($picture); $i++ ) {
+			$source = $picture[$i];
+
+			$images = [];
+			foreach( $source['srcset_sizes'] as $size => $query ) {
+				$images[] = $this->get_image_url($query).' '.$size;
+			}
+
+			$picture[$i]['srcset'] = implode(', ',$images);
+		}
+
+		return $picture;
+	}
+
+
+	function get_html( $lazyloading = true ) {
+
+		$classes = [ 'image', 'image-'.$this->format ];
+
+		$width = $this->width;
+		$height = $this->height;
+
+		$picture = $this->get_picture_srcset();
+
 		$html = '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">'; // TODO: backgroundcolor
 
 			foreach( $picture as $source ) {
-				$images = [];
-				foreach( $source['srcset'] as $size => $query ) {
-					$images[] = $this->get_image_url($query).' '.$size;
-				}
-				$html .= '<source media="'.$source['media'].'" srcset="'.implode(', ',$images).'" type="'.$source['mimetype'].'">';
+				$html .= '<source media="'.$source['media'].'" srcset="'.$source['srcset'].'" type="'.$source['mimetype'].'">';
 			}
 
 			$src = $this->get_image_url([
