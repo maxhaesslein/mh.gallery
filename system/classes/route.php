@@ -142,12 +142,10 @@ class Route {
 
 		}
 
-		$template_path = 'templates/'.$template_name.'.php';
-
-		if( file_exists(get_abspath('custom/'.$template_path)) ) {
-			$include_path = get_abspath('custom/'.$template_path);
-		} else {
-			$include_path = get_abspath('system/site/'.$template_path);
+		$include_path = $this->get_include_path($template_name);
+		if( ! $include_path ) {
+			$template_name = '404';
+			$include_path = $this->get_include_path($template_name);
 		}
 
 
@@ -161,6 +159,22 @@ class Route {
 			'args' => $args,
 		);
 
+	}
+
+
+	function get_include_path( $template_name ) {
+
+		$template_path = 'templates/'.$template_name.'.php';
+		
+		if( file_exists(get_abspath('custom/'.$template_path)) ) {
+			return get_abspath('custom/'.$template_path);
+		}
+
+		if( file_exists(get_abspath('system/site/'.$template_path))) {
+			return get_abspath('system/site/'.$template_path);
+		}
+		
+		return false;
 	}
 
 	function get( $option = false ) {
