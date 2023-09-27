@@ -18,7 +18,7 @@ This is an early version, expect things to not work or change.
 
 Download the latest release .zip file, extract it, upload it to a folder on your webserver and open the URL to this folder in a browser. Missing files and folders will be automatically created.
 
-## Create Galleries
+## Galleries
 
 create a `content/` folder and add subfolders for your galleries. You can also organize them in additional subfolders, like  `content/2023/gallery-name/`. In each gallery folder, create a new text file called  `gallery.txt`. This file is needed to detect this folder as a gallery, you can also add some additional information to this file:
 
@@ -43,6 +43,22 @@ Setting `hidden: true` will hide this gallery from the index (homepage). You can
 Setting a `secret` will hide this gallery from the index, and only make the url accessible with the secret appenden to the slug. For example, if the slug is `gallery-01` and the secret is set to `secret: a1b2c3`, the URL to open the gallery will be `https://www.example.com/gallery-01-a1b2c3`.
 
 The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
+
+## Collections
+
+Galleries can be organized inside 'collections'. A collection is like a folder that contains multiple galleries, and can also contain other collections with their own galleries. By default, there is always one root collection, that contains all galleries (and collections) that you create.
+
+To create a collection, add a `collection.txt` file inside a folder, and add one or more subfolders with a `gallery.txt`inside that collection. The `collection.txt` file can contain some settings, like the `gallery.txt` file:
+
+```txt
+title: my nice collection
+slug: my-nice-collection
+description: here is a collection of some galleries
+hidden: true
+thumbnail: gallery-slug/image-01.jpg
+```
+
+Currently, everything inside a collection is always sorted alphabetically by slug, this will be expanded later.
 
 ## Update
 

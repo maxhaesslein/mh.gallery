@@ -1,6 +1,7 @@
 
 this list is not complete
 
+- allow sorting of collections (currently, it's always sorted by slug)
 - Collection() and Gallery() can be merged into one class?
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
