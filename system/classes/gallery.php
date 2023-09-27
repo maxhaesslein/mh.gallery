@@ -140,7 +140,7 @@ class Gallery {
 		$title = $this->get_config('title');
 
 		if( ! $title ) {
-			$title = $this->get_slug( true );
+			$title = $this->get_slug( true, true );
 		}
 
 		$allowed_tags = get_config('allowed_tags');
@@ -169,7 +169,7 @@ class Gallery {
 	}
 
 
-	function get_slug( $skip_secret = false ) {
+	function get_slug( $skip_secret = false, $skip_parent = false ) {
 
 		$slug = $this->get_config('slug');
 
@@ -186,7 +186,7 @@ class Gallery {
 			$slug .= '-'.trim($this->secret);
 		}
 
-		if( $this->parent_collection ) {
+		if( ! $skip_parent && $this->parent_collection ) {
 			$parent_slug = $this->parent_collection->get_slug();
 			if( $parent_slug ) $parent_slug = trailing_slash_it($parent_slug);
 			$slug = $parent_slug.$slug;
@@ -222,6 +222,11 @@ class Gallery {
 		if( ! array_key_exists($slug.'.', $this->images) ) return false;
 
 		return $this->images[$slug.'.'];
+	}
+
+
+	function get( $slug ) {
+		return $this->get_image($slug);
 	}
 
 
@@ -478,6 +483,13 @@ class Gallery {
 		$zip->close();
 
 		return count($this->get_missing_zip_images());
+	}
+
+
+	function is( $test ) {
+		if( $test == 'gallery' ) return true;
+
+		return false;
 	}
 
 	

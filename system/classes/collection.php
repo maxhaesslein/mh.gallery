@@ -34,7 +34,7 @@ class Collection {
 
 			$gallery = new Gallery($subgallery_file, $this);
 
-			$slug = $gallery->get_slug();
+			$slug = $gallery->get_slug( false, true );
 
 			if( ! $slug ) continue;
 
@@ -56,7 +56,7 @@ class Collection {
 
 			$collection = new Collection($subcollection_folder, $this);
 
-			$slug = $collection->get_slug();
+			$slug = $collection->get_slug( true );
 
 			if( ! $slug ) continue;
 
@@ -118,7 +118,7 @@ class Collection {
 	}
 
 
-	function get_slug() {
+	function get_slug( $skip_parent = false ) {
 
 		$slug = $this->get_config('slug');
 
@@ -132,7 +132,7 @@ class Collection {
 
 		if( $slug == 'content' ) $slug = ''; // the root collection should return an empty slug
 
-		if( $this->parent_collection ) {
+		if( ! $skip_parent && $this->parent_collection ) {
 			$parent_slug = $this->parent_collection->get_slug();
 			if( $parent_slug ) $parent_slug = trailing_slash_it($parent_slug);
 			$slug = $parent_slug.$slug;
@@ -210,7 +210,7 @@ class Collection {
 	
 
 	function get_gallery( $slug ) {
-		
+
 		if( ! array_key_exists($slug, $this->galleries) ) {
 			return false;
 		}
@@ -228,13 +228,32 @@ class Collection {
 	}
 
 
-	function get() {
+	function get( $slug = false ) {
+
+		if( $slug ) {
+
+			if( $this->get_collection($slug) ) {
+				return $this->get_collection($slug);
+			} elseif( $this->get_gallery($slug) ) {
+				return $this->get_gallery($slug);
+			}
+
+			return false;
+
+		}
 
 		$collection_content = array_merge($this->collections, $this->galleries);
 
 		ksort($collection_content);
 
 		return $collection_content;
+	}
+
+
+	function is( $test ) {
+		if( $test == 'collection' ) return true;
+
+		return false;
 	}
 
 }

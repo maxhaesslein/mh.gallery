@@ -2,42 +2,55 @@
 
 if( ! $core ) exit;
 
-$collection = $core->collection->get();
+$collection = $core->route->get('collection');
 
 snippet( 'header' );
+
+
+if( $collection ) {
+	$collection_list = $collection->get();
+}
 
 ?>
 <main>
 
 	<h1><?= get_config('site_title') ?></h1>
 
-	<ul class="gallery-list">
-		<?php
-		foreach( $collection as $collection_or_gallery ) {
-
-			if( $collection_or_gallery->is_hidden() ) continue;
-
-			$url = $collection_or_gallery->get_url();
-
-			$image = false;
-			$thumbnail_slug = $collection_or_gallery->get_thumbnail_slug();
-			if( $thumbnail_slug ) {
-				$image = $collection_or_gallery->get_image($thumbnail_slug);
-			}
-
-			$title = $collection_or_gallery->get_title();
-
-			?>
-			<li>
-				<a href="<?= $url ?>">
-					<?php if( $image ) snippet( 'thumbnail', [ 'image' => $image ] ); ?>
-					<span class="title"><?= $title ?></span>
-				</a>
-			</li>
-			<?php
-		}
+	<?php
+	if( count($collection_list) ) {
 		?>
-	</ul>
+		<ul class="gallery-list">
+			<?php
+
+			foreach( $collection_list as $collection_or_gallery ) {
+
+				if( $collection_or_gallery->is_hidden() ) continue;
+
+				$url = $collection_or_gallery->get_url();
+
+				$image = false;
+				$thumbnail_slug = $collection_or_gallery->get_thumbnail_slug();
+				if( $thumbnail_slug ) {
+					$image = $collection_or_gallery->get_image($thumbnail_slug);
+				}
+
+				$title = $collection_or_gallery->get_title();
+
+				?>
+				<li>
+					<a href="<?= $url ?>">
+						<?php if( $image ) snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+						<span class="title"><?= $title ?></span>
+					</a>
+				</li>
+				<?php
+			}
+			?>
+		</ul>
+		<?php
+	}
+	?>
+	
 </main>
 <?php
 

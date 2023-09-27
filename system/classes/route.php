@@ -7,10 +7,6 @@ class Route {
 	function __construct() {
 		global $core;
 
-		$gallery = false;
-		$image = false;
-		$args = [];
-
 		$request_string = $_SERVER['REQUEST_URI'];
 		$request_string = preg_replace( '/^'.preg_quote(get_basefolder(), '/').'/', '', $request_string );
 		
@@ -21,23 +17,64 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		$template_name = '404';
 
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], ['img', 'api', 'download']) ) {
 			$mode = array_shift($request);
 		}
 
+		if( $mode == 'download' ) {
+			$request[count($request)-1] = str_replace('.zip', '', $request[count($request)-1]);
+		}
+
+
+		$template_name = '404';
+		$collection = false;
+		$gallery = false;
+		$image = false;
+		$args = [];
+
+		if( count($request) ) {
+
+			$request_object = $core->collection;
+			foreach( $request as $request_part ) {
+				$new_request_object = $request_object->get($request_part);
+				if( $new_request_object ) {
+					$request_object = $new_request_object;
+
+					if( $request_object->is('gallery') ) {
+						$gallery = $request_object;
+						$template_name = 'overview';
+					} elseif( $request_object->is('collection') ) {
+						$collection = $request_object;
+						$template_name = 'index';
+					} elseif( $request_object->is('image') ) {
+						$image = $request_object;
+						$template_name = 'image';
+					}
+
+				} else {
+					$template_name = '404';
+				}
+			}
+		
+		} else {
+
+			if( get_config('allow_overview') ) {
+				$collection = $core->collection;
+				$template_name = 'index';
+			}
+
+		}
+
 
 		if( $mode == 'img' ) {
 
-			// TODO
-
-			$image_name = array_pop($request);
-			$gallery_slug = implode('/', $request);
-
-			$gallery = $core->collection->get_gallery($gallery_slug);
+			$template_name = '404';
+			
 			if( $gallery ) {
+
+				$image_name = array_pop($request);
 
 				$image_name = explode('.', $image_name);
 				$type = array_pop($image_name);
@@ -78,81 +115,27 @@ class Route {
 
 					$template_name = 'img-output';
 				}
+
 			}
 
-		}elseif( $mode == 'download' ) {
+		} elseif( $mode == 'download' ) {
 
-			// TODO
-
-			$gallery_slug = implode('/', $request);
-
-			$gallery_slug = explode('.', $gallery_slug);
-			unset($gallery_slug[count($gallery_slug)-1]);
-			$gallery_slug = implode('.', $gallery_slug);
-
-			$gallery = $core->collection->get_gallery($gallery_slug);
+			$template_name = '404';
+			
 			if( $gallery && $gallery->is_download_gallery_enabled() ) {
 				$template_name = 'download';
 			}
 
 		} elseif( $mode == 'api' ) {
+			
+			$template_name = '404';
 
-			// TODO
-
-			$gallery_slug = $request[0];
-
-			if( $core->collection->gallery_exists($gallery_slug) ) {
-
-				$gallery = $core->collection->get_gallery($gallery_slug);
-
-				if( $gallery ) {
-					$image_slug = $request[1];
-
-					$image = $gallery->get_image($image_slug);
-
-					if( $image ) {
-						$template_name = 'api-output';
-					}
-
-				}
-
+			if( $image ) {
+				$template_name = 'api-output';
 			}
-
-		} elseif( count($request)) {
-
-			// TODO
-
-			$gallery_slug = $request[0];
-
-			if( $core->collection->gallery_exists($gallery_slug) ) {
-
-				$gallery = $core->collection->get_gallery($gallery_slug);
-
-				if( $gallery ) {
-
-					$template_name = 'overview';
-
-					if( ! empty($request[1]) ) {
-						$image_slug = $request[1];
-						$image = $gallery->get_image($image_slug);
-
-						if( $image ) {
-							$template_name = 'image';
-						} else {
-							$template_name = '404';
-						}
-
-					}
-
-				}
-
-			}
-
-		} elseif( get_config('allow_overview') ) {
-
-			$template_name = 'index';
 
 		}
+
 
 		$include_path = $this->get_include_path($template_name);
 		if( ! $include_path ) {
@@ -166,6 +149,7 @@ class Route {
 			'template_include' => $include_path,
 			'request' => $request,
 			'query' => $_REQUEST,
+			'collection' => $collection,
 			'gallery' => $gallery,
 			'image' => $image,
 			'args' => $args,

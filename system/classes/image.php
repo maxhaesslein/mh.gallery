@@ -663,4 +663,11 @@ class Image {
 		exit;
 	}
 
+
+	function is( $test ) {
+		if( $test == 'image' ) return true;
+		
+		return false;
+	}
+
 }
