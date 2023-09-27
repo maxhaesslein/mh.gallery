@@ -7,6 +7,10 @@ class Route {
 	function __construct() {
 		global $core;
 
+		$gallery = false;
+		$image = false;
+		$args = [];
+
 		$request_string = $_SERVER['REQUEST_URI'];
 		$request_string = preg_replace( '/^'.preg_quote(get_basefolder(), '/').'/', '', $request_string );
 		
@@ -19,13 +23,16 @@ class Route {
 
 		$template_name = '404';
 
-		$gallery = false;
-		$image = false;
-		$args = [];
+		$mode = false;
+		if( count($request) > 0 && in_array($request[0], ['img', 'api', 'download']) ) {
+			$mode = array_shift($request);
+		}
 
-		if( ! empty($request[0]) && $request[0] == 'img' ) {
 
-			unset($request[0]); // remove img/ route from request
+		if( $mode == 'img' ) {
+
+			// TODO
+
 			$image_name = array_pop($request);
 			$gallery_slug = implode('/', $request);
 
@@ -73,9 +80,10 @@ class Route {
 				}
 			}
 
-		} elseif( ! empty($request[0]) && $request[0] == 'download' ) {
+		}elseif( $mode == 'download' ) {
 
-			unset($request[0]); // remove download/ route from request
+			// TODO
+
 			$gallery_slug = implode('/', $request);
 
 			$gallery_slug = explode('.', $gallery_slug);
@@ -87,16 +95,18 @@ class Route {
 				$template_name = 'download';
 			}
 
-		} elseif( count($request) >= 3 && $request[0] == 'api' ) {
+		} elseif( $mode == 'api' ) {
 
-			$gallery_slug = $request[1];
+			// TODO
+
+			$gallery_slug = $request[0];
 
 			if( $core->collection->gallery_exists($gallery_slug) ) {
 
 				$gallery = $core->collection->get_gallery($gallery_slug);
 
 				if( $gallery ) {
-					$image_slug = $request[2];
+					$image_slug = $request[1];
 
 					$image = $gallery->get_image($image_slug);
 
@@ -108,7 +118,9 @@ class Route {
 
 			}
 
-		} elseif( count($request) > 0 ) {
+		} elseif( count($request)) {
+
+			// TODO
 
 			$gallery_slug = $request[0];
 
