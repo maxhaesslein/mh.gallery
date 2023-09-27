@@ -27,7 +27,7 @@ class Collection {
 
 
 		$galleries = [];
-		$galleries_folder = new Folder( $path, 'gallery.txt', true ); // TODO: don't add galleries, that are inside other collections
+		$galleries_folder = new Folder( $path, 'gallery.txt', true, 'collection.txt' );
 		$subgalleries = $galleries_folder->get();
 		if( ! count($subgalleries) ) $subgalleries = [];
 		foreach( $subgalleries as $subgallery_file ) {

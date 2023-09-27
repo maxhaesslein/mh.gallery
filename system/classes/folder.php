@@ -5,20 +5,20 @@ class Folder {
 	private $path;
 	private $files = [];
 
-	function __construct( $path, $filter = false, $recursive = false ) {
+	function __construct( $path, $filter = false, $recursive = false, $stop = false ) {
 
 		if( ! is_dir(get_abspath($path)) ) return;
 
 		$this->path = $path;
 
-		$files = $this->read_folder( $path, $filter, $recursive );
+		$files = $this->read_folder( $path, $filter, $recursive, $stop );
 
 		$this->files = $files;
 
 	}
 
 
-	function read_folder( $path = false, $filter = false, $recursive = false ) {
+	function read_folder( $path = false, $filter = false, $recursive = false, $stop = false, $depth = 0 ) {
 
 		if( ! $path ) $path = $this->path;
 
@@ -31,8 +31,12 @@ class Folder {
 
 				if( str_starts_with($filename, '.') ) continue; // skip everything that starts with '.', and thus also './' and '../'
 
+				if( $stop && $filename == $stop && $depth > 0 ) {
+					return [];
+				}
+
 				if( $recursive && is_dir($path.$filename) ) {
-					$subfolder_files = $this->read_folder( $path.$filename, $filter, $recursive );
+					$subfolder_files = $this->read_folder( $path.$filename, $filter, $recursive, $stop, $depth+1 );
 					if( count($subfolder_files) ) {
 						$files = array_merge( $files, $subfolder_files );
 					}
