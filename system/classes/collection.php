@@ -44,8 +44,9 @@ class Collection {
 		$this->galleries = $galleries;
 
 
+
 		$collections = [];
-		$collections_folder = new Folder( $path, 'collection.txt', true );
+		$collections_folder = new Folder( $path, 'collection.txt', true, 'collection.txt', 1 );
 		$subcollections = $collections_folder->get();
 		if( ! count($subcollections) ) $subcollections = [];
 		foreach( $subcollections as $subcollection_file ) {
