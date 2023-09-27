@@ -1,6 +1,7 @@
 v.0.2.0
 
-- ..
+- added collections, that can group multiple galleries into one 'subfolder' (see README.md)
+- social sharing images will now be automatically cropped
 
 
 v.0.1.5
