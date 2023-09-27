@@ -5,6 +5,7 @@ class Collection {
 	private $galleries = [];
 	private $collections = [];
 
+	private $parent_collection = false;
 	private $path;
 	private $file = false; // root collection may not have a file; all other collections must have one
 	private $slug;
@@ -12,7 +13,7 @@ class Collection {
 	private $settings;
 	private $hidden;
 
-	function __construct( $path = 'content/' ) {
+	function __construct( $path = 'content/', $parent_collection = false ) {
 
 		$this->path = $path;
 
@@ -22,6 +23,8 @@ class Collection {
 			$this->read_collection_file();
 		}
 
+		if( $parent_collection ) $this->parent_collection = $parent_collection;
+
 
 		$galleries = [];
 		$galleries_folder = new Folder( $path, 'gallery.txt', true );
@@ -29,7 +32,7 @@ class Collection {
 		if( ! count($subgalleries) ) $subgalleries = [];
 		foreach( $subgalleries as $subgallery_file ) {
 
-			$gallery = new Gallery($subgallery_file);
+			$gallery = new Gallery($subgallery_file, $this);
 
 			$slug = $gallery->get_slug();
 
@@ -51,7 +54,7 @@ class Collection {
 
 			if( $subcollection_folder == $path ) continue;
 
-			$collection = new Collection($subcollection_folder);
+			$collection = new Collection($subcollection_folder, $this);
 
 			$slug = $collection->get_slug();
 
@@ -105,6 +108,8 @@ class Collection {
 
 	function get_config( $option ) {
 
+		if( ! $this->settings ) return NULL;
+
 		if( array_key_exists($option, $this->settings) ) {
 			return $this->settings[$option];
 		}
@@ -115,8 +120,6 @@ class Collection {
 
 	function get_slug() {
 
-		// TODO: check, if this collection is part of a parent collection; if so, add the parent slug before our slug.
-
 		$slug = $this->get_config('slug');
 
 		if( ! $slug ) {
@@ -126,6 +129,14 @@ class Collection {
 		}
 
 		$slug = sanitize_string($slug, true);
+
+		if( $slug == 'content' ) $slug = ''; // the root collection should return an empty slug
+
+		if( $this->parent_collection ) {
+			$parent_slug = $this->parent_collection->get_slug();
+			if( $parent_slug ) $parent_slug = trailing_slash_it($parent_slug);
+			$slug = $parent_slug.$slug;
+		}
 		
 		return $slug;
 	}

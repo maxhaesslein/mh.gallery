@@ -4,6 +4,7 @@ class Gallery {
 
 	private $gallery_file;
 	private $path;
+	private $parent_collection;
 	private $settings;
 	private $images = NULL;
 	private $hidden = false;
@@ -12,12 +13,14 @@ class Gallery {
 	private $download_gallery_enabled;
 	private $bridge_sort_order = NULL;
 
-	function __construct( $gallery_file ) {
+	function __construct( $gallery_file, $parent_collection ) {
 
 		$path = str_replace( 'gallery.txt', '', $gallery_file);
 
 		$this->path = $path;
 		$this->gallery_file = $gallery_file;
+
+		$this->parent_collection = $parent_collection;
 
 		$this->read_gallery_file();
 
@@ -168,8 +171,6 @@ class Gallery {
 
 	function get_slug( $skip_secret = false ) {
 
-		// TODO: check, if this gallery is part of a collection. if so, add collection slug before our slug.
-
 		$slug = $this->get_config('slug');
 
 		if( ! $slug ) {
@@ -180,8 +181,15 @@ class Gallery {
 
 		$slug = sanitize_string($slug, true);
 
+		// TODO: secrets will work differently in the future.
 		if( ! $skip_secret && $this->secret ) {
 			$slug .= '-'.trim($this->secret);
+		}
+
+		if( $this->parent_collection ) {
+			$parent_slug = $this->parent_collection->get_slug();
+			if( $parent_slug ) $parent_slug = trailing_slash_it($parent_slug);
+			$slug = $parent_slug.$slug;
 		}
 		
 		return $slug;
