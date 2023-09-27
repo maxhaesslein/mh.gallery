@@ -2,8 +2,8 @@
 this list is not complete
 
 - collections
-	- collection thumbnails
 	- don't add galleries from subcollections
+	- check social tags!
 	- Collection() and Gallery() can be merged into one class?
 - enhance slide navigation
 	- image needs to move, next image needs to be visible

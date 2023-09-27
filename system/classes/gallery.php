@@ -254,6 +254,16 @@ class Gallery {
 	}
 
 
+	function get_thumbnail() {
+
+		$slug = $this->get_thumbnail_slug();
+
+		if( ! $slug ) return false;
+
+		return $this->get_image($slug);
+	}
+
+
 	function get_image_link( $slug ) {
 
 		if( $this->images == NULL ) $this->load_images();

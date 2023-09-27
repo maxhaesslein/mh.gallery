@@ -29,11 +29,8 @@ if( $collection ) {
 				$url = $collection_or_gallery->get_url();
 
 				$image = false;
-				$thumbnail_slug = $collection_or_gallery->get_thumbnail_slug();
-				if( $thumbnail_slug ) {
-					$image = $collection_or_gallery->get_image($thumbnail_slug);
-				}
-
+				$image = $collection_or_gallery->get_thumbnail();
+				
 				$title = $collection_or_gallery->get_title();
 
 				?>
