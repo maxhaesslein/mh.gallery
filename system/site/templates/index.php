@@ -7,9 +7,11 @@ $collection = $core->route->get('collection');
 snippet( 'header' );
 
 
+$description = false;
 if( $collection ) {
 	$collection_list = $collection->get();
 	$title = $collection->get_title();
+	$description = $collection->get_description();
 } else {
 	$title = get_config('site_title');
 }
@@ -18,6 +20,11 @@ if( $collection ) {
 <main>
 
 	<h1><?= $title ?></h1>
+	<?php
+	if( $description ) {
+		echo '<p class="description">'.$description.'</p>';
+	}
+	?>
 
 	<?php
 	if( count($collection_list) ) {
