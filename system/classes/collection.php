@@ -143,6 +143,12 @@ class Collection {
 
 
 	function get_title() {
+
+		if( ! $this->file ) {
+			// this is the root collection
+			return get_config('site_title');
+		}
+
 		$title = $this->get_config('title');
 
 		if( ! $title ) {

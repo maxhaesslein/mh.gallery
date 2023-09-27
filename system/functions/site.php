@@ -36,11 +36,30 @@ function get_site_title() {
 
 	$title = [ get_config('site_title') ];
 
-	$gallery = $core->route->get('gallery');
-	if( $gallery ) $title[] = $gallery->get_title();
+	$gallery = false;
+	$request_object = $core->collection;
+	foreach( $core->route->get('request') as $request_part ) {
+		$new_request_object = $request_object->get($request_part);
+		if( $new_request_object ) {
+			$request_object = $new_request_object;
 
-	$image = $core->route->get('image');
-	if( $image ) $title[] = $image->get_number().'/'.$gallery->get_image_count();
+			if( $request_object->is('gallery') ) {
+				$gallery = $request_object;
+				$title[] = $gallery->get_title();
+			} elseif( $request_object->is('collection') ) {
+				$collection = $request_object;
+				$title[] = $collection->get_title();
+			} elseif( $request_object->is('image') ) {
+				$image = $request_object;
+				if( $gallery ) {
+					$title[] = $image->get_number().'/'.$gallery->get_image_count();
+				}
+			}
+
+		} else {
+			$template_name = '404';
+		}
+	}
 
 	$title = array_reverse( $title );
 
@@ -58,22 +77,27 @@ function get_site_sharing_tags() {
 
 	global $core;
 
+	$collection = $core->route->get('collection');
 	$gallery = $core->route->get('gallery');
 	$image = $core->route->get('image');
-
 	if( ! $image && $gallery ) {
-		$thumbnail_slug = $gallery->get_thumbnail_slug();
-		$image = $gallery->get_image( $thumbnail_slug );
+		$image = $gallery->get_thumbnail();
+	}
+	if( ! $image && $collection ) {
+		$image = $collection->get_thumbnail();
 	}
 
 	$description = false;
 	if( $gallery ) {
 		$description = $gallery->get_description();
 	}
+	if( ! $description && $collection ) {
+		$description = $collection->get_description();
+	}
 
 	$thumbnail = false;
 	if( $image ) {
-		$thumbnail = $image->get_image_url( [ 'width' => 1200, 'height' => 1200, 'crop' => false, 'type' => 'jpg'] );
+		$thumbnail = $image->get_image_url( [ 'width' => 1600, 'height' => 900, 'crop' => true, 'type' => 'jpg'] );
 	}
 
 	$sharing_tags = [];

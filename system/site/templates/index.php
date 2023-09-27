@@ -9,12 +9,15 @@ snippet( 'header' );
 
 if( $collection ) {
 	$collection_list = $collection->get();
+	$title = $collection->get_title();
+} else {
+	$title = get_config('site_title');
 }
 
 ?>
 <main>
 
-	<h1><?= get_config('site_title') ?></h1>
+	<h1><?= $title ?></h1>
 
 	<?php
 	if( count($collection_list) ) {

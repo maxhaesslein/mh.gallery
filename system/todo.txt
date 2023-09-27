@@ -1,9 +1,7 @@
 
 this list is not complete
 
-- collections
-	- check social tags!
-	- Collection() and Gallery() can be merged into one class?
+- Collection() and Gallery() can be merged into one class?
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 - hidden galleries with secret link
