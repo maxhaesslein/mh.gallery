@@ -2,7 +2,7 @@
 
 if( ! $core ) exit;
 
-$galleries = $core->galleries->get();
+$collection = $core->collection->get();
 
 snippet( 'header' );
 
@@ -13,19 +13,19 @@ snippet( 'header' );
 
 	<ul class="gallery-list">
 		<?php
-		foreach( $galleries as $gallery ) {
+		foreach( $collection as $collection_or_gallery ) {
 
-			if( $gallery->is_hidden() ) continue;
+			if( $collection_or_gallery->is_hidden() ) continue;
 
-			$url = $gallery->get_url();
+			$url = $collection_or_gallery->get_url();
 
 			$image = false;
-			$thumbnail_slug = $gallery->get_thumbnail_slug();
+			$thumbnail_slug = $collection_or_gallery->get_thumbnail_slug();
 			if( $thumbnail_slug ) {
-				$image = $gallery->get_image($thumbnail_slug);
+				$image = $collection_or_gallery->get_image($thumbnail_slug);
 			}
 
-			$title = $gallery->get_title();
+			$title = $collection_or_gallery->get_title();
 
 			?>
 			<li>

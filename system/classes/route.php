@@ -29,7 +29,7 @@ class Route {
 			$image_name = array_pop($request);
 			$gallery_slug = implode('/', $request);
 
-			$gallery = $core->galleries->get_gallery($gallery_slug);
+			$gallery = $core->collection->get_gallery($gallery_slug);
 			if( $gallery ) {
 
 				$image_name = explode('.', $image_name);
@@ -82,7 +82,7 @@ class Route {
 			unset($gallery_slug[count($gallery_slug)-1]);
 			$gallery_slug = implode('.', $gallery_slug);
 
-			$gallery = $core->galleries->get_gallery($gallery_slug);
+			$gallery = $core->collection->get_gallery($gallery_slug);
 			if( $gallery && $gallery->is_download_gallery_enabled() ) {
 				$template_name = 'download';
 			}
@@ -91,9 +91,9 @@ class Route {
 
 			$gallery_slug = $request[1];
 
-			if( $core->galleries->gallery_exists($gallery_slug) ) {
+			if( $core->collection->gallery_exists($gallery_slug) ) {
 
-				$gallery = $core->galleries->get_gallery($gallery_slug);
+				$gallery = $core->collection->get_gallery($gallery_slug);
 
 				if( $gallery ) {
 					$image_slug = $request[2];
@@ -112,9 +112,9 @@ class Route {
 
 			$gallery_slug = $request[0];
 
-			if( $core->galleries->gallery_exists($gallery_slug) ) {
+			if( $core->collection->gallery_exists($gallery_slug) ) {
 
-				$gallery = $core->galleries->get_gallery($gallery_slug);
+				$gallery = $core->collection->get_gallery($gallery_slug);
 
 				if( $gallery ) {
 

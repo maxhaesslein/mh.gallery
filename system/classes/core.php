@@ -7,7 +7,7 @@ class Core {
 	private $baseurl;
 
 	public $config;
-	public $galleries;
+	public $collection;
 	public $route;
 
 	function __construct( $abspath ){
@@ -34,7 +34,7 @@ class Core {
 
 		$this->check_required_files_and_folders();
 
-		$this->galleries = new Collection(); // needs to be there before new Route()
+		$this->collection = new Collection(); // needs to be there before new Route()
 
 		$this->route = new Route();
 

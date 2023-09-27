@@ -2,10 +2,10 @@
 this list is not complete
 
 - collections
-	- rename core->galleries to core->collection
 	- collections can contain galleries and other collections
 	- there is always at least one collection, the root collection, in core->collection
 	- rename index template to collection template, use for collection/galleries overview
+	- Collection() and Gallery() can be merged into one class?
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 - hidden galleries with secret link
