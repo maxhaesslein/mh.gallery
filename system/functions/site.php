@@ -137,10 +137,6 @@ function head() {
 	<title><?= get_site_title() ?></title>
 	<?= get_site_sharing_tags() ?>
 <?php
-	// preload loading animation:
-	?>
-	<link rel="preload" href="<?= url('system/site/assets/img/loading_white.svg', false) ?>" as="image" type="image/svg+xml" crossorigin>
-	<?php
 
 	// CSS
 	$css_filter = 'extension=css';
