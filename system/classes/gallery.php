@@ -205,6 +205,24 @@ class Gallery {
 	}
 
 
+	function get_parent_url( $full_url = true ) {
+
+		if( ! $this->parent_collection ) {
+			return false;
+		}
+
+		if( $this->parent_collection->is_root() && ! get_config('allow_overview') ) {
+			return false;
+		}
+
+		$url = $this->parent_collection->get_url(false);
+
+		if( $full_url ) $url = url($url);
+
+		return $url;
+	}
+
+
 	function get_images() {
 
 		if( $this->images == NULL ) $this->load_images();

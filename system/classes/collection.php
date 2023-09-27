@@ -7,6 +7,7 @@ class Collection {
 
 	private $parent_collection = false;
 	private $path;
+	private $is_root = false;
 	private $file = false; // root collection may not have a file; all other collections must have one
 	private $slug;
 
@@ -16,6 +17,10 @@ class Collection {
 	function __construct( $path = 'content/', $parent_collection = false ) {
 
 		$this->path = $path;
+
+		if( $path == 'content/' ) {
+			$this->is_root = true;
+		}
 
 		$collection_file = $path.'collection.txt';
 		if( file_exists(get_abspath($collection_file)) ) {
@@ -241,6 +246,24 @@ class Collection {
 	}
 
 
+	function get_parent_url( $full_url = true ) {
+
+		if( ! $this->parent_collection ) {
+			return false;
+		}
+
+		if( $this->parent_collection->is_root() && ! get_config('allow_overview') ) {
+			return false;
+		}
+
+		$url = $this->parent_collection->get_url(false);
+
+		if( $full_url ) $url = url($url);
+
+		return $url;
+	}
+
+
 	function gallery_exists( $slug ) {
 		
 		if( $this->get_gallery($slug) ) {
@@ -305,6 +328,11 @@ class Collection {
 		if( $test == 'collection' ) return true;
 
 		return false;
+	}
+
+
+	function is_root() {
+		return $this->is_root;
 	}
 
 }

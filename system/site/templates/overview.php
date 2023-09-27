@@ -14,8 +14,16 @@ if( $gallery->is_download_gallery_enabled() ) {
 
 $description = $gallery->get_description();
 
+$overview_url = $gallery->get_parent_url();
+
 ?>
 <main>
+
+	<?php
+	if( $overview_url ) {
+		echo '<a href="'.$overview_url.'">&laquo; overview</a>';
+	}
+	?>
 
 	<h1><?= $gallery->get_title() ?></h1>
 

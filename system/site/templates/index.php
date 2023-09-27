@@ -12,12 +12,19 @@ if( $collection ) {
 	$collection_list = $collection->get();
 	$title = $collection->get_title();
 	$description = $collection->get_description();
+	$overview_url = $collection->get_parent_url();
 } else {
 	$title = get_config('site_title');
 }
 
 ?>
 <main>
+
+	<?php
+	if( $overview_url ) {
+		echo '<a href="'.$overview_url.'">&laquo; overview</a>';
+	}
+	?>
 
 	<h1><?= $title ?></h1>
 	<?php
