@@ -1,0 +1,219 @@
+<?php
+
+class Collection {
+
+	private $galleries = [];
+	private $collections = [];
+
+	private $path;
+	private $file = false; // root collection may not have a file; all other collections must have one
+	private $slug;
+
+	private $settings;
+	private $hidden;
+
+	function __construct( $path = 'content/' ) {
+
+		$this->path = $path;
+
+		$collection_file = $path.'collection.txt';
+		if( file_exists(get_abspath($collection_file)) ) {
+			$this->file = $collection_file;
+			$this->read_collection_file();
+		}
+
+
+		$galleries = [];
+		$galleries_folder = new Folder( $path, 'gallery.txt', true );
+		$subgalleries = $galleries_folder->get();
+		if( ! count($subgalleries) ) $subgalleries = [];
+		foreach( $subgalleries as $subgallery_file ) {
+
+			$gallery = new Gallery($subgallery_file);
+
+			$slug = $gallery->get_slug();
+
+			if( ! $slug ) continue;
+
+			$galleries[$slug] = $gallery;
+		}
+
+		$this->galleries = $galleries;
+
+
+		$collections = [];
+		$collections_folder = new Folder( $path, 'collection.txt', true );
+		$subcollections = $collections_folder->get();
+		if( ! count($subcollections) ) $subcollections = [];
+		foreach( $subcollections as $subcollection_file ) {
+
+			$subcollection_folder = str_replace('collection.txt', '', $subcollection_file);
+
+			if( $subcollection_folder == $path ) continue;
+
+			$collection = new Collection($subcollection_folder);
+
+			$slug = $collection->get_slug();
+
+			if( ! $slug ) continue;
+
+			$collections[$slug] = $collection;
+		}
+
+		$this->collections = $collections;
+
+	}
+
+
+	function read_collection_file() { 
+
+		// NOTE: the structure of the collection.txt file is as follows: every key/value combination has its own line. key and value are seperated by a ':'. if there are multiple instances of the same key, the last instance will overwrite all the instances before. example file contents:
+		/*
+		slug: this-is-my-collection-slug
+		title: this is the collection title: it can also have a colon in the title.
+		this line will be ignored
+		hidden: true
+
+		the root collection may not have a collection file.
+		*/
+
+		if( ! $this->file ) return $this;
+
+		$file = $this->file;
+
+		$settings = read_settings_file( $file );
+
+		$this->settings = $settings;
+
+		if( isset($settings['hidden']) ) {
+			$hidden = $settings['hidden'];
+			if( $hidden == 'false' || $hidden == '0' ) $hidden = false;
+			$hidden = !! $hidden; // make bool
+			$this->hidden = $hidden;
+		}
+
+		// TODO: add secret for collections
+
+		return $this;
+	}
+
+
+	function is_hidden(){
+		return $this->hidden;
+	}
+
+
+	function get_config( $option ) {
+
+		if( array_key_exists($option, $this->settings) ) {
+			return $this->settings[$option];
+		}
+
+		return NULL;
+	}
+
+
+	function get_slug() {
+
+		// TODO: check, if this collection is part of a parent collection; if so, add the parent slug before our slug.
+
+		$slug = $this->get_config('slug');
+
+		if( ! $slug ) {
+			$path = explode('/', $this->path);
+			$path = array_filter($path); // remove empty elements
+			$slug = end($path);
+		}
+
+		$slug = sanitize_string($slug, true);
+		
+		return $slug;
+	}
+
+
+	function get_title() {
+		$title = $this->get_config('title');
+
+		if( ! $title ) {
+			$title = $this->get_slug( true );
+		}
+
+		$allowed_tags = get_config('allowed_tags');
+		if( $allowed_tags ) {
+			$title = strip_tags( $title, $allowed_tags );
+		}
+
+		return $title;
+	}
+
+
+	function get_description(){
+		$description = $this->get_config('description');
+
+		$allowed_tags = get_config('allowed_tags');
+		if( $allowed_tags ) {
+			$description = strip_tags( $description, $allowed_tags );
+		}
+
+		return $description;
+	}
+
+
+	function get_path() {
+		return $this->path;
+	}
+
+
+	function get_url( $full_url = true ) {
+		$url = $this->get_slug();
+
+		if( $full_url ) $url = url($url);
+
+		return $url;
+	}
+
+
+	function gallery_exists( $slug ) {
+		
+		if( $this->get_gallery($slug) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	function collection_exists( $slug ) {
+		
+		if( $this->get_collection($slug) ) {
+			return true;
+		}
+
+		return false;
+	}
+	
+
+	function get_gallery( $slug ) {
+		
+		if( ! array_key_exists($slug, $this->galleries) ) {
+			return false;
+		}
+
+		return $this->galleries[$slug];
+	}
+
+	function get_collection( $slug ) {
+		
+		if( ! array_key_exists($slug, $this->collections) ) {
+			return false;
+		}
+
+		return $this->collections[$slug];
+	}
+
+
+	function get() {
+		// TODO: return collections & galleries
+		return $this->galleries;
+	}
+
+}

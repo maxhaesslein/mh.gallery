@@ -37,26 +37,7 @@ class Gallery {
 
 		$file = $this->gallery_file;
 
-		$file_contents = file_get_contents($file);
-
-		$file_contents = str_replace( ["\r\n", "\r"], "\n", $file_contents );
-
-		$file_contents = explode( "\n", $file_contents );
-
-		$settings = [];
-
-		foreach( $file_contents as $line ) {
-
-			$line = explode( ':', $line );
-
-			if( count($line) < 2 ) continue;
-
-			$key = trim(array_shift($line));
-			$value = trim(implode(':', $line));
-
-			$settings[$key] = $value;
-
-		}
+		$settings = read_settings_file( $file );
 
 		$this->settings = $settings;
 
@@ -186,6 +167,9 @@ class Gallery {
 
 
 	function get_slug( $skip_secret = false ) {
+
+		// TODO: check, if this gallery is part of a collection. if so, add collection slug before our slug.
+
 		$slug = $this->get_config('slug');
 
 		if( ! $slug ) {

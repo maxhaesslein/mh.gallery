@@ -91,7 +91,7 @@ class Route {
 
 			$gallery_slug = $request[1];
 
-			if( $core->galleries->exists($gallery_slug) ) {
+			if( $core->galleries->gallery_exists($gallery_slug) ) {
 
 				$gallery = $core->galleries->get_gallery($gallery_slug);
 
@@ -112,7 +112,7 @@ class Route {
 
 			$gallery_slug = $request[0];
 
-			if( $core->galleries->exists($gallery_slug) ) {
+			if( $core->galleries->gallery_exists($gallery_slug) ) {
 
 				$gallery = $core->galleries->get_gallery($gallery_slug);
 

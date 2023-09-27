@@ -34,7 +34,7 @@ class Core {
 
 		$this->check_required_files_and_folders();
 
-		$this->galleries = new Galleries(); // needs to be there before new Route()
+		$this->galleries = new Collection(); // needs to be there before new Route()
 
 		$this->route = new Route();
 
