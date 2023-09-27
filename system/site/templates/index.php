@@ -14,19 +14,23 @@ snippet( 'header' );
 	<ul class="gallery-list">
 		<?php
 		foreach( $galleries as $gallery ) {
+
 			if( $gallery->is_hidden() ) continue;
 
 			$url = $gallery->get_url();
 
+			$image = false;
 			$thumbnail_slug = $gallery->get_thumbnail_slug();
-			$image = $gallery->get_image($thumbnail_slug);
+			if( $thumbnail_slug ) {
+				$image = $gallery->get_image($thumbnail_slug);
+			}
 
 			$title = $gallery->get_title();
 
 			?>
 			<li>
 				<a href="<?= $url ?>">
-					<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+					<?php if( $image ) snippet( 'thumbnail', [ 'image' => $image ] ); ?>
 					<span class="title"><?= $title ?></span>
 				</a>
 			</li>

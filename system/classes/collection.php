@@ -170,6 +170,12 @@ class Collection {
 	}
 
 
+	function get_thumbnail_slug() {
+		// TODO
+		return false;
+	}
+
+
 	function get_path() {
 		return $this->path;
 	}
@@ -223,8 +229,12 @@ class Collection {
 
 
 	function get() {
-		// TODO: return collections & galleries
-		return $this->galleries;
+
+		$collection_content = array_merge($this->collections, $this->galleries);
+
+		ksort($collection_content);
+
+		return $collection_content;
 	}
 
 }
