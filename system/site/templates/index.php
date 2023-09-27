@@ -22,7 +22,7 @@ if( $collection ) {
 
 	<?php
 	if( $overview_url ) {
-		echo '<a href="'.$overview_url.'">&laquo; overview</a>';
+		echo '<a class="button" href="'.$overview_url.'">&laquo; overview</a>';
 	}
 	?>
 

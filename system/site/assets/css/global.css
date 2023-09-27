@@ -190,7 +190,8 @@ h1 {
 		}
 
 	.meta a,
-	.meta .button-more {
+	.meta .button-more,
+	.button {
 		text-decoration: none;
 		display: inline-block;
 		background: var(--color-black) no-repeat center center / 70% auto;
@@ -201,7 +202,8 @@ h1 {
 	}
 
 		.meta a:hover,
-		.meta li:hover .button-more {
+		.meta li:hover .button-more,
+		.button:hover {
 			background-color: var(--color-grey-dark);
 		}
 
