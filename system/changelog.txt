@@ -1,5 +1,6 @@
 v.0.2.1
 
+- added robots.txt to .gitignore
 - …
 
 
