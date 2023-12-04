@@ -1,3 +1,8 @@
+v.0.2.2
+
+- …
+
+
 v.0.2.1
 
 - bugfix for images rotated via exif
