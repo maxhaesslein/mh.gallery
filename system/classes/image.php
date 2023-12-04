@@ -76,7 +76,6 @@ class Image {
 			$this->rotated = true;
 		}
 
-		// TODO: check how we want to handle this, if $this->rotated is set to true
 		if( $this->src_width > $this->src_height ) {
 			$this->format = 'landscape';
 		} elseif( $this->src_width < $this->src_height ) {
@@ -202,9 +201,17 @@ class Image {
 
 		if( ! $crop ) {
 			if( $width ) {
-				$height = (int) round($width * $this->src_height/$this->src_width);
+				$ratio = $this->src_height/$this->src_width;
+				if( $this->rotated ) {
+					$ratio = $this->src_width/$this->src_height;
+				}
+				$height = (int) round($width * $ratio);
 			} elseif( $height ) {
-				$width = (int) round($height * $this->src_width/$this->src_height);
+				$ratio = $this->src_width/$this->src_height;
+				if( $this->rotated ) {
+					$ratio = $this->src_height/$this->src_width;
+				}
+				$width = (int) round($height * $ratio);
 			}
 		}
 
@@ -499,11 +506,21 @@ class Image {
 
 	function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
 
-		$background_image = imagecreatetruecolor( $this->src_width, $this->src_height );
+		$src_width = $this->src_width;
+		$src_height = $this->src_height;
+		if( $this->rotated ) {
+			$src_width = $this->src_height;
+			$src_height = $this->src_width;
+		}
+
+		$background_image = imagecreatetruecolor( $src_width, $src_height );
 		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
+
 		imagefill( $background_image, 0, 0, $background_color );
-		imagecopy( $background_image, $image, 0, 0, 0, 0, $this->src_width, $this->src_height );
+		imagecopy( $background_image, $image, 0, 0, 0, 0, $src_width, $src_height );
+
 		$image = $background_image;
+
 		imagedestroy( $background_image );
 
 		return $image;
@@ -543,8 +560,8 @@ class Image {
 		$quality = $this->quality;
 		$type = $this->output_type;
 
-		$this->src_width = $this->src_width;
-		$this->src_height = $this->src_height;
+		$src_width = $this->src_width;
+		$src_height = $this->src_height;
 
 		$width = $this->width;
 		$height = $this->height;
@@ -567,15 +584,9 @@ class Image {
 			exit;
 		}
 
-		list( $image_blob, $this->src_width, $this->src_height ) = $this->image_rotate( $image_blob, $this->src_width, $this->src_height );
+		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
 
-		if( $this->src_width > $width || $this->src_height > $height ) {
-
-			if( $this->rotated ) {
-				$tmp_width = $width;
-				$width = $height;
-				$height = $tmp_width;
-			}
+		if( $src_width > $width || $src_height > $height ) {
 
 			$image_blob_resized = imagecreatetruecolor( $width, $height );
 
@@ -593,14 +604,14 @@ class Image {
 
 			// NOTE: currently, we just center the image on crop
 			// TODO: maybe at a 'region of interest' option, somehow ..
-			$src_width_cropped = $this->src_width;
-			$src_height_cropped = round($src_width_cropped * $height/$width);
-			if( $src_height_cropped > $this->src_height ) {
-				$src_height_cropped = $this->src_height;
-				$src_width_cropped = round($src_height_cropped * $width/$height);
+			$src_width_cropped = $src_width;
+			$src_height_cropped = (int) round($src_width_cropped * $height/$width);
+			if( $src_height_cropped > $src_height ) {
+				$src_height_cropped = $src_height;
+				$src_width_cropped = (int) round($src_height_cropped * $width/$height);
 			}
-			$src_x = (int) round(($this->src_width - $src_width_cropped)/2);
-			$src_y = (int) round(($this->src_height - $src_height_cropped)/2);
+			$src_x = (int) round(($src_width - $src_width_cropped)/2);
+			$src_y = (int) round(($src_height - $src_height_cropped)/2);
 
 			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
 

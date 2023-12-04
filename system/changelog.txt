@@ -1,7 +1,7 @@
 v.0.2.1
 
+- bugfix for images rotated via exif
 - added robots.txt to .gitignore
-- …
 
 
 v.0.2.0
