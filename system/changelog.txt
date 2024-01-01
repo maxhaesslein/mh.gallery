@@ -1,5 +1,8 @@
 v.0.2.2
 
+when updating to v.0.2.2, make sure to delete all files in the cache/image/ directory and the .htaccess file in the root directory
+
+- restructured the image cache to directly load the image instead of routing through PHP
 - …
 
 

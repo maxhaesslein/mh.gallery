@@ -184,6 +184,8 @@ class Cache {
 
 		foreach( $files as $file ) {
 
+			if( is_dir($file) ) continue;
+
 			$expire_timestamp = $this->get_expire_timestamp( $file );
 
 			if( $expire_timestamp < $current_timestamp ) { // cachefile too old
@@ -195,8 +197,13 @@ class Cache {
 
 
 	function get_expire_timestamp( $file ) {
+		
 		$file_explode = explode( '_', $file );
-		$expire_timestamp = (int) end($file_explode);
+		$expire_timestamp = end($file_explode);
+
+		// remove file extension, if provided:
+		$expire_timestamp = explode('.', $expire_timestamp);
+		$expire_timestamp = (int) $expire_timestamp[0];
 
 		return $expire_timestamp;
 	}
