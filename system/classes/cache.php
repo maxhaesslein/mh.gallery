@@ -11,19 +11,38 @@ class Cache {
 	private $cache_file_name;
 	private $filesize;
 	private $lifetime;
+	private $file_extension;
 	
-	function __construct( $type, $input, $input_is_hash = false, $lifetime = false, $file_extension = false ) {
+	function __construct( $type, $input, $input_is_hash = false, $lifetime = false, $keep_file_extension = false ) {
 
 		if( ! $type && ! $input ) return;
 
 		$this->cache_folder .= $type.'/';
 
+		$subfolder = false;
+		$input_exp = explode('/', $input);
+		if( count($input_exp) > 1 ) {
+			$input = array_pop($input_exp);
+			$subfolder = implode('/', $input_exp);
+		}
+
+		if( $subfolder ) $this->cache_folder .= trailing_slash_it($subfolder);
+
 		$this->check_cache_folder();
 
 		$this->type = $type;
 
+		if( $keep_file_extension ) {
+			$file_extension = false;
+			$input_exp = explode('.', $input);
+			if( count($input_exp) > 1 ) $file_extension = array_pop( $input_exp );
+			$input = implode('.', $input_exp);
+
+			if( $file_extension ) $this->file_extension = $file_extension;
+		}
+
 		if( $input_is_hash ) {
-			$this->hash = $hash;
+			$this->hash = $input;
 		} else {
 			$this->hash = get_hash( $input );
 		}
@@ -33,13 +52,13 @@ class Cache {
 		}
 		$this->lifetime = $lifetime;
 
-		$this->cache_file_name = $this->get_file_name( false, $file_extension );
+		$this->cache_file_name = $this->get_file_name( false );
 		$this->cache_file = $this->get_file_path();
 
 	}
 
 
-	function get_file_name( $force_new_filename = false, $file_extension = false ){
+	function get_file_name( $force_new_filename = false ){
 
 		if( ! $force_new_filename ) {
 			$folderpath = $this->cache_folder;
@@ -65,7 +84,7 @@ class Cache {
 
 		$filename = $this->hash.'_'.$target_timestamp;
 
-		if( $file_extension ) $filename .= '.'.$file_extension;
+		if( $this->file_extension ) $filename .= '.'.$this->file_extension;
 
 		return $filename;
 	}
