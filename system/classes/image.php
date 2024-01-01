@@ -26,6 +26,8 @@ class Image {
 	private $file_mod_time = NULL;
 	private $exif_data = NULL;
 
+	private $cache;
+
 
 	function __construct( $filename, $gallery ) {
 
@@ -275,9 +277,20 @@ class Image {
 	}
 
 
+	function get_image_path( $query = [] ) {
+
+		$cache = $this->get_cache( $query );
+		$cache_filename = $cache->get_file_name();
+
+		$path = 'img/'.trailing_slash_it($this->gallery->get_url(false)).$cache_filename;
+
+		return $path;
+	}
+
+
 	function get_image_url( $query = [] ) {
 
-		$url = get_baseurl('img/').trailing_slash_it($this->gallery->get_url(false)).$this->get_filename($query);
+		$url = get_baseurl($this->get_image_path($query));
 
 		return $url;
 	}
@@ -552,10 +565,21 @@ class Image {
 	}
 
 
+	function get_cache( $query = [] ) {
+
+		if( $this->cache ) return $this->cache;
+
+		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $query );
+		$cache = new Cache( 'image', $cache_filename, true, false, true );
+
+		$this->cache = $cache;
+
+		return $cache;
+	}
+
+
 	function output() {
 		// NOTE: this assumes we did not output any headers or HTML yet!
-
-		$filesize = filesize( $this->path );
 
 		$quality = $this->quality;
 		$type = $this->output_type;
@@ -565,18 +589,6 @@ class Image {
 
 		$width = $this->width;
 		$height = $this->height;
-
-		$cache_filename = $this->get_filename().$filesize;
-		$cache = new Cache( 'image', $cache_filename );
-		$cache_content = $cache->get_data();
-		if( $cache_content ) {
-			// return cached file, then end
-			$cache->refresh_lifetime();
-			header("Content-Type: ".$this->mime_type);
-			header("Content-Length: ".$cache->get_filesize());
-			echo $cache_content;
-			exit;
-		}
 
 		$image_blob = $this->read_image();
 		if( ! $image_blob ) {
@@ -619,10 +631,16 @@ class Image {
 
 			$image_blob = $image_blob_resized;
 
-		} else {
-			$image_blob_resized = $image_blob;
 		}
 
+		$query = [
+			'width' => $width,
+			'height' => $height,
+			'crop' => $this->crop,
+			'type' => $type,
+			'quality' => $quality,
+		];
+		$cache = $this->get_cache( $query );
 
 		if( $type == 'jpg' ) {
 
