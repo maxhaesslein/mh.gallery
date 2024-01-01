@@ -26,8 +26,6 @@ class Image {
 	private $file_mod_time = NULL;
 	private $exif_data = NULL;
 
-	private $cache;
-
 
 	function __construct( $filename, $gallery ) {
 
@@ -567,12 +565,8 @@ class Image {
 
 	function get_cache( $query = [] ) {
 
-		if( $this->cache ) return $this->cache;
-
 		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $query );
 		$cache = new Cache( 'image', $cache_filename, true, false, true );
-
-		$this->cache = $cache;
 
 		return $cache;
 	}
