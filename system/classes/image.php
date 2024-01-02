@@ -435,6 +435,8 @@ class Image {
 
 			if( $type != 'jpg' ) { // webp/avif/...
 
+				if( $type == 'avif' && ! $this->avif_supported() ) continue; // skip avif, if we do not support generating avif images
+
 				$html .= '<source ';
 				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
 				$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';

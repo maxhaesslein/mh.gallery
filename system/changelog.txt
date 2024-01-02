@@ -7,6 +7,7 @@ when updating to this version, make sure to delete all files in the `cache/image
 - the config option `default_image_size` is now renamed to `default_image_width`
 - the default config option `default_image_quality` is now changed to `85` (from `88`)
 - added the config option `default_modern_image_quality` to control the quality of webp and avif images
+- the avif `source` in the `picture` element does not get included, if the server does not support generating avif files
 
 
 v.0.2.1
