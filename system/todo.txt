@@ -1,8 +1,9 @@
 
 this list is not complete
 
-- allow sorting of collections (currently, it's always sorted by slug)
+- [Bug] currently, it seems only one collections can be loaded in the overview? need to investigate.
 - Collection() and Gallery() can be merged into one class?
+- allow sorting of collections (currently, it's always sorted by slug)
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 - hidden galleries with secret link
