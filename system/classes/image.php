@@ -269,7 +269,7 @@ class Image {
 
 		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
 		if( $args['crop'] ) $filename .= '-crop';
-		$filename .= '-'.$args['quality'].'.'.$args['type'];
+		$filename .= '-'.$args['quality'].'-'.$args['type'].'.'.$args['type'];
 
 		return $filename;
 	}
@@ -297,114 +297,102 @@ class Image {
 	function get_picture_srcset() {
 
 		$width = $this->width;
-		$height = $this->height;
-
-		$mobile_width = $width/2; // TODO: check, how we want to set the mobile width and breakpoint
-		$mobile_height = (int) round($mobile_width * $height / $width);
 
 		$picture = [
-			[
-				'mimetype' => 'image/avif',
-				'media' => '(max-width: '.$mobile_width.'px)',
-				'srcset_sizes' => [
-					'1x' => [
-						'width' => $mobile_width,
-						'height' => $mobile_height,
-						'quality' => 70,
-						'type' => 'avif',
-					],
-					'2x' => [
-						'width' => (int) ceil($mobile_width*1.75),
-						'height' => (int) ceil($mobile_width*1.75 * $height/$width),
-						'quality' => 60,
-						'type' => 'avif',
-					],
-					'3x' => [
-						'width' => (int) ceil($mobile_width*2.5),
-						'height' => (int) ceil($mobile_width*2.5 * $height/$width),
-						'quality' => 60,
-						'type' => 'avif',
-					],
-				]
-			],
-			[
-				'mimetype' => 'image/webp',
-				'media' => '(max-width: '.$mobile_width.'px)',
-				'srcset_sizes' => [
-					'1x' => [
-						'width' => $mobile_width,
-						'height' => $mobile_height,
-						'quality' => 70,
-						'type' => 'webp',
-					],
-					'2x' => [
-						'width' => (int) ceil($mobile_width*1.75),
-						'height' => (int) ceil($mobile_width*1.75 * $height/$width),
-						'quality' => 60,
-						'type' => 'webp',
-					],
-					'3x' => [
-						'width' => (int) ceil($mobile_width*2.5),
-						'height' => (int) ceil($mobile_width*2.5 * $height/$width),
-						'quality' => 60,
-						'type' => 'webp',
-					],
+
+			'avif' => [
+				'320w' => [
+					'width' => 320,
+					'quality' => 75,
+				],
+				'640w' => [
+					'width' => 640,
+					'quality' => 70,
 				],
 			],
-			[
-				'mimetype' => 'image/avif',
-				'media' => '(min-width: '.$mobile_width.'px)',
-				'srcset_sizes' => [
-					'1x' => [
-						'width' => $width,
-						'height' => $height,
-						'quality' => 80,
-						'type' => 'avif',
-					],
-					'2x' => [
-						'width' => (int) ceil($width*1.75),
-						'height' => (int) ceil($width*1.75 * $height/$width),
-						'quality' => 60,
-						'type' => 'avif',
-					],
+
+			'webp' => [
+				'320w' => [
+					'width' => 320,
+					'quality' => 75,
+				],
+				'640w' => [
+					'width' => 640,
+					'quality' => 70,
 				],
 			],
-			[
-				'mimetype' => 'image/webp',
-				'media' => '(min-width: '.$mobile_width.'px)',
-				'srcset_sizes' => [
-					'1x' => [
-						'width' => $width,
-						'height' => $height,
-						'quality' => 80,
-						'type' => 'webp',
-					],
-					'2x' => [
-						'width' => (int) ceil($width*1.75),
-						'height' => (int) ceil($width*1.75 * $height/$width),
-						'quality' => 60,
-						'type' => 'webp',
-					],
+
+			'jpg' => [
+				'320w' => [
+					'width' => 320,
+					'quality' => 85,
 				],
 			],
+
 		];
 
-		for( $i = 0; $i < count($picture); $i++ ) {
-			$source = $picture[$i];
+		if( $width > 640 ) {
 
-			$images = [];
-			foreach( $source['srcset_sizes'] as $size => $query ) {
-				$images[] = $this->get_image_url($query).' '.$size;
-			}
+			$picture['jpg']['640w'] = [
+				'width' => 640,
+				'quality' => 88,
+			];
 
-			$picture[$i]['srcset'] = implode(', ',$images);
+			$picture['avif']['800w'] = [
+				'width' => 800,
+				'quality' => 65,
+			];
+
+			$picture['webp']['800w'] = [
+				'width' => 800,
+				'quality' => 65,
+			];
+
+		}
+
+		if( $width > 800 ) {
+
+			$picture['jpg']['800w'] = [
+				'width' => 800,
+				'quality' => 75,
+			];
+
+			$picture['avif']['1200w'] = [
+				'width' => 1200,
+				'quality' => 65,
+			];
+
+			$picture['webp']['1200w'] = [
+				'width' => 1200,
+				'quality' => 65,
+			];
+
+		}
+
+		if( $width > 1200 ) {
+
+			$picture['jpg']['1200w'] = [
+				'width' => 1200,
+				'quality' => 75,
+			];
+
+			$picture['avif']['2000w'] = [
+				'width' => 2000,
+				'quality' => 65,
+			];
+
+			$picture['webp']['2000w'] = [
+				'width' => 2000,
+				'quality' => 65,
+			];
+
 		}
 
 		return $picture;
 	}
 
 
-	function get_html( $lazyloading = true, $skip_container = false ) {
+	function get_html( $lazyloading = true, $skip_container = false, $sizes = false ) {
 
 		$classes = [ 'image', 'image-'.$this->format ];
 
@@ -413,25 +401,53 @@ class Image {
 
 		$picture = $this->get_picture_srcset();
 
+		$main_src = $this->get_image_url([
+			'width' => $this->width,
+			'height' => $this->height,
+			'crop' => $this->crop,
+		]);
+		$alt = $this->alt;
+
 		$html = '';
+
 		if( ! $skip_container ) $html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
 		$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">'; // TODO: backgroundcolor
 
-			foreach( $picture as $source ) {
-				$html .= '<source media="'.$source['media'].'" srcset="'.$source['srcset'].'" type="'.$source['mimetype'].'">';
+		foreach( $picture as $type => $sources ) {
+
+			$srcset = [];
+			foreach( $sources as $size => $image_url_args ) {
+
+				$image_url_args['type'] = $type;
+
+				if( $this->crop ) {
+					$image_url_args['height'] = round($image_url_args['width']*$height/$width);
+					$image_url_args['crop'] = true;
+				}
+
+				$image_url = $this->get_image_url($image_url_args);
+				$srcset[] = $image_url.' '.$size;
 			}
 
-			$src = $this->get_image_url([
-				'width' => $this->width,
-				'height' => $this->height,
-				'crop' => $this->crop,
-			]);
-			$alt = $this->alt;
+			$srcset = implode(', ', $srcset);
 
-			$html .= '<img src="'.$src.'" width="'.$width.'" height="'.$height.'"';
-				if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
-				else $html .= ' fetchpriority="high" decoding="sync"';
-			$html .= ' alt="'.$alt.'">';
+			if( $type != 'jpg' ) { // webp/avif/...
+
+				$html .= '<source ';
+				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
+				$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
+
+			} else { // jpg
+
+				$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
+					if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
+					else $html .= ' fetchpriority="high" decoding="sync"';
+				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
+				$html .= 'srcset="'.$srcset.'" alt="'.$alt.'">';
+
+			}
+
+		}
 
 		$html .= '</picture>';
 		if( ! $skip_container ) $html .= '</div>';

@@ -95,6 +95,8 @@ class Route {
 					$width = (int) $size[0];
 					$height = (int) $size[1];
 
+					$type = array_pop($image_args);
+
 					$crop = array_shift($image_args);
 					if( $crop == 'crop' ) {
 						$quality = array_pop($image_args);

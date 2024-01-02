@@ -1,9 +1,9 @@
 v.0.2.2
 
-when updating to v.0.2.2, make sure to delete all files in the cache/image/ directory and the .htaccess file in the root directory
+when updating to this version, make sure to delete all files in the `cache/image/` directory, as well as the `.htaccess` file in the root directory and then open the root URL to generate the new, updated `.htaccess` file.
 
 - restructured the image cache to directly load the image instead of routing through PHP
-- …
+- the `picture` element now uses the `sizes` attribute and a restructured `srcset` attribute for better responsive image loading; previously, we provided 1x, 2x and 3x image sizes for two different viewport breakpoints, now we provide different image sizes and let the browser select the appropriate image size for themselves
 
 
 v.0.2.1
