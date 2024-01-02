@@ -69,6 +69,8 @@ hidden: true
 thumbnail: gallery-slug/image-01.jpg
 ```
 
+To edit the root collection (for the overview page), add a `content/collection.txt` file. You need at least add a `title:` field, but you can also add a `description`.
+
 Currently, everything inside a collection is always sorted alphabetically by slug, this will be expanded later.
 
 ## Update
