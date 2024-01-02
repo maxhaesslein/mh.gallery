@@ -1,3 +1,8 @@
+v.0.3.1
+
+- …
+
+
 v.0.3.0
 
 when updating to this version, make sure to delete all files in the `cache/image/` directory, as well as the `.htaccess` file in the root directory and then open the root URL to generate the new, updated `.htaccess` file.
