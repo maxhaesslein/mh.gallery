@@ -65,7 +65,7 @@ class Core {
 			// content/ folder is missing
 
 			$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
-			if( mkdir( $abspath.'content/', 0777, true ) === false ) {
+			if( mkdir( $abspath.'content/', get_config('chmod_folder'), true ) === false ) {
 				debug( 'could not create "content/" folder; aborting.' );
 				exit;
 			}
@@ -77,7 +77,7 @@ class Core {
 			// cache/ folder is missing
 
 			$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
-			if( mkdir( $abspath.'cache/', 0777, true ) === false ) {
+			if( mkdir( $abspath.'cache/', get_config('chmod_folder'), true ) === false ) {
 				debug( 'could not create "cache/" folder; aborting.' );
 				exit;
 			}

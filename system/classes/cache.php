@@ -165,7 +165,7 @@ class Cache {
 		if( is_dir(get_abspath($this->cache_folder)) ) return;
 
 		$oldumask = umask(0); // we need this for permissions of mkdir to be set correctly
-		if( mkdir( get_abspath($this->cache_folder), 0777, true ) === false ) {
+		if( mkdir( get_abspath($this->cache_folder), get_config('chmod_folder'), true ) === false ) {
 			debug( 'could not create cache dir', $this->cache_folder );
 		}
 		umask($oldumask); // we need this after changing permissions with mkdir

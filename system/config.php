@@ -22,4 +22,5 @@ return [
 	'site_sharing_tags' => true, // add OpenGraph sharing tags to HTML head, for better link previews
 	'sort_order' => 'filename', // can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
 	'allowed_tags' => [ 'p', 'ul', 'ol', 'li', 'br', 'i', 'u', 'b', 'em', 'strong' ], // these HTML tags are allowed in text fields, all other tags are stripped (set to false to allow all tags)
+	'chmod_folder' => 0775, // chmod for new folders; needs to be set as an octal value, so you need to prefix a leading zero; see https://www.php.net/manual/en/function.chmod.php#refsect1-function.chmod-parameters
 ];
