@@ -4,6 +4,9 @@ when updating to this version, make sure to delete all files in the `cache/image
 
 - restructured the image cache to directly load the image instead of routing through PHP
 - the `picture` element now uses the `sizes` attribute and a restructured `srcset` attribute for better responsive image loading; previously, we provided 1x, 2x and 3x image sizes for two different viewport breakpoints, now we provide different image sizes and let the browser select the appropriate image size for themselves
+- the config option `default_image_size` is now renamed to `default_image_width`
+- the default config option `default_image_quality` is now changed to `85` (from `88`)
+- added the config option `default_modern_image_quality` to control the quality of webp and avif images
 
 
 v.0.2.1

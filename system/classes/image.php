@@ -297,35 +297,37 @@ class Image {
 	function get_picture_srcset() {
 
 		$width = $this->width;
+		$default_image_quality = get_config('default_image_quality');
+		$default_modern_image_quality = get_config('default_modern_image_quality');
 
 		$picture = [
 
 			'avif' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => 75,
+					'quality' => $default_modern_image_quality,
 				],
 				'640w' => [
 					'width' => 640,
-					'quality' => 70,
+					'quality' => $default_modern_image_quality,
 				],
 			],
 
 			'webp' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => 75,
+					'quality' => $default_modern_image_quality,
 				],
 				'640w' => [
 					'width' => 640,
-					'quality' => 70,
+					'quality' => $default_modern_image_quality,
 				],
 			],
 
 			'jpg' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => 85,
+					'quality' => $default_image_quality,
 				],
 			],
 
@@ -335,17 +337,17 @@ class Image {
 
 			$picture['jpg']['640w'] = [
 				'width' => 640,
-				'quality' => 88,
+				'quality' => $default_image_quality,
 			];
 
 			$picture['avif']['800w'] = [
 				'width' => 800,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 			$picture['webp']['800w'] = [
 				'width' => 800,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 		}
@@ -354,17 +356,17 @@ class Image {
 
 			$picture['jpg']['800w'] = [
 				'width' => 800,
-				'quality' => 75,
+				'quality' => $default_image_quality,
 			];
 
 			$picture['avif']['1200w'] = [
 				'width' => 1200,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 			$picture['webp']['1200w'] = [
 				'width' => 1200,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 		}
@@ -373,17 +375,17 @@ class Image {
 
 			$picture['jpg']['1200w'] = [
 				'width' => 1200,
-				'quality' => 75,
+				'quality' => $default_image_quality,
 			];
 
 			$picture['avif']['2000w'] = [
 				'width' => 2000,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 			$picture['webp']['2000w'] = [
 				'width' => 2000,
-				'quality' => 65,
+				'quality' => $default_modern_image_quality,
 			];
 
 		}

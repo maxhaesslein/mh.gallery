@@ -35,7 +35,7 @@ if( $gallery->is_download_gallery_enabled() ) {
 	$download_gallery_url = $gallery->get_zip_download_url();
 }
 
-$image->resize(get_config('default_image_size'));
+$image->resize(get_config('default_image_width'));
 
 snippet( 'header' );
 

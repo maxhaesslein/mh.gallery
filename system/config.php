@@ -9,9 +9,10 @@ return [
 	'system_css' => true, // set to false to disable the systems css files
 	'system_js' => true, // set to false to disable the systems js files
 	'allow_overview' => true, // set to false to disable overview page with index of public galleries
-	'default_image_quality' => 88,
-	'default_image_size' => 2000,
-	'cache_disabled' => false,
+	'default_image_quality' => 85, // this is the default image quality for jpg images
+	'default_modern_image_quality' => 75, // this is the default image quality for modern formats, like webp and avif
+	'default_image_width' => 2000, // the default image width in the single view
+	'cache_disabled' => false, // you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
 	'zip_lifetime' => 60*60*24*7, // cache time of gallery zip files; 7 days in seconds
 	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'], // search for these extensions while loading gallery images; TODO: add avif

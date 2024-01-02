@@ -8,7 +8,7 @@ $image = $core->route->get('image');
 
 if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 
-	$image->resize(get_config('default_image_size'));
+	$image->resize(get_config('default_image_width'));
 
 	$json = [
 		'content' => $image->get_html( true, true )
