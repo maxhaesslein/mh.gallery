@@ -1,3 +1,8 @@
+v.0.3.2-dev
+
+- …
+
+
 v.0.3.1
 
 - new config option `chmod_folder` to control the permissions of folders created by this script (like the `cache` or `content` folder)
