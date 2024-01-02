@@ -150,12 +150,11 @@ class Collection {
 
 	function get_title() {
 
-		if( ! $this->file ) {
-			// this is the root collection
+		$title = $this->get_config('title');
+
+		if( ! $title && $this->is_root() ) {
 			return get_config('site_title');
 		}
-
-		$title = $this->get_config('title');
 
 		if( ! $title ) {
 			$title = $this->get_slug( true );
