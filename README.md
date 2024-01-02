@@ -6,21 +6,22 @@ This is an early version, expect things to not work or change.
 
 ## Requirements
 
-- PHP 8.0 or higher
-- write access to the folder where it's installed
-- .htaccess with mod_rewrite support
-- php-mbstring
-- php-gd
-- simplexml, if you want to sort by a .BridgeSort file
-- maybe more? this list will be expanded later
+This should run on any modern off-the-mill shared hosting environment. If something does not work, make sure the hosting environment meets at least these requirements:
+
+- `PHP 8.0` or higher
+- write access to the folder where this is installed
+- `.htaccess` with `mod_rewrite` support
+- `php-mbstring`
+- `php-gd`
+- `simplexml`, if you want to sort by a `.BridgeSort` file
 
 ## Installation
 
-### manual
+### manually
 
 Download the latest release .zip file, extract it, upload it to a folder on your webserver and open the URL to this folder in a browser. Missing files and folders will be automatically created.
 
-### git
+### via git
 
 `cd` into the directory you want to use, then call
 
@@ -33,27 +34,24 @@ Then open the URL pointing to this directory in a browser. All the missing files
 
 ## Galleries
 
-create a `content/` folder and add subfolders for your galleries. You can also organize them in additional subfolders, like  `content/2023/gallery-name/`. In each gallery folder, create a new text file called  `gallery.txt`. This file is needed to detect this folder as a gallery, you can also add some additional information to this file:
+In the root directory, there should be a `content/` folder (if it does not exist, open the URL in a browser). In this `content/` folder you can add subfolders for your galleries. You can also organize them in additional subfolders, like  `content/2023/gallery-name/`. In each gallery folder, create a new text file called  `gallery.txt`. This file is needed to detect this folder as a gallery, you can also add some additional information to this file:
 
 ```txt
 title: my cool gallery
 slug: my-cool-gallery
 description: this was a very nice and sunny day, and I took some pictures.
 hidden: true
-secret: 1234
 thumbnail: image-01.jpg
 download_image_enabled: true
 download_gallery_enabled: true
 sort_order: filename
 ```
 
-If you ommit the title or slug, it gets automatically generated based on the folder name. The slug and secret should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
+If you ommit the title or slug, it gets automatically generated based on the folder name. The slug should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
 
-Add `.jpg` files into the gallery folder, the images get detected automatically. For supported extensions see the `image_extensions` option in `system/config.php`.
+Add `.jpg` (or `.jpeg`, `.png` or `.webp`) files into the gallery folder, the images get detected automatically. (For supported extensions see the `image_extensions` option in `system/config.php`)
 
-Setting `hidden: true` will hide this gallery from the index (homepage). You can also disable the index with a config option, see 'Customization' below.
-
-Setting a `secret` will hide this gallery from the index, and only make the url accessible with the secret appenden to the slug. For example, if the slug is `gallery-01` and the secret is set to `secret: a1b2c3`, the URL to open the gallery will be `https://www.example.com/gallery-01-a1b2c3`.
+Setting `hidden: true` will hide this gallery from the index (home page). You can also disable the index with a config option, see 'Customization' below.
 
 The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
 
@@ -75,11 +73,11 @@ Currently, everything inside a collection is always sorted alphabetically by slu
 
 ## Update
 
-### manual
+### manually
 
 Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `README.md`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folders!)
 
-### git
+### via git
 
 `cd` into the directory you want to use, then call
 
@@ -104,10 +102,18 @@ return [
 
 these options will overwrite the default options. You can see a list of all available options in `system/config.php`, including their default values.
 
+### Snippets
+
 Create a folder called `custom/snippets/`, copy files from `system/site/snippets/` into this folder and edit them. They will be loaded instead of the equivalent file inside the `system/site/snippets/` folder. Create a folder called `custom/templates/`, copy files from `system/site/templates/` into this folder and edit them. They will be loaded instead of their equivalent.
+
+### Custom CSS
 
 Create a folder called `custom/assets/css/` and add `.css` files into this folder. The css files will get loaded automatically, after the system css files. If you want to disable the system css files, you can add `'system_css' => false` to the `custom/config.php`.
 
+### Custom JavaScript
+
 Create a folder called `custom/assets/js/` and add `.js` files into this folder. The js files will get loaded automatically (but `async`, so they may get executed before or after the systems JavaScript). If you want to disable the system js files, you can add `'system_js' => false` to the `custom/config.php`.
 
-All thumbnails and images will be resized on view. The resized images will be automatically cached inside the `cache/` subfolder. Old cached files will be cleared out automatically after about 30 days. You can disable the cache to save space (at the cost of loading time) via the config option `'cache_disabled' => true` or change the lifetime of cache files (in seconds) via the config option `cache_lifetime`.
+### Image Caching
+
+All thumbnails and images will be resized on view. The resized images will be automatically cached inside the `cache/` subfolder. Old cached files will be cleared out automatically after about 30 days. You can disable the cache to save space (at the cost of loading time) via the config option `'cache_disabled' => true` or change the lifetime of cache files (in seconds) via the config option `cache_lifetime`. If possible, the cache should never be disabled.
