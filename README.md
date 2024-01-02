@@ -94,6 +94,8 @@ By default, the home page / index will display all galleries (and collections) t
 
 To hide a gallery or collection from the index, add `hidden: true` to the `gallery.txt` or `collection.txt` file. To disable the index completely, add `'allow_overview' => false` to the `custom/config.php`.
 
+To add a description to the index page, you can use the root collection. Add a `content/collection.txt` with a line `description: my description` inside.
+
 ### Snippets
 
 Create a folder called `custom/snippets/`, copy files from `system/site/snippets/` into this folder and edit them. They will be loaded instead of the equivalent file inside the `system/site/snippets/` folder. Create a folder called `custom/templates/`, copy files from `system/site/templates/` into this folder and edit them. They will be loaded instead of their equivalent.
@@ -109,6 +111,10 @@ Create a folder called `custom/assets/js/` and add `.js` files into this folder.
 ### Image Caching
 
 All thumbnails and images will be resized on view. The resized images will be automatically cached inside the `cache/` subfolder. Old cached files will be cleared out automatically after about 30 days. You can disable the cache to save space (at the cost of loading time) via the config option `'cache_disabled' => true` or change the lifetime of cache files (in seconds) via the config option `cache_lifetime`. If possible, the cache should never be disabled.
+
+### avif support
+
+avif support is disabled by default, until we reach a more stable version. You can enable it by adding `'avif_supported' => true` to the `custom/config.php`. You need at least `PHP 8.1`, `GD` compiled with avif support and `libavif v.0.8.2` or higher.
 
 ## Update
 
