@@ -73,22 +73,6 @@ To edit the root collection (for the overview page), add a `content/collection.t
 
 Currently, everything inside a collection is always sorted alphabetically by slug, this will be expanded later.
 
-## Update
-
-### manually
-
-Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `README.md`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folders!)
-
-### via git
-
-`cd` into the directory you want to use, then call
-
-```bash
-git pull
-```
-
-this should update (and checkout) the `main` branch to the latest release. Make sure to read the release notes in `system/changelog.txt`, because you may need to manually delete a file or folder.
-
 ## Customization
 
 Create a `custom/config.php` file, with your custom options:
@@ -103,6 +87,12 @@ return [
 ```
 
 these options will overwrite the default options. You can see a list of all available options in `system/config.php`, including their default values.
+
+### Index
+
+By default, the home page / index will display all galleries (and collections) that are public.
+
+To hide a gallery or collection from the index, add `hidden: true` to the `gallery.txt` or `collection.txt` file. To disable the index completely, add `'allow_overview' => false` to the `custom/config.php`.
 
 ### Snippets
 
@@ -119,3 +109,20 @@ Create a folder called `custom/assets/js/` and add `.js` files into this folder.
 ### Image Caching
 
 All thumbnails and images will be resized on view. The resized images will be automatically cached inside the `cache/` subfolder. Old cached files will be cleared out automatically after about 30 days. You can disable the cache to save space (at the cost of loading time) via the config option `'cache_disabled' => true` or change the lifetime of cache files (in seconds) via the config option `cache_lifetime`. If possible, the cache should never be disabled.
+
+## Update
+
+### manually
+
+Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `README.md`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folders!)
+
+### via git
+
+`cd` into the directory you want to use, then call
+
+```bash
+git pull
+```
+
+this should update (and checkout) the `main` branch to the latest release. Make sure to read the release notes in `system/changelog.txt`, because you may need to manually delete a file or folder.
+
