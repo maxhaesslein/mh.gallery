@@ -16,7 +16,20 @@ This is an early version, expect things to not work or change.
 
 ## Installation
 
+### manual
+
 Download the latest release .zip file, extract it, upload it to a folder on your webserver and open the URL to this folder in a browser. Missing files and folders will be automatically created.
+
+### git
+
+`cd` into the directory you want to use, then call
+
+```bash
+git clone https://github.com/maxhaesslein/mh.gallery.git ./
+```
+
+(this will use the `main` branch, which should always contain the latest release)
+Then open the URL pointing to this directory in a browser. All the missing files and folders will be automatically created.
 
 ## Galleries
 
@@ -62,7 +75,19 @@ Currently, everything inside a collection is always sorted alphabetically by slu
 
 ## Update
 
+### manual
+
 Make a backup of the `content/` and `custom/` folders, then delete the content of the `cache/` folder as well as the complete `system/` folder and all the files in the root directory (`index.php`, `README.md`, `.htaccess` and `.gitignore`). Then download the latest release .zip file, extract it and upload everything. (But make sure to not overwrite the `content/` and `custom` folders!)
+
+### git
+
+`cd` into the directory you want to use, then call
+
+```bash
+git pull
+```
+
+this should update (and checkout) the `main` branch to the latest release. Make sure to read the release notes in `system/changelog.txt`, because you may need to manually delete a file or folder.
 
 ## Customization
 
