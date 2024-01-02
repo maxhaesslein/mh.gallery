@@ -11,6 +11,9 @@ $description = false;
 if( $collection ) {
 	$collection_list = $collection->get();
 	$title = $collection->get_title();
+	if( ! $title && $collection->is_root() ) {
+		$title = get_config('site_title');
+	}
 	$description = $collection->get_description();
 	$overview_url = $collection->get_parent_url();
 } else {
