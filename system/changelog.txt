@@ -1,6 +1,7 @@
 v.0.3.1
 
 - new config option `chmod_folder` to control the permissions of folders created by this script (like the `cache` or `content` folder)
+- avif is now disabled by default; there is a new config option, `avif_enabled`, to enable avif support. There is still an additional check in the code, if avif is available in the server environment; you need to be at least on PHP 8.1 to use avif
 - …
 
 

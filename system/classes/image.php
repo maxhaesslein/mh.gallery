@@ -107,6 +107,8 @@ class Image {
 
 	function avif_supported() {
 
+		if( ! get_config('avif_enabled') ) return false;
+
 		if( ! defined('IMAGETYPE_AVIF') ) return false;
 
 		if( ! function_exists('imagecreatefromavif') ) return false;
