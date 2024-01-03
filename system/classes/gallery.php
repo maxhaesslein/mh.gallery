@@ -362,59 +362,6 @@ class Gallery {
 	}
 
 
-/*
-// TODO: this is from the old Collection() class, we may need to adapt it:
-
-	function get_thumbnail() {
-
-		// the thumbnail can be set via the gallery.txt
-		// use this format: {gallery-slug}/{image-slug}.{extension}		
-		$thumbnail_slug = $this->get_config('thumbnail');
-		if( $thumbnail_slug ) {
-
-			$thumbnail_slug_path = explode('/', $thumbnail_slug);
-
-			$thumbnail_slug = array_pop($thumbnail_slug_path);
-			$thumbnail_slug = explode('.', $thumbnail_slug);
-			unset($thumbnail_slug[count($thumbnail_slug)-1]);
-			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
-
-			$gallery = false;
-			$request_object = $this;
-			foreach( $thumbnail_slug_path as $path_part ) {
-				$new_request_object = $request_object->get($path_part);
-				if( $new_request_object ) {
-					$request_object = $new_request_object;
-
-					if( $request_object->is('gallery') ) {
-						$gallery = $request_object;
-					} elseif( $request_object->is('collection') ) {
-						$collection = $request_object;
-					} elseif( $request_object->is('image') ) {
-						break;
-					}
-
-				}
-			}
-
-			if( $gallery ) {
-				return $gallery->get_image($thumbnail_slug);
-			}
-
-		}
-
-		if( count($this->galleries) ) {
-			return $this->galleries[array_keys($this->galleries)[0]]->get_thumbnail();
-		}
-
-		if( count($this->collections) ) {
-			return $this->collections[array_keys($this->collections)[0]]->get_thumbnail();
-		}
-
-		return false;
-	}
-*/
-
 	function get_thumbnail_slug() {
 
 		$images = $this->get_images();
@@ -422,28 +369,68 @@ class Gallery {
 		if( ! count($images) ) return false;
 
 		$thumbnail_slug = $this->get_config('thumbnail');
+
 		if( $thumbnail_slug ) {
-			$thumbnail_slug = explode('.', $thumbnail_slug);
-			unset($thumbnail_slug[count($thumbnail_slug)-1]);
-			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
+			$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
 			if( array_key_exists($thumbnail_slug.'.', $images) ) {
 				return $thumbnail_slug;
 			}
 		}
 
+		// no thumbnail defined, use the first image:
 		$thumbnail_slug = array_keys($images)[0];
-
 		$thumbnail_slug = substr($thumbnail_slug, 0, -1); // removed additional dot from slug
 
 		return $thumbnail_slug;
 	}
 
 
-	function get_thumbnail() {
+	function sanitize_thumbnail_slug( $thumbnail_slug ) {
+		$thumbnail_slug = explode('.', $thumbnail_slug);
+		unset($thumbnail_slug[count($thumbnail_slug)-1]);
+		$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
 
-		$slug = $this->get_thumbnail_slug();
+		return $thumbnail_slug;
+	}
 
-		if( ! $slug ) return false;
+
+	function get_thumbnail( $slug = false ) {
+
+		if( ! $slug ) {
+			$slug = $this->get_thumbnail_slug();
+		}
+
+		if( ! $slug ) {
+
+			$thumbnail_slug = $this->get_config('thumbnail');
+			if( $thumbnail_slug ) {
+				// the slug may include a path to a sub-gallery
+				$thumbnail_slug_exp = explode('/', $thumbnail_slug);
+				if( count($thumbnail_slug_exp) > 1 ) {
+					// sub-gallery
+					$sub_gallery = $this;
+					$thumbnail_slug = array_pop($thumbnail_slug_exp);
+					foreach( $thumbnail_slug_exp as $thumbnail_slug_part ) {
+						$thumbnail_slug_part = sanitize_string($thumbnail_slug_part);
+						$sub_gallery = $sub_gallery->get_sub_gallery($thumbnail_slug_part);
+						if( ! $sub_gallery ) break;
+					}
+
+					if( $sub_gallery ) {
+						$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
+						return $sub_gallery->get_thumbnail($thumbnail_slug);
+					}
+				}
+			}
+
+			$sub_galleries = $this->get_sub_galleries();
+			if( count($sub_galleries) > 0 ) {
+				// use the first sub-gallery
+				return $sub_galleries[array_key_first($sub_galleries)]->get_thumbnail();
+			}
+
+			return false;
+		}
 
 		return $this->get_image($slug);
 	}
