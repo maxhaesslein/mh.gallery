@@ -2,13 +2,9 @@
 this list may not be complete.
 
 - Collection() and Gallery() can be merged into one Gallery() class
-	- we then only need gallery.txt files, no collection.txt files
 	- if a gallery has subfolders with more galleries, these are displayed before any images
-		- index.php and overview.php templates can be merged
-	- this should fix this bug: [Bug] currently, it seems only one collections can be loaded in the overview? need to investigate.
-	- allow sorting of ~~collections~~ sub-galleries (currently, it's always sorted by slug)
+	- allow sorting of sub-galleries (currently, it's always sorted by slug)
 	- make sure, the title breadcrumbs work with sub_galleries
-	- test root gallery.txt file
 	- make sure, the correct thumbnail gets loaded (see Collection get_thumbnail function)
 	- make sure, that the image count in templates/overview.php is correct
 

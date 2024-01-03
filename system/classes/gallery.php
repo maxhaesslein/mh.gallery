@@ -23,6 +23,9 @@ class Gallery {
 		if( ! $gallery_file ) {
 			$path = 'content/';
 			$this->is_root_gallery = true;
+			if( file_exists($path.'gallery.txt') ) {
+				$gallery_file = $path.'gallery.txt';
+			}
 		} else {
 			$path = str_replace( 'gallery.txt', '', $gallery_file);
 		}
@@ -118,6 +121,9 @@ class Gallery {
 		// only include one depth of subgalleries
 		$used_subgallery_paths = [];
 		foreach( $subgallery_paths as $subgallery_path ) {
+
+			if( $subgallery_path == $this->path ) continue; // skip self
+			
 			foreach( $used_subgallery_paths as $used_subgallery_path ) {
 				if( str_starts_with($subgallery_path, $used_subgallery_path) ) {
 					continue 2;
