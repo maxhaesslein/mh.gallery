@@ -1,8 +1,8 @@
 # mh.gallery
 
-A simple and lightweight PHP gallery, without any dependencies.
+A simple and lightweight PHP gallery, without any dependencies. A demo can be found at [gallery.maxhaessle.in](https://gallery.maxhaessle.in).
 
-This is an early version, expect things to not work or change.
+This is an early version, *expect things to not work or change*.
 
 ## Requirements
 
@@ -123,4 +123,3 @@ git pull
 ```
 
 this should update (and checkout) the `main` branch to the latest release. Make sure to read the release notes in `system/changelog.txt`, because you may need to manually delete a file or folder.
-
