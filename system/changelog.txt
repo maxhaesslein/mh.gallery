@@ -1,3 +1,8 @@
+v.0.4.1
+
+- …
+
+
 v.0.4.0
 
 when updating to this version, make sure to rename all `collection.txt` to `gallery.txt`
