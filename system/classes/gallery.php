@@ -105,8 +105,6 @@ class Gallery {
 
 	function load_sub_galleries(){
 
-		if( ! $this->is_root() ) return $this; // DEBUG; currently, only root gallery has subgalleries
-
 		$sub_galleries = [];
 
 		$galleries_folder = new Folder( $this->path, 'gallery.txt', true );
@@ -123,7 +121,7 @@ class Gallery {
 		foreach( $subgallery_paths as $subgallery_path ) {
 
 			if( $subgallery_path == $this->path ) continue; // skip self
-			
+
 			foreach( $used_subgallery_paths as $used_subgallery_path ) {
 				if( str_starts_with($subgallery_path, $used_subgallery_path) ) {
 					continue 2;
