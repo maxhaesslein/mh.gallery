@@ -61,7 +61,7 @@ $imagecount = $gallery->get_image_count();
 						if( $thumbnail ) {
 							snippet( 'thumbnail', [ 'image' => $thumbnail ] );
 						} else {
-							echo '<span class="empty-thumbnail"></span>';
+							echo '<span class="empty-thumbnail" style="padding-top: calc('.(1/get_config('thumbnail_aspect_ratio')).' * 100%);"></span>';
 						}
 						?>
 						<span class="title"><?= $title ?></span>

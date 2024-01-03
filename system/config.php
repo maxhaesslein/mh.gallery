@@ -12,6 +12,7 @@ return [
 	'default_image_quality' => 85, // this is the default image quality for jpg images
 	'default_modern_image_quality' => 75, // this is the default image quality for modern formats, like webp and avif
 	'default_image_width' => 2000, // the default image width in the single view
+	'thumbnail_aspect_ratio' => 3/2, // the aspect ratio of thumbnails; width/height
 	'cache_disabled' => false, // you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
 	'zip_lifetime' => 60*60*24*7, // cache time of gallery zip files; 7 days in seconds

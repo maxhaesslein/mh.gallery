@@ -171,7 +171,6 @@ h1 {
 		background: var(--color-black);
 		width: 100%;
 		display: block;
-		padding-top: calc(2/3 * 100%);
 	}
 
 .meta {

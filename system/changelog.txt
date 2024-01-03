@@ -3,6 +3,7 @@ v.0.4.0
 when updating to this version, make sure to rename all `collection.txt` to `gallery.txt`
 
 - removed 'collections'; now galleries can have sub-galleries, so no need for the `collection.txt` anymore; if you previously used collections, you can rename all `collection.txt` to `gallery.txt`
+- the aspect ratio of thumbnails can now be set via the new config option `thumbnail_aspect_ratio`
 
 
 v.0.3.1
