@@ -37,7 +37,7 @@ function get_site_title() {
 	$title = [ get_config('site_title') ];
 
 	$gallery = false;
-	$request_object = $core->collection;
+	$request_object = $core->gallery;
 	foreach( $core->route->get('request') as $request_part ) {
 		$new_request_object = $request_object->get($request_part);
 		if( $new_request_object ) {
@@ -46,9 +46,6 @@ function get_site_title() {
 			if( $request_object->is('gallery') ) {
 				$gallery = $request_object;
 				$title[] = $gallery->get_title();
-			} elseif( $request_object->is('collection') ) {
-				$collection = $request_object;
-				$title[] = $collection->get_title();
 			} elseif( $request_object->is('image') ) {
 				$image = $request_object;
 				if( $gallery ) {
@@ -77,22 +74,15 @@ function get_site_sharing_tags() {
 
 	global $core;
 
-	$collection = $core->route->get('collection');
 	$gallery = $core->route->get('gallery');
 	$image = $core->route->get('image');
 	if( ! $image && $gallery ) {
 		$image = $gallery->get_thumbnail();
 	}
-	if( ! $image && $collection ) {
-		$image = $collection->get_thumbnail();
-	}
 
 	$description = false;
 	if( $gallery ) {
 		$description = $gallery->get_description();
-	}
-	if( ! $description && $collection ) {
-		$description = $collection->get_description();
 	}
 
 	$thumbnail = false;

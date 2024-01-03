@@ -4,7 +4,12 @@ class Gallery {
 
 	private $gallery_file;
 	private $path;
-	private $parent_collection;
+
+	private $parent_gallery = false;
+	private $is_root_gallery = false;
+
+	private $sub_galleries = [];
+
 	private $settings;
 	private $images = NULL;
 	private $hidden = false;
@@ -13,16 +18,30 @@ class Gallery {
 	private $download_gallery_enabled;
 	private $bridge_sort_order = NULL;
 
-	function __construct( $gallery_file, $parent_collection ) {
+	function __construct( $gallery_file, $parent_gallery ) {
 
-		$path = str_replace( 'gallery.txt', '', $gallery_file);
+		if( ! $gallery_file ) {
+			$path = 'content/';
+			$this->is_root_gallery = true;
+		} else {
+			$path = str_replace( 'gallery.txt', '', $gallery_file);
+		}
 
 		$this->path = $path;
-		$this->gallery_file = $gallery_file;
+		$this->parent_gallery = $parent_gallery;
 
-		$this->parent_collection = $parent_collection;
+		if( ! $parent_gallery ) {
+			$this->is_root_gallery = true;
+		}
 
-		$this->read_gallery_file();
+		if( $gallery_file ) {
+			$this->gallery_file = $gallery_file;
+			$this->read_gallery_file();
+		} else {
+			$this->is_root_gallery = true;
+		}
+
+		$this->load_sub_galleries();
 
 	}
 	
@@ -39,6 +58,8 @@ class Gallery {
 		*/
 
 		$file = $this->gallery_file;
+
+		if( ! $file ) return $this;
 
 		$settings = read_settings_file( $file );
 
@@ -74,6 +95,50 @@ class Gallery {
 		}
 		$this->download_gallery_enabled = $download_gallery_enabled;
 
+
+		return $this;
+	}
+
+
+	function load_sub_galleries(){
+
+		if( ! $this->is_root() ) return $this; // DEBUG; currently, only root gallery has subgalleries
+
+		$sub_galleries = [];
+
+		$galleries_folder = new Folder( $this->path, 'gallery.txt', true );
+		$subgallery_paths = $galleries_folder->get();
+
+		// make sure that parent-galleries are listed before subgalleries:
+		$subgallery_paths = array_map(function( $el ){
+			return str_replace('gallery.txt','',$el);
+		}, $subgallery_paths);
+		sort($subgallery_paths);
+
+		// only include one depth of subgalleries
+		$used_subgallery_paths = [];
+		foreach( $subgallery_paths as $subgallery_path ) {
+			foreach( $used_subgallery_paths as $used_subgallery_path ) {
+				if( str_starts_with($subgallery_path, $used_subgallery_path) ) {
+					continue 2;
+				}
+			}
+
+			$used_subgallery_paths[] = $subgallery_path;
+		}
+
+		foreach( $used_subgallery_paths as $subgallery_path ) {
+
+			$gallery = new Gallery($subgallery_path.'gallery.txt', $this);
+
+			$slug = $gallery->get_slug( true );
+
+			if( ! $slug ) continue;
+
+			$sub_galleries[$slug] = $gallery;
+		}
+
+		$this->sub_galleries = $sub_galleries;
 
 		return $this;
 	}
@@ -122,11 +187,13 @@ class Gallery {
 
 
 	function get_zip_filename() {
-		return $this->get_slug( true ).".zip";
+		return $this->get_slug().".zip";
 	}
 
 
 	function get_config( $option ) {
+
+		if( ! $this->settings ) return NULL;
 
 		if( array_key_exists($option, $this->settings) ) {
 			return $this->settings[$option];
@@ -139,8 +206,12 @@ class Gallery {
 	function get_title() {
 		$title = $this->get_config('title');
 
+		if( ! $title && $this->is_root() ) {
+			$title = get_config('site_title');
+		}
+
 		if( ! $title ) {
-			$title = $this->get_slug( true, true );
+			$title = $this->get_slug( true );
 		}
 
 		$allowed_tags = get_config('allowed_tags');
@@ -169,7 +240,7 @@ class Gallery {
 	}
 
 
-	function get_slug( $skip_secret = false, $skip_parent = false ) {
+	function get_slug( $skip_parent = false ) {
 
 		$slug = $this->get_config('slug');
 
@@ -181,13 +252,10 @@ class Gallery {
 
 		$slug = sanitize_string($slug, true);
 
-		// TODO: secrets will work differently in the future.
-		if( ! $skip_secret && $this->secret ) {
-			$slug .= '-'.trim($this->secret);
-		}
+		if( $slug == 'content' ) $slug = ''; // the root collection should return an empty slug
 
-		if( ! $skip_parent && $this->parent_collection ) {
-			$parent_slug = $this->parent_collection->get_slug();
+		if( ! $skip_parent && $this->parent_gallery ) {
+			$parent_slug = $this->parent_gallery->get_slug();
 			if( $parent_slug ) $parent_slug = trailing_slash_it($parent_slug);
 			$slug = $parent_slug.$slug;
 		}
@@ -207,19 +275,47 @@ class Gallery {
 
 	function get_parent_url( $full_url = true ) {
 
-		if( ! $this->parent_collection ) {
+		if( ! $this->parent_gallery ) {
 			return false;
 		}
 
-		if( $this->parent_collection->is_root() && ! get_config('allow_overview') ) {
+		if( $this->parent_gallery->is_root() && ! get_config('allow_overview') ) {
 			return false;
 		}
 
-		$url = $this->parent_collection->get_url(false);
+		$url = $this->parent_gallery->get_url(false);
 
 		if( $full_url ) $url = url($url);
 
 		return $url;
+	}
+
+
+	function get_sub_galleries() {
+
+		if( $this->sub_galleries == NULL ) $this->load_sub_galleries();
+
+		return $this->sub_galleries;
+	}
+
+
+	function get_sub_gallery( $slug ) {
+
+		if( ! array_key_exists($slug, $this->sub_galleries) ) {
+			return false;
+		}
+
+		return $this->sub_galleries[$slug];
+	}
+
+
+	function sub_gallery_exists( $slug ) {
+
+		if( $this->get_sub_gallery($slug) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 
@@ -243,10 +339,77 @@ class Gallery {
 	}
 
 
-	function get( $slug ) {
-		return $this->get_image($slug);
+	function get( $slug = false ) {
+
+		if( $slug ) {
+
+			if( $this->get_sub_gallery($slug) ) {
+				return $this->get_sub_gallery($slug);
+			} else if( $this->get_image($slug) ) {
+				return $this->get_image($slug);
+			}
+
+			return false;
+		}
+
+		$gallery_content = array_merge($this->sub_galleries, $this->images);
+
+		return $gallery_content;
 	}
 
+
+/*
+// TODO: this is from the old Collection() class, we may need to adapt it:
+
+	function get_thumbnail() {
+
+		// the thumbnail can be set via the gallery.txt
+		// use this format: {gallery-slug}/{image-slug}.{extension}		
+		$thumbnail_slug = $this->get_config('thumbnail');
+		if( $thumbnail_slug ) {
+
+			$thumbnail_slug_path = explode('/', $thumbnail_slug);
+
+			$thumbnail_slug = array_pop($thumbnail_slug_path);
+			$thumbnail_slug = explode('.', $thumbnail_slug);
+			unset($thumbnail_slug[count($thumbnail_slug)-1]);
+			$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
+
+			$gallery = false;
+			$request_object = $this;
+			foreach( $thumbnail_slug_path as $path_part ) {
+				$new_request_object = $request_object->get($path_part);
+				if( $new_request_object ) {
+					$request_object = $new_request_object;
+
+					if( $request_object->is('gallery') ) {
+						$gallery = $request_object;
+					} elseif( $request_object->is('collection') ) {
+						$collection = $request_object;
+					} elseif( $request_object->is('image') ) {
+						break;
+					}
+
+				}
+			}
+
+			if( $gallery ) {
+				return $gallery->get_image($thumbnail_slug);
+			}
+
+		}
+
+		if( count($this->galleries) ) {
+			return $this->galleries[array_keys($this->galleries)[0]]->get_thumbnail();
+		}
+
+		if( count($this->collections) ) {
+			return $this->collections[array_keys($this->collections)[0]]->get_thumbnail();
+		}
+
+		return false;
+	}
+*/
 
 	function get_thumbnail_slug() {
 
@@ -515,9 +678,15 @@ class Gallery {
 
 
 	function is( $test ) {
+
 		if( $test == 'gallery' ) return true;
 
 		return false;
+	}
+
+
+	function is_root() {
+		return $this->is_root_gallery;
 	}
 
 	

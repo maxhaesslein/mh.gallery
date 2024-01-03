@@ -5,20 +5,20 @@ class Folder {
 	private $path;
 	private $files = [];
 
-	function __construct( $path, $filter = false, $recursive = false, $stop = false, $stop_depth = 0 ) {
+	function __construct( $path, $filter = false, $recursive = false ) {
 
 		if( ! is_dir(get_abspath($path)) ) return;
 
 		$this->path = $path;
 
-		$files = $this->read_folder( $path, $filter, $recursive, $stop, $stop_depth, 0 );
+		$files = $this->read_folder( $path, $filter, $recursive );
 
 		$this->files = $files;
 
 	}
 
 
-	function read_folder( $path = false, $filter = false, $recursive = false, $stop = false, $stop_depth = 0, $depth = 0 ) {
+	function read_folder( $path = false, $filter = false, $recursive = false ) {
 
 		if( ! $path ) $path = $this->path;
 
@@ -60,15 +60,7 @@ class Folder {
 				}
 
 				if( $recursive && is_dir($path.$filename) ) {
-
-					if( $stop && file_exists(get_abspath($path.$filename.'/'.$stop)) ) {
-						if( $depth >= $stop_depth ) {
-							continue;
-						}
-						$depth++;
-					}
-
-					$subfolder_files = $this->read_folder( $path.$filename, $filter, $recursive, $stop, $stop_depth, $depth );
+					$subfolder_files = $this->read_folder( $path.$filename, $filter, $recursive );
 					if( count($subfolder_files) ) {
 						$files = array_merge( $files, $subfolder_files );
 					}

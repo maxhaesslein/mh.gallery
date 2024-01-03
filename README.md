@@ -55,23 +55,7 @@ Setting `hidden: true` will hide this gallery from the index (home page). You ca
 
 The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
 
-## Collections
-
-Galleries can be organized inside 'collections'. A collection is like a folder that contains multiple galleries, and can also contain other collections with their own galleries. By default, there is always one root collection, that contains all galleries (and collections) that you create.
-
-To create a collection, add a `collection.txt` file inside a folder, and add one or more subfolders with a `gallery.txt`inside that collection. The `collection.txt` file can contain some settings, like the `gallery.txt` file:
-
-```txt
-title: my nice collection
-slug: my-nice-collection
-description: here is a collection of some galleries
-hidden: true
-thumbnail: gallery-slug/image-01.jpg
-```
-
-To edit the root collection (for the overview page), add a `content/collection.txt` file. You need at least add a `title:` field, but you can also add a `description`.
-
-Currently, everything inside a collection is always sorted alphabetically by slug, this will be expanded later.
+Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file.
 
 ## Customization
 
@@ -90,11 +74,11 @@ these options will overwrite the default options. You can see a list of all avai
 
 ### Index
 
-By default, the home page / index will display all galleries (and collections) that are public.
+By default, the home page / index will display all galleries that are public.
 
-To hide a gallery or collection from the index, add `hidden: true` to the `gallery.txt` or `collection.txt` file. To disable the index completely, add `'allow_overview' => false` to the `custom/config.php`.
+To hide a gallery from the index, add `hidden: true` to the `gallery.txt` file. To disable the index completely, add `'allow_overview' => false` to the `custom/config.php`.
 
-To add a description to the index page, you can use the root collection. Add a `content/collection.txt` with a line `description: my description` inside.
+To add a description to the index page, you can use the root gallery. Add a `content/gallery.txt` with a line `description: my description` inside.
 
 ### Snippets
 

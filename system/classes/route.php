@@ -29,14 +29,13 @@ class Route {
 
 
 		$template_name = '404';
-		$collection = false;
 		$gallery = false;
 		$image = false;
 		$args = [];
 
 		if( count($request) ) {
 
-			$request_object = $core->collection;
+			$request_object = $core->gallery;
 			foreach( $request as $request_part ) {
 				$new_request_object = $request_object->get($request_part);
 				if( $new_request_object ) {
@@ -45,9 +44,6 @@ class Route {
 					if( $request_object->is('gallery') ) {
 						$gallery = $request_object;
 						$template_name = 'overview';
-					} elseif( $request_object->is('collection') ) {
-						$collection = $request_object;
-						$template_name = 'index';
 					} elseif( $request_object->is('image') ) {
 						$image = $request_object;
 						$template_name = 'image';
@@ -61,8 +57,8 @@ class Route {
 		} else {
 
 			if( get_config('allow_overview') ) {
-				$collection = $core->collection;
-				$template_name = 'index';
+				$gallery = $core->gallery;
+				$template_name = 'overview';
 			}
 
 		}
@@ -153,7 +149,6 @@ class Route {
 			'template_include' => $include_path,
 			'request' => $request,
 			'query' => $_REQUEST,
-			'collection' => $collection,
 			'gallery' => $gallery,
 			'image' => $image,
 			'args' => $args,
