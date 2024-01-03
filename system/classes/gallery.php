@@ -428,8 +428,17 @@ class Gallery {
 			if( ! $slug ) {
 				$sub_galleries = $this->get_sub_galleries();
 				if( count($sub_galleries) > 0 ) {
-					// use the first sub-gallery
-					return $sub_galleries[array_key_first($sub_galleries)]->get_thumbnail();
+					// use the first sub-gallery (that is not hidden)
+					foreach( $sub_galleries as $sub_gallery ) {
+						if( $sub_gallery->is_hidden() ) {
+							$sub_gallery = false;
+							continue;
+						}
+
+						break;
+					}
+					if( ! $sub_gallery ) return false;
+					return $sub_gallery->get_thumbnail();
 				}
 			}
 
