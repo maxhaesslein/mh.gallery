@@ -364,13 +364,11 @@ class Gallery {
 	}
 
 
-	function get_thumbnail_slug() {
+	function get_thumbnail_slug( $thumbnail_slug = false ) {
 
 		$images = $this->get_images();
 
 		if( ! count($images) ) return false;
-
-		$thumbnail_slug = $this->get_config('thumbnail');
 
 		if( $thumbnail_slug ) {
 			$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
@@ -399,12 +397,9 @@ class Gallery {
 	function get_thumbnail( $slug = false ) {
 
 		if( ! $slug ) {
-			$slug = $this->get_thumbnail_slug();
-		}
-
-		if( ! $slug ) {
 
 			$thumbnail_slug = $this->get_config('thumbnail');
+
 			if( $thumbnail_slug ) {
 				// the slug may include a path to a sub-gallery
 				$thumbnail_slug_exp = explode('/', $thumbnail_slug);
@@ -422,15 +417,25 @@ class Gallery {
 						$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
 						return $sub_gallery->get_thumbnail($thumbnail_slug);
 					}
+				} else {
+					// no sub-gallery, check current gallery for image or use first image
+					$slug = $this->get_thumbnail_slug( $thumbnail_slug );
+				}
+			} else {
+				$slug = $this->get_thumbnail_slug();
+			}
+
+			if( ! $slug ) {
+				$sub_galleries = $this->get_sub_galleries();
+				if( count($sub_galleries) > 0 ) {
+					// use the first sub-gallery
+					return $sub_galleries[array_key_first($sub_galleries)]->get_thumbnail();
 				}
 			}
 
-			$sub_galleries = $this->get_sub_galleries();
-			if( count($sub_galleries) > 0 ) {
-				// use the first sub-gallery
-				return $sub_galleries[array_key_first($sub_galleries)]->get_thumbnail();
-			}
-
+		}
+		
+		if( ! $slug ) {
 			return false;
 		}
 

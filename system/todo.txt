@@ -1,11 +1,7 @@
 
 this list may not be complete.
 
-- Collection() and Gallery() can be merged into one Gallery() class
-	- allow sorting of sub-galleries (currently, it's always sorted by slug)
-	- make sure the 'download all' works correctly if there are sub-galleries
-	- test mix of sub-galleries and images
-
+- allow sorting of sub-galleries (currently, it's always sorted by slug)
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 - hidden galleries with secret link

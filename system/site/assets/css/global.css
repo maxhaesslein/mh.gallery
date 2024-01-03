@@ -189,6 +189,10 @@ h1 {
 	transition: opacity 500ms ease-in-out;
 }
 
+	.gallery-list + .meta {
+		margin-top: 2em;
+	}
+
 	.meta ul {
 		margin: 0;
 		padding: 0;
