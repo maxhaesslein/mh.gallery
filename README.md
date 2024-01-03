@@ -4,6 +4,12 @@ A simple and lightweight PHP gallery, without any dependencies. A demo can be fo
 
 This is an early version, *expect things to not work or change*.
 
+## Screenshots
+
+![Screenshot of the overview page](system/readme/mh-gallery-1.png)
+
+![Screenshot of the image detail page](system/readme/mh-gallery-3.png)
+
 ## Requirements
 
 This should run on any modern off-the-mill shared hosting environment. If something does not work, make sure the hosting environment meets at least these requirements:
