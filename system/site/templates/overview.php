@@ -17,6 +17,8 @@ $title = $gallery->get_title();
 $description = $gallery->get_description();
 $overview_url = $gallery->get_parent_url();
 
+$imagecount = $gallery->get_image_count();
+
 ?>
 <main>
 
@@ -45,13 +47,13 @@ $overview_url = $gallery->get_parent_url();
 		<ul class="gallery-list">
 			<?php
 
-			foreach( $sub_galleries as $gallery ) {
+			foreach( $sub_galleries as $sub_gallery ) {
 
-				if( $gallery->is_hidden() ) continue;
+				if( $sub_gallery->is_hidden() ) continue;
 
-				$url = $gallery->get_url();
-				$thumbnail = $gallery->get_thumbnail();
-				$title = $gallery->get_title();
+				$url = $sub_gallery->get_url();
+				$thumbnail = $sub_gallery->get_thumbnail();
+				$title = $sub_gallery->get_title();
 				?>
 				<li>
 					<a href="<?= $url ?>">
@@ -71,35 +73,40 @@ $overview_url = $gallery->get_parent_url();
 		</ul>
 		<?php
 	}
-	?>
 
-	<div class="meta">
-		<ul class="info">
-			<li><?= $gallery->get_image_count() ?> images</li>
-			<?php
-			if( $download_gallery_url ) {
+
+	if( $imagecount > 0 ) {
+		?>
+		<div class="meta">
+			<ul class="info">
+				<li><?= $imagecount ?> images</li>
+				<?php
+				if( $download_gallery_url ) {
+					?>
+					<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+					<?php
+				}
 				?>
-				<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+			</ul>
+		</div>
+
+		<ul class="gallery-list">
+			<?php
+			foreach( $images as $image ) {
+				$url = $image->get_link();
+				?>
+				<li>
+					<a href="<?= $url ?>">
+						<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+					</a>
+				</li>
 				<?php
 			}
 			?>
 		</ul>
-	</div>
-
-	<ul class="gallery-list">
 		<?php
-		foreach( $images as $image ) {
-			$url = $image->get_link();
-			?>
-			<li>
-				<a href="<?= $url ?>">
-					<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
-				</a>
-			</li>
-			<?php
-		}
-		?>
-	</ul>
+	}
+	?>
 
 </main>
 <?php
