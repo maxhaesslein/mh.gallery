@@ -2,11 +2,12 @@
 this list may not be complete.
 
 - allow sorting of sub-galleries (currently, it's always sorted by slug)
+- sub-galleries should probably inherit the sort_order (and maybe other options, like the secret) from the parent gallery
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 - hidden galleries with secret link
 	- re-implement secrets (removed with merging of Collection() and Gallery() classes)
-	- secret links should be added via /{secret} or ?secret={secret}, and then converted into a session variable and removed from the URL, so only the original link will contain the secret
+	- secret links should be added via ?secret={secret}, and then converted into a session variable and removed from the URL, so only the original link will contain the secret
 	- if no secret hash exists, create one and save it into the gallery.txt on first access?
 	- allow multiple secret hashes per gallery, and the removal of links/secrets (could be: secret: 12345, 54321, abc)
 	- sanitize secret for URL?
@@ -18,4 +19,5 @@ this list may not be complete.
 	- stepped, like zip creation
 - favicon
 - theme support
+- support for sub-pages (for example an 'about' or 'imprint' page)
 - add license file
