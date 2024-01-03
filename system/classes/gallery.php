@@ -142,6 +142,8 @@ class Gallery {
 			$sub_galleries[$slug] = $gallery;
 		}
 
+		ksort($sub_galleries);
+
 		$this->sub_galleries = $sub_galleries;
 
 		return $this;

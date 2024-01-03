@@ -55,7 +55,7 @@ Setting `hidden: true` will hide this gallery from the index (home page). You ca
 
 The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
 
-Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file.
+Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file. Currently, sub-galleries are always sorted by slug. More sort options will follow in the future.
 
 ## Customization
 
