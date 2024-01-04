@@ -195,6 +195,34 @@ class Gallery {
 	}
 
 
+	function is_secret() {
+
+		if( $this->secret ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	function secret_provided() {
+
+		if( ! $this->is_secret() ) return true;
+
+		if( empty($_SESSION['secrets']) ) return false;
+
+		$secrets = $_SESSION['secrets'];
+
+		if( ! is_array($secrets) || ! count($secrets) ) return false;
+
+		foreach( $secrets as $secret ) {
+			if( $secret == $this->secret ) return true;
+		}
+
+		return false;
+	}
+
+
 	function is_download_image_enabled() {
 		return $this->download_image_enabled;
 	}

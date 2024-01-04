@@ -57,8 +57,6 @@ If you ommit the title or slug, it gets automatically generated based on the fol
 
 Add `.jpg` (or `.jpeg`, `.png` or `.webp`) files into the gallery folder, the images get detected automatically. (For supported extensions see the `image_extensions` option in `system/config.php`)
 
-Setting `hidden: true` will hide this gallery from the index (home page). You can also disable the index with a config option, see 'Customization' below.
-
 The `image_sort_order` sets the sort order for images in a gallery and can be set via `custom/config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge). This option gets inherited from the parent gallery.
 
 The `download_image_enabled` option activates (or deactivates) the download-link for individual images. The `download_gallery_enabled` option activates (or deactivates) the download-link for all images as a .zip-file. This option can be set via the `custom/config.php` or on a per-gallery-basis in the `gallery.txt` file. Both options get inherited from the parent gallery.
@@ -74,6 +72,13 @@ If you want to set a thumbnail to use an image from a sub-gallery, us the slug a
 ```txt
 thumbnail: sub-gallery/sub-sub-gallery/image-05.jpg
 ```
+
+### Hidden and Secret Galleries
+
+Setting `hidden: true` will hide this gallery from the index page. You can also completely disable the index page with a config option, see 'Customization' below. The gallery can still be accessed via the URL.
+
+Setting `secret: ` to a string will hide this gallery from the index and also disables the URL of this gallery. The secret string needs to be URL-compatible, so it should only consist of `a-z`, `0-9` and `-_`, for example `secret: abc123`.
+To access the gallery, you need to append `?secret={string}` (for example `?secret=abc123`) to the URL of the gallery. This secret will then be saved in the browser session, and as long as the session is active (until you close the browser window), you can access the URL of this gallery.
 
 ## Customization
 

@@ -35,9 +35,9 @@ class Route {
 			
 			$reload_url = implode_url($reload_url);
 
+			// remove the secret query parameter from the URL:
 			header('Location: '.$reload_url);
 			exit;
-
 		}
 
 
@@ -65,8 +65,16 @@ class Route {
 					$request_object = $new_request_object;
 
 					if( $request_object->is('gallery') ) {
+
 						$gallery = $request_object;
 						$template_name = 'overview';
+
+						// check, if the gallery is secret
+						if( $gallery->is_secret() && ! $gallery->secret_provided() ) {
+							$gallery = false;
+							$template_name = '401';
+						}
+
 					} elseif( $request_object->is('image') ) {
 						$image = $request_object;
 						$template_name = 'image';
