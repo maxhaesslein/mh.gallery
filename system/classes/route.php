@@ -18,6 +18,29 @@ class Route {
 		$request = array_filter($request); // remove empty elements
 
 
+		$query_parameters = $_GET;
+		if( ! empty($query_parameters['secret']) ) {
+			// add the new secret to our session, then reload the URL without the secret
+
+			$secret = $query_parameters['secret'];
+
+			if( ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
+			if( ! in_array($secret, $_SESSION['secrets']) ) {
+				$_SESSION['secrets'][] = $secret;
+			}
+
+			$reload_url = explode_url(get_current_url());
+			
+			unset($reload_url['query']['secret']);
+			
+			$reload_url = implode_url($reload_url);
+
+			header('Location: '.$reload_url);
+			exit;
+
+		}
+
+
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], ['img', 'api', 'download']) ) {
 			$mode = array_shift($request);

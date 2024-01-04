@@ -1,5 +1,7 @@
 <?php
 
+session_start(); // we use this for secret links
+
 $abspath = realpath(dirname(__FILE__)).'/';
 $abspath = preg_replace( '/system\/$/', '', $abspath );
 
