@@ -149,6 +149,9 @@ class Gallery {
 			} elseif( $gallery_sort_order == 'foldername' ) {
 				$subgallery_path_exp = explode('/', un_trailing_slash_it($subgallery_path));
 				$sort = array_pop($subgallery_path_exp);
+			} elseif( $gallery_sort_order == 'order' ) {
+				$sort = $gallery->get_config( 'order' );
+				if( ! $sort ) $sort = 'zzz-'.$gallery->get_title();
 			} else { // fallback: slug
 				$sort = $slug;
 			}
@@ -160,7 +163,7 @@ class Gallery {
 
 		}
 
-		array_multisort( $galleries_sort, $sub_galleries );
+		array_multisort( $galleries_sort, SORT_ASC, SORT_NATURAL|SORT_FLAG_CASE,  $sub_galleries );
 
 		$this->sub_galleries = $sub_galleries;
 

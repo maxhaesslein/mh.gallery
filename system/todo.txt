@@ -1,9 +1,6 @@
 
 this list may not be complete.
 
-- allow sorting of sub-galleries (currently, it's always sorted by slug)
-	- sort by 'title', 'slug', 'foldername' (on the disk), 'order' (parameter in the gallery.txt)
-
 - sub-galleries should probably inherit the sort_order (and maybe other options, like the secret) from the parent gallery
 
 - enhance slide navigation
