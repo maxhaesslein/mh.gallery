@@ -1,16 +1,8 @@
 <?php
 
 
-function get_config( $option, $gallery = false, $fallback = false ) {
+function get_config( $option, $fallback = false ) {
 	global $core;
-
-	$config = false;
-
-	if( $gallery ) {
-		$config = $gallery->get_config( $option );
-
-		if( $config !== NULL ) return $config;
-	}
 
 	return $core->config->get( $option, $fallback );
 }
