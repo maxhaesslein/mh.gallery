@@ -551,11 +551,12 @@ class Gallery {
 
 			}
 
-			$images_sort[] = $sort;
-
 			$key = $image->get_key();
 
+			if( array_key_exists($key, $images) ) continue;
+
 			$images[$key] = $image;
+			$images_sort[] = $sort;
 		}
 
 		array_multisort($images_sort, $images);
