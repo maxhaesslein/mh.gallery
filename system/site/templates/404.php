@@ -2,6 +2,8 @@
 
 if( ! $core ) exit;
 
+header('HTTP/1.1 404 Not Found');
+
 snippet( 'header' );
 
 ?>
