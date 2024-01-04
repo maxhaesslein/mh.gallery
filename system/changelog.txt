@@ -1,5 +1,8 @@
 v.0.4.1
 
+if you use the option `sort_order`, update it to `image_sort_order`
+
+- renamed the config option `sort_order` to `image_sort_order`. You need to update your `custom/config.php` and `gallery.txt` files, if you use this option.
 - …
 
 

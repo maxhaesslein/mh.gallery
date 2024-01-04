@@ -506,7 +506,7 @@ class Gallery {
 
 		$files = $folder->get();
 
-		$sort_order = get_config( 'sort_order', $this );
+		$image_sort_order = get_config( 'image_sort_order', $this );
 
 		$images = [];
 		$images_sort = [];
@@ -518,11 +518,11 @@ class Gallery {
 			
 			$image = new Image($filename, $this);
 
-			if( $sort_order == 'filedate' ) {
+			if( $image_sort_order == 'filedate' ) {
 
 				$sort = $image->get_filedate();
 
-			} elseif( $sort_order == 'exifdate' ) {
+			} elseif( $image_sort_order == 'exifdate' ) {
 
 				$sort = $image->get_exif_data('DateTimeOriginal');
 				if( ! $sort ) $sort = $image->get_exif_data('DateTime');
@@ -534,7 +534,7 @@ class Gallery {
 					$sort = $image->get_filedate(); // fallback to file modification date
 				}
 
-			} elseif( $sort_order == 'bridge' ) {
+			} elseif( $image_sort_order == 'bridge' ) {
 
 				$bridge_position = $image->get_bridge_position();
 

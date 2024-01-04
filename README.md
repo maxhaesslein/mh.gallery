@@ -50,7 +50,7 @@ hidden: true
 thumbnail: image-01.jpg
 download_image_enabled: true
 download_gallery_enabled: true
-sort_order: filename
+image_sort_order: filename
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
@@ -59,7 +59,7 @@ Add `.jpg` (or `.jpeg`, `.png` or `.webp`) files into the gallery folder, the im
 
 Setting `hidden: true` will hide this gallery from the index (home page). You can also disable the index with a config option, see 'Customization' below.
 
-The `sort_order` can be set via `config.php` or on a per-gallery-basis via the `gallery.txt`. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
+The `image_sort_order` sets the sort order for images in a gallery and can be set via `config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
 
 ### Sub-Galleries
 
