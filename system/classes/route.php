@@ -17,29 +17,7 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-
 		$query_parameters = $_GET;
-		if( ! empty($query_parameters['secret']) ) {
-			// add the new secret to our session, then reload the URL without the secret
-
-			$secret = $query_parameters['secret'];
-
-			if( ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
-			if( ! in_array($secret, $_SESSION['secrets']) ) {
-				$_SESSION['secrets'][] = $secret;
-			}
-
-			$reload_url = explode_url(get_current_url());
-			
-			unset($reload_url['query']['secret']);
-			
-			$reload_url = implode_url($reload_url);
-
-			// remove the secret query parameter from the URL:
-			header('Location: '.$reload_url);
-			exit;
-		}
-
 
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], ['img', 'api', 'download']) ) {
@@ -65,16 +43,8 @@ class Route {
 					$request_object = $new_request_object;
 
 					if( $request_object->is('gallery') ) {
-
 						$gallery = $request_object;
 						$template_name = 'overview';
-
-						// check, if the gallery is secret
-						if( $gallery->is_secret() && ! $gallery->secret_provided() ) {
-							$gallery = false;
-							$template_name = '401';
-						}
-
 					} elseif( $request_object->is('image') ) {
 						$image = $request_object;
 						$template_name = 'image';
@@ -91,6 +61,39 @@ class Route {
 				$gallery = $core->gallery;
 				$template_name = 'overview';
 			}
+
+		}
+
+
+		if( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+			
+			if( ! empty($query_parameters['secret']) ) {
+
+				$hash = get_hash($gallery->get_slug());
+
+				$secret = $query_parameters['secret'];
+
+				if( ! isset($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
+
+				if( ! array_key_exists($hash, $_SESSION['secrets']) ) $_SESSION['secrets'][$hash] = [];
+
+				if( ! in_array($secret, $_SESSION['secrets'][$hash]) ) {
+					$_SESSION['secrets'][$hash][] = $secret;
+				}
+
+				$reload_url = explode_url(get_current_url());
+				
+				unset($reload_url['query']['secret']);
+				
+				$reload_url = implode_url($reload_url);
+
+				// remove the secret query parameter from the URL:
+				header('Location: '.$reload_url);
+				exit;
+			}
+
+			$gallery = false;
+			$template_name = '401';
 
 		}
 

@@ -1,10 +1,6 @@
 
 this list may not be complete.
 
-- hidden galleries with secret link
-	- secret should be tied to gallery slug
-	- allow multiple secret hashes per gallery, and the removal of links/secrets (could be: secret: 12345, 54321, abc)
-
 - design update
 
 - enhance slide navigation
@@ -20,6 +16,7 @@ this list may not be complete.
 	- maybe add ?pre-cache to a gallery link?
 	- stepped, like zip creation
 
+- allow multiple secret hashes per gallery (could be: secret: 12345, 54321, abc)
 - support for sub-pages (for example an 'about' or 'imprint' page)
 - support for heic/heif as source images
 - support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research

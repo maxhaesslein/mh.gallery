@@ -215,7 +215,10 @@ class Gallery {
 
 		if( ! is_array($secrets) || ! count($secrets) ) return false;
 
-		foreach( $secrets as $secret ) {
+		$hash = get_hash($this->get_slug());
+		if( ! isset($secrets[$hash]) || ! is_array($secrets[$hash]) ) return false;
+
+		foreach( $secrets[$hash] as $secret ) {
 			if( $secret == $this->secret ) return true;
 		}
 

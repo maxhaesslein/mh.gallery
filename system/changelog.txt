@@ -1,10 +1,11 @@
-v.0.4.1
+v.0.5.0
 
 if you use the option `sort_order`, update it to `image_sort_order`
 
 - renamed the config option `sort_order` to `image_sort_order`. You need to update your `custom/config.php` and `gallery.txt` files, if you use this option.
 - new config option `gallery_sort_order` to sort (sub-)galleries by title, slug, foldername or order-parameter set in the `gallery.txt` of sub-galleries
 - inherit `image_sort_order`, `gallery_sort_order`, `download_gallery_enabled` and `download_image_enabled` from parent gallery
+- you can now add a `secret` to a gallery, to protect the link; see 'Hidden and Secret Galleries' in the `README.md`
 - …
 
 
