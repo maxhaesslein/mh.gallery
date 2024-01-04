@@ -105,8 +105,6 @@ class Gallery {
 
 	function load_sub_galleries(){
 
-		$sub_galleries = [];
-
 		$galleries_folder = new Folder( $this->path, 'gallery.txt', true );
 		$subgallery_paths = $galleries_folder->get();
 
@@ -131,6 +129,11 @@ class Gallery {
 			$used_subgallery_paths[] = $subgallery_path;
 		}
 
+		$gallery_sort_order = get_config( 'gallery_sort_order', $this );
+
+		$sub_galleries = [];
+		$galleries_sort = [];
+
 		foreach( $used_subgallery_paths as $subgallery_path ) {
 
 			$gallery = new Gallery($subgallery_path.'gallery.txt', $this);
@@ -139,10 +142,25 @@ class Gallery {
 
 			if( ! $slug ) continue;
 
+			if( $gallery_sort_order == 'slug' ) {
+				$sort = $slug;
+			} elseif( $gallery_sort_order == 'title' ) {
+				$sort = $gallery->get_title();
+			} elseif( $gallery_sort_order == 'foldername' ) {
+				$subgallery_path_exp = explode('/', un_trailing_slash_it($subgallery_path));
+				$sort = array_pop($subgallery_path_exp);
+			} else { // fallback: slug
+				$sort = $slug;
+			}
+
+			if( array_key_exists($slug, $sub_galleries) ) continue;
+
 			$sub_galleries[$slug] = $gallery;
+			$galleries_sort[] = $sort;
+
 		}
 
-		ksort($sub_galleries);
+		array_multisort( $galleries_sort, $sub_galleries );
 
 		$this->sub_galleries = $sub_galleries;
 

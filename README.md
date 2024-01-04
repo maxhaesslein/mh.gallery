@@ -63,7 +63,9 @@ The `image_sort_order` sets the sort order for images in a gallery and can be se
 
 ### Sub-Galleries
 
-Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file. Currently, sub-galleries are always sorted by slug. More sort options will follow in the future.
+Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file.
+
+The `gallery_sort_order` option sets the order for (sub-)galleries and can be set via `config.php` or on a per-gallery-basis for sub-galleries via the `gallery.txt` file. The available sort orders are `title`, `slug` or `foldername` (the name of the folder on the disk).
 
 If you want to set a thumbnail to use an image from a sub-gallery, us the slug as a path. This could for example look like this:
 
