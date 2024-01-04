@@ -14,8 +14,8 @@ class Gallery {
 	private $images = NULL;
 	private $hidden = false;
 	private $secret = false;
-	private $download_image_enabled;
-	private $download_gallery_enabled;
+	private $download_image_enabled = NULL;
+	private $download_gallery_enabled = NULL;
 	private $bridge_sort_order = NULL;
 
 	function __construct( $gallery_file, $parent_gallery ) {
@@ -80,20 +80,36 @@ class Gallery {
 			$this->hidden = true; // force gallery to be hidden, if a secret is set
 		}
 
+
+		$download_image_enabled = NULL;
 		if( isset($settings['download_image_enabled']) ) {
+			// own setting
 			$download_image_enabled = $settings['download_image_enabled'];
 			if( $download_image_enabled == 'false' || $download_image_enabled == '0' ) $download_image_enabled = false;
 			$download_image_enabled = !! $download_image_enabled; // make bool
-		} else {
+		} elseif( $this->parent_gallery ) {
+			// setting from parent gallery
+			$download_image_enabled = $this->parent_gallery->get_config( 'download_image_enabled', true );
+		}
+		if( is_null($download_image_enabled) ) {
+			// fall back to config.php
 			$download_image_enabled = get_config( 'download_image_enabled' );
 		}
 		$this->download_image_enabled = $download_image_enabled;
 
+
+		$download_gallery_enabled = NULL;
 		if( isset($settings['download_gallery_enabled']) ) {
+			// own setting
 			$download_gallery_enabled = $settings['download_gallery_enabled'];
 			if( $download_gallery_enabled == 'false' || $download_gallery_enabled == '0' ) $download_gallery_enabled = false;
 			$download_gallery_enabled = !! $download_gallery_enabled; // make bool
-		} else {
+		} elseif( $this->parent_gallery ) {
+			// setting from parent gallery
+			$download_gallery_enabled = $this->parent_gallery->get_config( 'download_gallery_enabled', true );
+		}
+		if( is_null($download_gallery_enabled) ) {
+			// fall back to config.php
 			$download_gallery_enabled = get_config( 'download_gallery_enabled' );
 		}
 		$this->download_gallery_enabled = $download_gallery_enabled;
@@ -230,7 +246,7 @@ class Gallery {
 
 		if( $inherit && $this->parent_gallery ) {
 			// try to get option from parent gallery
-			$option = $this->parent_gallery->get_config($option);
+			$option = $this->parent_gallery->get_config( $option, $inherit );
 			return $option;
 		}
 
