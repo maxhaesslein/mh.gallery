@@ -1,8 +1,6 @@
 
 this list may not be complete.
 
-- sub-galleries should probably inherit the sort_order (and maybe other options, like the secret) from the parent gallery
-
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 

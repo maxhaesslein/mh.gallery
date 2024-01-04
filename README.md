@@ -59,13 +59,13 @@ Add `.jpg` (or `.jpeg`, `.png` or `.webp`) files into the gallery folder, the im
 
 Setting `hidden: true` will hide this gallery from the index (home page). You can also disable the index with a config option, see 'Customization' below.
 
-The `image_sort_order` sets the sort order for images in a gallery and can be set via `config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge).
+The `image_sort_order` sets the sort order for images in a gallery and can be set via `config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata, if available, or file modification date otherwise) or `bridge` (sort by a .BridgeSort file, created by Adobe Bridge). This option gets inherited from the parent gallery.
 
 ### Sub-Galleries
 
 Galleries can also have sub-galleries. Just create a sub-folder with its own `gallery.txt` file. Sub-Galleries are listed before images. There is always a root gallery, that does not need (but can have) a `gallery.txt` file. If you want to add settings to the root gallery, create a `content/gallery.txt` file.
 
-The `gallery_sort_order` option sets the order for (sub-)galleries and can be set via `config.php` or on a per-gallery-basis for sub-galleries via the `gallery.txt` file. The available sort orders are `title`, `slug`, `foldername` (the name of the folder on the disk) or `order` (a config option `order: ` that can be set via the `gallery.txt` file of the sub-galleries).
+The `gallery_sort_order` option sets the order for (sub-)galleries and can be set via `config.php` or on a per-gallery-basis for sub-galleries via the `gallery.txt` file. The available sort orders are `title`, `slug`, `foldername` (the name of the folder on the disk) or `order` (a config option `order: ` that can be set via the `gallery.txt` file of the sub-galleries). This option gets inherited from the parent gallery.
 
 If you want to set a thumbnail to use an image from a sub-gallery, us the slug as a path. This could for example look like this:
 

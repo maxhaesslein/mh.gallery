@@ -129,7 +129,10 @@ class Gallery {
 			$used_subgallery_paths[] = $subgallery_path;
 		}
 
-		$gallery_sort_order = get_config( 'gallery_sort_order', $this );
+		$gallery_sort_order = $this->get_config( 'gallery_sort_order', true );
+		if( ! $gallery_sort_order ) { // fall back to config.php
+			$gallery_sort_order = get_config( 'gallery_sort_order' );
+		}
 
 		$sub_galleries = [];
 		$galleries_sort = [];
@@ -218,14 +221,20 @@ class Gallery {
 	}
 
 
-	function get_config( $option ) {
+	function get_config( $option, $inherit = false ) {
 
-		if( ! $this->settings ) return NULL;
-
-		if( array_key_exists($option, $this->settings) ) {
+		// get option from current gallery
+		if( $this->settings && array_key_exists($option, $this->settings) ) {
 			return $this->settings[$option];
 		}
 
+		if( $inherit && $this->parent_gallery ) {
+			// try to get option from parent gallery
+			$option = $this->parent_gallery->get_config($option);
+			return $option;
+		}
+
+		// no config found
 		return NULL;
 	}
 
@@ -527,7 +536,10 @@ class Gallery {
 
 		$files = $folder->get();
 
-		$image_sort_order = get_config( 'image_sort_order', $this );
+		$image_sort_order = $this->get_config( 'image_sort_order', true );
+		if( ! $image_sort_order ) { // fall back to config.php
+			$image_sort_order = get_config( 'image_sort_order' );
+		}
 
 		$images = [];
 		$images_sort = [];
