@@ -1,3 +1,8 @@
+v.0.5.1
+
+- allow '_' in sanitized URIs
+
+
 v.0.5.0
 
 if you use the option `sort_order`, update it to `image_sort_order`
