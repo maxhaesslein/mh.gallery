@@ -492,7 +492,8 @@ class Gallery {
 
 					if( $sub_gallery ) {
 						$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
-						return $sub_gallery->get_thumbnail($thumbnail_slug);
+						$thumbnail = $sub_gallery->get_thumbnail($thumbnail_slug);
+						if( $thumbnail ) return $thumbnail;
 					}
 				} else {
 					// no sub-gallery, check current gallery for image or use first image
