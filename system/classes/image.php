@@ -37,7 +37,7 @@ class Image {
 		$slug = remove_fileextension($filename);
 		$this->slug = sanitize_string($slug);
 
-		$this->key = $this->slug.'.'; // the key needs to be a string, because we use it as a key in a associative array, so we append a '.' to force this to be a string, even if the slug would be '1' (and therefore be cast to an int in the array)
+		$this->key = 'img-'.$this->slug; // the key needs to be a string, because we use it as a key in a associative array
 
 		$this->quality = get_config( 'default_image_quality' );
 
@@ -415,7 +415,7 @@ class Image {
 		$html = '';
 
 		if( ! $skip_container ) $html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
-		$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">'; // TODO: backgroundcolor
+		$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">';
 
 		foreach( $picture as $type => $sources ) {
 

@@ -1,6 +1,4 @@
 
-- image key could be 'img-{id}' instead of '{id}.' for better readability
-
 - theme support
 
 - design update

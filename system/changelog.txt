@@ -1,6 +1,7 @@
 v.0.5.2
 
 - updated hash algorithm to murmur3, if available
+- internally, use leading 'img-' instead of trailing '.' for image keys
 
 
 v.0.5.1
