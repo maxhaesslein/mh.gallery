@@ -2,6 +2,7 @@ v.0.5.2
 
 - updated hash algorithm to murmur3, if available
 - internally, use leading 'img-' instead of trailing '.' for image keys
+- added the 'twitter:image' meta tag, for better sharing support (this fixes preview images on Mastodon)
 
 
 v.0.5.1

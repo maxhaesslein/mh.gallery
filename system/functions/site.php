@@ -104,8 +104,9 @@ function get_site_sharing_tags() {
 
 	if( $thumbnail ) {
 		$thumbnail = strip_tags($thumbnail);
-		$sharing_tags[] = '<meta name="twitter:card" content="summary_large_image">';
 		$sharing_tags[] = '<meta property="og:image" content="'.$thumbnail.'">';
+		$sharing_tags[] = '<meta name="twitter:card" content="summary_large_image">';
+		$sharing_tags[] = '<meta name="twitter:image" content="'.$thumbnail.'">';
 	}
 
 	if( $description ) {
