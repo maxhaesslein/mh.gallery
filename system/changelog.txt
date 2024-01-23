@@ -1,6 +1,7 @@
 v.0.5.3
 
-- new sort option `random` to sort galleries randomly
+- new sort option `random` to sort galleries randomly on every load
+- code cleanup
 
 
 v.0.5.2

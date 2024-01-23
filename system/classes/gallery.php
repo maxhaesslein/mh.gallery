@@ -466,9 +466,8 @@ class Gallery {
 
 	function sanitize_thumbnail_slug( $thumbnail_slug ) {
 
-		$thumbnail_slug = explode('.', $thumbnail_slug);
-		unset($thumbnail_slug[count($thumbnail_slug)-1]);
-		$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
+		$thumbnail_slug = remove_fileextension($thumbnail_slug);
+		$thumbnail_slug = sanitize_string($thumbnail_slug, true);
 
 		return $thumbnail_slug;
 	}
