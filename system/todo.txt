@@ -8,8 +8,6 @@
 
 - favicon
 
-- when going back to the overview ('overview' link or escape key), set scrollposition to the previously active scrollposition (or image)
-
 - support for sub-pages (for example an 'about' or 'imprint' page)
 
 - image display

@@ -9,6 +9,7 @@ $gallery_slug = $gallery->get_slug();
 $image_slug = $image->get_slug();
 
 $overview_link = $gallery->get_url();
+$overview_link .= '#'.$image_slug;
 
 $prev_image = $image->get_adjacent_image('prev');
 $next_image = $image->get_adjacent_image('next');

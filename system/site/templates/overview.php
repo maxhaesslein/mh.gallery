@@ -96,6 +96,7 @@ $imagecount = $gallery->get_image_count();
 				$url = $image->get_link();
 				?>
 				<li>
+					<a class="thumbnail-anchor anchor" name="<?= $image->get_slug() ?>"></a>
 					<a href="<?= $url ?>">
 						<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
 					</a>
