@@ -624,7 +624,7 @@ class Gallery {
 
 				if( $bridge_position === false ) $bridge_position = INF;
 
-				$sort = str_pad( $bridge_position, 6, 0, STR_PAD_LEFT ); // add leading zeros
+				$sort = $bridge_position;
 
 			} elseif( $image_sort_order == 'random' ) {
 
@@ -645,7 +645,7 @@ class Gallery {
 			$images_sort[] = $sort;
 		}
 
-		array_multisort($images_sort, $images);
+		array_multisort($images_sort, SORT_NATURAL|SORT_FLAG_CASE, $images);
 
 		$this->images = $images;
 
