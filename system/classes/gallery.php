@@ -70,7 +70,7 @@ class Gallery {
 
 		if( isset($settings['hidden']) ) {
 			$hidden = $settings['hidden'];
-			if( $hidden == 'false' || $hidden == '0' ) $hidden = false;
+			if( $hidden === 'false' || $hidden === '0' ) $hidden = false;
 			$hidden = !! $hidden; // make bool
 			$this->hidden = $hidden;
 		}
@@ -80,42 +80,27 @@ class Gallery {
 			$this->hidden = true; // force gallery to be hidden, if a secret is set
 		}
 
-
-		$download_image_enabled = NULL;
-		if( isset($settings['download_image_enabled']) ) {
-			// own setting
-			$download_image_enabled = $settings['download_image_enabled'];
-			if( $download_image_enabled == 'false' || $download_image_enabled == '0' ) $download_image_enabled = false;
-			$download_image_enabled = !! $download_image_enabled; // make bool
-		} elseif( $this->parent_gallery ) {
-			// setting from parent gallery
-			$download_image_enabled = $this->parent_gallery->get_config( 'download_image_enabled', true );
-		}
-		if( is_null($download_image_enabled) ) {
-			// fall back to config.php
-			$download_image_enabled = get_config( 'download_image_enabled' );
-		}
-		$this->download_image_enabled = $download_image_enabled;
-
-
-		$download_gallery_enabled = NULL;
-		if( isset($settings['download_gallery_enabled']) ) {
-			// own setting
-			$download_gallery_enabled = $settings['download_gallery_enabled'];
-			if( $download_gallery_enabled == 'false' || $download_gallery_enabled == '0' ) $download_gallery_enabled = false;
-			$download_gallery_enabled = !! $download_gallery_enabled; // make bool
-		} elseif( $this->parent_gallery ) {
-			// setting from parent gallery
-			$download_gallery_enabled = $this->parent_gallery->get_config( 'download_gallery_enabled', true );
-		}
-		if( is_null($download_gallery_enabled) ) {
-			// fall back to config.php
-			$download_gallery_enabled = get_config( 'download_gallery_enabled' );
-		}
-		$this->download_gallery_enabled = $download_gallery_enabled;
-
+		$this->download_image_enabled = $this->inherit_setting( 'download_image_enabled' );
+		$this->download_gallery_enabled = $this->inherit_setting( 'download_gallery_enabled' );
 
 		return $this;
+	}
+
+
+	function inherit_setting( $setting_name ) {
+
+		$value = $this->get_config( $setting_name, true );
+
+		if( is_null($value) ) {
+			// fall back to config.php
+			$value = get_config( $setting_name );
+		}
+
+		if( $value === 'false' || $value === '0' ) $value = false;
+
+		$value = !! $value; // make bool
+
+		return $value;
 	}
 
 
@@ -146,7 +131,7 @@ class Gallery {
 		}
 
 		$gallery_sort_order = $this->get_config( 'gallery_sort_order', true );
-		if( ! $gallery_sort_order ) { // fall back to config.php
+		if( is_null($gallery_sort_order) ) { // fall back to config.php
 			$gallery_sort_order = get_config( 'gallery_sort_order' );
 		}
 
@@ -277,8 +262,7 @@ class Gallery {
 
 		if( $inherit && $this->parent_gallery ) {
 			// try to get option from parent gallery
-			$option = $this->parent_gallery->get_config( $option, $inherit );
-			return $option;
+			return $this->parent_gallery->get_config( $option, $inherit );
 		}
 
 		// no config found
@@ -587,7 +571,7 @@ class Gallery {
 		$files = $folder->get();
 
 		$image_sort_order = $this->get_config( 'image_sort_order', true );
-		if( ! $image_sort_order ) { // fall back to config.php
+		if( is_null($image_sort_order) ) { // fall back to config.php
 			$image_sort_order = get_config( 'image_sort_order' );
 		}
 
