@@ -1,3 +1,8 @@
+v.0.5.2
+
+- updated hash algorithm to murmur3, if available
+
+
 v.0.5.1
 
 - allow '_' in sanitized URIs

@@ -41,4 +41,14 @@ class Config {
 		return $this->options[$option];
 	}
 
+
+	function overwrite( $option, $new_value ) {
+
+		if( ! array_key_exists( $option, $this->options ) ) return false;
+
+		$this->options[$option] = $new_value;
+
+		return true;
+	}
+
 };

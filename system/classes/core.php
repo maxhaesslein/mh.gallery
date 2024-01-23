@@ -34,6 +34,8 @@ class Core {
 
 		$this->check_required_files_and_folders();
 
+		$this->check_hash_algo();
+
 		$this->gallery = new Gallery( false, false ); // needs to be there before new Route()
 
 		$this->route = new Route();
@@ -84,6 +86,24 @@ class Core {
 			umask($oldumask); // we need this after changing permissions with mkdir
 
 		}
+
+	}
+
+
+	function check_hash_algo() {
+
+		$possible_algorithms = $this->config->get('hash_algorithm');
+
+		$available_algorithms = hash_algos();
+
+		$algorithm = false;
+		foreach( $possible_algorithms as $algorithm ) {
+			if( in_array($algorithm, $available_algorithms) ) break;
+			$algorithm = false;
+		}
+		if( ! $algorithm ) $algorithm = 'md5';
+
+		$this->config->overwrite('hash_algorithm', $algorithm);
 
 	}
 

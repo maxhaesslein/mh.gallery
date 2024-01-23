@@ -26,4 +26,5 @@ return [
 	'gallery_sort_order' => 'title', // sort (sub-)galleries by this option; can be 'title', 'slug', 'foldername' (folder on disk); can be overwritten via gallery.txt for sub-galleries
 	'allowed_tags' => [ 'p', 'ul', 'ol', 'li', 'br', 'i', 'u', 'b', 'em', 'strong' ], // these HTML tags are allowed in text fields, all other tags are stripped (set to false to allow all tags)
 	'chmod_folder' => 0775, // chmod for new folders; needs to be set as an octal value, so you need to prefix a leading zero; see https://www.php.net/manual/en/function.chmod.php#refsect1-function.chmod-parameters
+	'hash_algorithm' => [ 'murmur3f', 'murmur3c', 'tiger128,3', 'sha256' ], // the first available algorithm will be used. you probably don't need to change this option
 ];
