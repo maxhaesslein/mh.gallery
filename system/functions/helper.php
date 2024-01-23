@@ -18,6 +18,8 @@ function get_hash( $input ) {
 
 
 	// TODO: check if we want to create the hash like this
+	// TODO: maybe switch to murmur3c or murmur3f if available? (PHP >= 8.1)
+	// https://www.php.net/manual/en/function.hash-algos.php
 	$hash = hash( 'tiger128,3', $input );
 
 	return $hash;

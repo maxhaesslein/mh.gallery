@@ -631,7 +631,6 @@ class Image {
 			}
 
 			// NOTE: currently, we just center the image on crop
-			// TODO: maybe at a 'region of interest' option, somehow ..
 			$src_width_cropped = $src_width;
 			$src_height_cropped = (int) round($src_width_cropped * $height/$width);
 			if( $src_height_cropped > $src_height ) {
