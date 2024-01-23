@@ -37,8 +37,8 @@ class Image {
 		$slug = remove_fileextension($filename);
 		$this->slug = sanitize_string($slug);
 
-		$this->key = 'img-'.$this->slug; // the key needs to be a string, because we use it as a key in a associative array
-
+		$this->key = get_image_key_from_slug($this->slug);
+		
 		$this->quality = get_config( 'default_image_quality' );
 
 		$this->load_image_meta();

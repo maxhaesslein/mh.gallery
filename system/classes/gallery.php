@@ -412,13 +412,13 @@ class Gallery {
 
 	function get_image( $slug ) {
 
-		// NOTE: in our $this->images array, the key of an image is their slug, but with a leading 'img-'; this is important to have the key exist as a string, instead of an int. when receiving the image, we need to prepend the 'img-' again.
-
 		if( $this->images == NULL ) $this->load_images();
 
-		if( ! array_key_exists('img-'.$slug, $this->images) ) return false;
+		$image_key = get_image_key_from_slug($slug);
 
-		return $this->images['img-'.$slug];
+		if( ! array_key_exists($image_key, $this->images) ) return false;
+
+		return $this->images[$image_key];
 	}
 
 
@@ -449,7 +449,8 @@ class Gallery {
 
 		if( $thumbnail_slug ) {
 			$thumbnail_slug = $this->sanitize_thumbnail_slug($thumbnail_slug);
-			if( array_key_exists('img-'.$thumbnail_slug, $images) ) {
+			$thumbnail_key = get_image_key_from_slug($thumbnail_slug);
+			if( array_key_exists($thumbnail_key, $images) ) {
 				return $thumbnail_slug;
 			}
 		}
@@ -457,7 +458,7 @@ class Gallery {
 		// no thumbnail defined, use the first image:
 		$thumbnail_slug = array_keys($images)[0];
 
-		$thumbnail_slug = $this->clean_thumbnail_slug( $thumbnail_slug );
+		$thumbnail_slug = get_image_slug_from_key( $thumbnail_slug );
 
 		return $thumbnail_slug;
 	}
@@ -469,17 +470,6 @@ class Gallery {
 		unset($thumbnail_slug[count($thumbnail_slug)-1]);
 		$thumbnail_slug = sanitize_string(implode('.', $thumbnail_slug), true);
 
-		return $thumbnail_slug;
-	}
-
-
-	function clean_thumbnail_slug( $thumbnail_slug ) {
-
-		// remove leading 'img-'
-		$thumbnail_slug = explode('img-', $thumbnail_slug);
-		if( count($thumbnail_slug) > 1) unset($thumbnail_slug[0]);
-		$thumbnail_slug = implode('img-', $thumbnail_slug);
-		
 		return $thumbnail_slug;
 	}
 
@@ -547,11 +537,11 @@ class Gallery {
 
 		if( $this->images == NULL ) $this->load_images();
 
-		$slug = 'img-'.$slug;
+		$image_key = get_image_key_from_slug($slug);
 
-		if( ! array_key_exists($slug, $this->images) ) return false;
+		if( ! array_key_exists($image_key, $this->images) ) return false;
 
-		return $this->images[$slug]->get_link();
+		return $this->images[$image_key]->get_link();
 	}
 
 
@@ -569,7 +559,8 @@ class Gallery {
 
 		$indexes = array_keys($this->images);
 
-		$current_index = array_search('img-'.$current_image_slug, $indexes);
+		$current_image_key = get_image_key_from_slug($current_image_slug);
+		$current_index = array_search($current_image_key, $indexes);
 
 		if( $direction == 'next' ) {
 			$next_index = $current_index+1;
