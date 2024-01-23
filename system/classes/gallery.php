@@ -622,9 +622,7 @@ class Gallery {
 
 				$bridge_position = $image->get_bridge_position();
 
-				if( $bridge_position === false ) {
-					$bridge_position = 999999999999; // TODO: check, how we want to handle this
-				}
+				if( $bridge_position === false ) $bridge_position = INF;
 
 				$sort = str_pad( $bridge_position, 6, 0, STR_PAD_LEFT ); // add leading zeros
 
