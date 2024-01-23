@@ -626,6 +626,10 @@ class Gallery {
 
 				$sort = str_pad( $bridge_position, 6, 0, STR_PAD_LEFT ); // add leading zeros
 
+			} elseif( $image_sort_order == 'random' ) {
+
+				$sort = rand();
+
 			} else {
 
 				// filename
