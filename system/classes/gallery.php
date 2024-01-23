@@ -572,9 +572,8 @@ class Gallery {
 			return false;
 		}
 
-		$slug = $indexes[$next_index];
-
-		$slug = substr( $slug, 0, -1 );
+		$key = $indexes[$next_index];
+		$slug = get_image_slug_from_key($key);
 
 		return $slug;
 	}
