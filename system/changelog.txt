@@ -7,6 +7,7 @@ if you depend on automatically generated slugs, this update may introduce breaki
 - allow `~` in URIs
 - change spaces to `_` in URIs (was `-`)
 - remove additional `-` before or after `_` from URIs
+- when returning to overview, the previously viewed image is now in the upper half of the viewport (instead of at the top)
 
 
 v.0.5.3

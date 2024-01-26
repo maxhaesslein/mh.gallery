@@ -58,6 +58,14 @@ hr {
 	opacity: 0.2;
 }
 
+.anchor {
+	position: absolute;
+}
+
+	.thumbnail-anchor {
+		margin-top: -33vh;
+	}
+
 main {
 	min-height: calc(100vh - 2.8em);
 }
