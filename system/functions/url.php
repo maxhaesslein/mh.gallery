@@ -71,6 +71,12 @@ function sanitize_string( $string, $keep_file_extension = false ) {
 
 	$string = str_replace( ['-_', '_-'], '_', $string );
 
+	// replace multipe '_' with one '_'
+	$string = preg_replace( '/_+/', '_', $string );
+
+	// replace multipe '-' with one '-'
+	$string = preg_replace( '/-+/', '-', $string );
+
 	if( $keep_file_extension && $file_extension ) {
 		$string .= '.'. $file_extension;
 	}
