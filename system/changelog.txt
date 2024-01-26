@@ -1,3 +1,8 @@
+v.0.5.4
+
+- don't allow file extensions in gallery slugs
+
+
 v.0.5.3
 
 - new sort option `random` to sort galleries randomly on every load

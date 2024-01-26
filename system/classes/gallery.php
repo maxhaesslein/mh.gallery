@@ -317,7 +317,7 @@ class Gallery {
 			$slug = end($path);
 		}
 
-		$slug = sanitize_string($slug, true);
+		$slug = sanitize_string($slug);
 
 		if( $slug == 'content' ) $slug = ''; // the root collection should return an empty slug
 
