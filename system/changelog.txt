@@ -1,5 +1,6 @@
 v.0.5.4
 
+- use folder name as fallback title (instead of slug)
 - don't allow file extensions in gallery slugs
 - allow `~` in URIs
 - change spaces to `_` in URIs (was `-`)

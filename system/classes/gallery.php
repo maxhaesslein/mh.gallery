@@ -278,7 +278,9 @@ class Gallery {
 		}
 
 		if( ! $title ) {
-			$title = $this->get_slug( true );
+			$path = explode('/', $this->path);
+			$path = array_filter($path); // remove empty elements
+			$title = end($path);
 		}
 
 		$allowed_tags = get_config('allowed_tags');
