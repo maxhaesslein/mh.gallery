@@ -1,5 +1,7 @@
 v.0.5.4
 
+if you depend on automatically generated slugs, this update may introduce breaking changes (depending on your folder names)
+
 - use folder name as fallback title (instead of slug)
 - don't allow file extensions in gallery slugs
 - allow `~` in URIs
