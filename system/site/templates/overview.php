@@ -17,7 +17,9 @@ $title = $gallery->get_title();
 $description = $gallery->get_description();
 
 $overview_link = $gallery->get_parent_url();
-$overview_link .= '#'.$gallery->get_slug();
+if( $overview_link ) {
+	$overview_link .= '#'.$gallery->get_slug();
+}
 
 $imagecount = $gallery->get_image_count();
 
