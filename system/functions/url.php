@@ -65,7 +65,7 @@ function sanitize_string( $string, $keep_file_extension = false ) {
 	$string = str_replace(array("ä", "ö", "ü", "ß"), array("ae", "oe", "ue", "ss"), $string);
 
 	// replace special characters with '-'
-	$string = preg_replace('/[^\p{L}\p{N}_]+/u', '-', $string);
+	$string = preg_replace('/[^\p{L}\p{N}_~]+/u', '-', $string);
 
 	if( $keep_file_extension && $file_extension ) {
 		$string .= '.'. $file_extension;
