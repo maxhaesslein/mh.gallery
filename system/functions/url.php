@@ -57,18 +57,22 @@ function sanitize_string( $string, $keep_file_extension = false ) {
 		}
 	}
 
-	$string = str_replace(' ', '_', $string);
+	// replace space with '_'
+	$string = str_replace( ' ', '_', $string );
 
 	// remove non-printable ASCII
 	$string = preg_replace('/[\x00-\x1F\x7F]/u', '', $string);
 
+	// change to lowercase
 	$string = mb_strtolower($string);
 
+	// replace german umlauts
 	$string = str_replace(array("ä", "ö", "ü", "ß"), array("ae", "oe", "ue", "ss"), $string);
 
 	// replace special characters with '-'
 	$string = preg_replace('/[^\p{L}\p{N}_~]+/u', '-', $string);
 
+	// change '-_' and '_-' to only '_'
 	$string = str_replace( ['-_', '_-'], '_', $string );
 
 	// replace multipe '_' with one '_'
