@@ -8,6 +8,7 @@ if you depend on automatically generated slugs, this update may introduce breaki
 - change spaces to `_` in URIs (was `-`)
 - remove additional `-` before or after `_` from URIs
 - when returning to overview, the previously viewed image is now in the upper half of the viewport (instead of at the top)
+- when returning from a gallery overview to the parent overview, scroll the previous (sub-)gallery into view
 
 
 v.0.5.3

@@ -15,7 +15,9 @@ if( $gallery->is_download_gallery_enabled() ) {
 
 $title = $gallery->get_title();
 $description = $gallery->get_description();
-$overview_url = $gallery->get_parent_url();
+
+$overview_link = $gallery->get_parent_url();
+$overview_link .= '#'.$gallery->get_slug();
 
 $imagecount = $gallery->get_image_count();
 
@@ -24,9 +26,9 @@ $imagecount = $gallery->get_image_count();
 
 	<?php
 
-	if( $overview_url ) {
+	if( $overview_link ) {
 		?>
-		<a class="button" href="<?= $overview_url ?>">&laquo; overview</a>
+		<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
 		<?php
 	}
 
@@ -56,6 +58,7 @@ $imagecount = $gallery->get_image_count();
 				$title = $sub_gallery->get_title();
 				?>
 				<li>
+					<a class="thumbnail-anchor anchor" name="<?= $sub_gallery->get_slug() ?>"></a>
 					<a href="<?= $url ?>">
 						<?php
 						if( $thumbnail ) {
