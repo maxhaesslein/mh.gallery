@@ -57,6 +57,8 @@ function sanitize_string( $string, $keep_file_extension = false ) {
 		}
 	}
 
+	$string = str_replace(' ', '_', $string);
+
 	// remove non-printable ASCII
 	$string = preg_replace('/[\x00-\x1F\x7F]/u', '', $string);
 
