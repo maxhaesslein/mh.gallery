@@ -3,6 +3,7 @@ v.0.5.4
 - don't allow file extensions in gallery slugs
 - allow `~` in URIs
 - change spaces to `_` in URIs (was `-`)
+- remove additional `-` before or after `_` from URIs
 
 
 v.0.5.3

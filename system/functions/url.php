@@ -69,6 +69,8 @@ function sanitize_string( $string, $keep_file_extension = false ) {
 	// replace special characters with '-'
 	$string = preg_replace('/[^\p{L}\p{N}_~]+/u', '-', $string);
 
+	$string = str_replace( ['-_', '_-'], '_', $string );
+
 	if( $keep_file_extension && $file_extension ) {
 		$string .= '.'. $file_extension;
 	}
