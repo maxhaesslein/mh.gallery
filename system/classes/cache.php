@@ -119,6 +119,8 @@ class Cache {
 
 		if( get_config('cache_disabled') ) return 0;
 
+		if( ! $this->exists() ) return 0;
+
 		if( $this->filesize ) return $this->filesize;
 
 		$this->filesize = filesize(get_abspath($this->cache_file));
