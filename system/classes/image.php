@@ -419,6 +419,8 @@ class Image {
 
 		foreach( $picture as $type => $sources ) {
 
+			if( $type == 'avif' && ! $this->avif_supported() ) continue; // skip avif, if we do not support generating avif images
+
 			$srcset = [];
 			foreach( $sources as $size => $image_url_args ) {
 
@@ -436,8 +438,6 @@ class Image {
 			$srcset = implode(', ', $srcset);
 
 			if( $type != 'jpg' ) { // webp/avif/...
-
-				if( $type == 'avif' && ! $this->avif_supported() ) continue; // skip avif, if we do not support generating avif images
 
 				$html .= '<source ';
 				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
