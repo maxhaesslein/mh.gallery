@@ -65,7 +65,12 @@ class Cache {
 			$folder = new Folder($this->cache_folder);
 			$files = $folder->get();
 			foreach( $files as $filepath ) {
+
+				if( is_dir($filepath) ) continue;
+				if( str_ends_with($filepath, '.placeholder') ) continue;
+				
 				$filename = str_replace($this->cache_folder, '', $filepath);
+
 				if( str_starts_with($filename, $this->hash) ) {
 					$current_timestamp = time();
 					$expire_timestamp = $this->get_expire_timestamp( $filename );
@@ -137,6 +142,9 @@ class Cache {
 			debug( 'could not create cache file', $this->cache_file );
 		}
 
+		// remove placeholder file, we no longer need it
+		$this->remove_placeholder_file();
+
 		return $this;
 	}
 
@@ -144,6 +152,7 @@ class Cache {
 	function remove() {
 		if( ! $this->exists() ) return;
 
+		$this->remove_placeholder_file(); // delete placeholder file, if it exists
 		unlink(get_abspath($this->cache_file));
 	}
 
@@ -187,11 +196,15 @@ class Cache {
 		foreach( $files as $file ) {
 
 			if( is_dir($file) ) continue;
+			if( str_ends_with($file, '.placeholder') ) continue;
 
 			$expire_timestamp = $this->get_expire_timestamp( $file );
 
 			if( $expire_timestamp < $current_timestamp ) { // cachefile too old
+				// delete old cache file; fail silently
+
 				@unlink(get_abspath($file)); // delete old cache file; fail silently
+
 			}
 
 		}
@@ -208,6 +221,53 @@ class Cache {
 		$expire_timestamp = (int) $expire_timestamp[0];
 
 		return $expire_timestamp;
+	}
+
+
+	function get_placeholder_filename( $include_path = false ) {
+
+		$filename = $this->get_file_name();
+
+		// remove timestamp and file extension
+		$filename_explode = explode( '_', $filename );
+		unset( $filename_explode[count($filename_explode)-1] );
+		$filename = implode('_', $filename_explode);
+
+		$filename .= '.placeholder';
+
+		if( $include_path ) {
+			$filename = $this->cache_folder.$filename;
+		}
+
+		return $filename;
+	}
+
+
+	function add_placeholder_file() {
+
+		// NOTE: we may need a placeholder file to determine, if the cache file is allowed to be created at a later point. a placeholder file has no timestamp and no content.
+
+		if( $this->exists() ) return $this;
+
+		$placeholder_file = $this->get_placeholder_filename(true);
+
+		if( ! touch(get_abspath($placeholder_file)) ) {
+			debug( 'could not create cache placeholder file', $placeholder_file );
+		}
+
+		return $this;
+	}
+
+
+	function remove_placeholder_file() {
+
+		$placeholder_file = $this->get_placeholder_filename(true);
+
+		if( ! file_exists(get_abspath($placeholder_file)) ) return $this;
+
+		@unlink(get_abspath($placeholder_file));
+
+		return $this;
 	}
 
 };
