@@ -419,9 +419,14 @@ class Image {
 
 		foreach( $picture as $type => $sources ) {
 
-			if( $type == 'avif' && ! $this->avif_supported() ) continue; // skip avif, if we do not support generating avif images
+			if( $type == 'avif' && ! $this->avif_supported() ) {
+				// skip avif, if we do not support generating avif images
+				continue;
+			}
+
 
 			$srcset = [];
+
 			foreach( $sources as $size => $image_url_args ) {
 
 				$image_url_args['type'] = $type;
@@ -437,13 +442,8 @@ class Image {
 
 			$srcset = implode(', ', $srcset);
 
-			if( $type != 'jpg' ) { // webp/avif/...
 
-				$html .= '<source ';
-				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-				$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
-
-			} else { // jpg
+			if( $type == 'jpg' ) { 
 
 				$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
 					if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
@@ -451,7 +451,14 @@ class Image {
 				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
 				$html .= 'srcset="'.$srcset.'" alt="'.$alt.'">';
 
+			} else { // webp/avif/...
+
+				$html .= '<source ';
+				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
+				$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
+
 			}
+
 
 		}
 
