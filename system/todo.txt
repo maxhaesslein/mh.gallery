@@ -1,4 +1,8 @@
 
+- placeholder file update / image generation update
+	- with large galleries, checking for .placeholder files takes way too long (we do a lot of work by creating the Cache first and then searching for the .placeholder file); this needs to be streamlined and maybe not use the Cache object, but instead directly target files?
+	- another small enhancement: the first time we create a new image, the linked file has another timestamp then the final image will have, so if you get a thumbnail list with newly generated files and open one of those files in a new window, this file will not exist, because in the background the timestamp changed. we could add a timestamp to the .placeholder file, and use that for the new file instead?
+
 - theme support
 
 - design update
