@@ -290,7 +290,7 @@ class Image {
 
 	function get_image_url( $query = [] ) {
 
-		$this->create_file($query);
+		$this->create_placeholder_file($query);
 
 		$url = get_baseurl($this->get_image_path($query));
 
@@ -298,15 +298,13 @@ class Image {
 	}
 
 
-	function create_file( $query ) {
+	function create_placeholder_file( $query ) {
 
 		// NOTE: this checks, if the cached version of this image file exists. if it does not exist, it creates an empty placeholder file, so that when we generate the file, we know that we are approved to create this image file. this is a safety measure, so that the server can't be killed by accessing a lot of different versions of a file.
 
 		$cache = $this->get_cache($query);
 
 		$cache->add_placeholder_file();
-
-		// TODO: check for placeholder file when creating and saving image data
 
 	}
 
@@ -678,6 +676,12 @@ class Image {
 			'quality' => $quality,
 		];
 		$cache = $this->get_cache( $query );
+
+
+		// check, if a placeholder file exists. if it does not exist, we are not allowed to create this image! see create_placeholder_file() for more info.
+		if( ! $cache->has_placeholder() ) {
+			return false;
+		}
 
 		if( $type == 'jpg' ) {
 

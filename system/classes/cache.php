@@ -259,6 +259,16 @@ class Cache {
 	}
 
 
+	function has_placeholder() {
+
+		$placeholder_file = $this->get_placeholder_filename(true);
+
+		if( file_exists(get_abspath($placeholder_file)) ) return true;
+
+		return false;
+	}
+
+
 	function remove_placeholder_file() {
 
 		$placeholder_file = $this->get_placeholder_filename(true);

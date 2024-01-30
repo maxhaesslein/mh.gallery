@@ -1,3 +1,8 @@
+v.0.5.5
+
+- create a placeholder for to-be-cached image files, so we can validate that the specific image is allowed to be generated. this will ensure that only sizes are allowed to be generated, that we explicitly want to create.
+
+
 v.0.5.4
 
 if you depend on automatically generated slugs, this update may introduce breaking changes (depending on your folder names)
