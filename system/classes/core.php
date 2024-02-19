@@ -146,7 +146,16 @@ class Core {
 
 	function refresh_cache(){
 
-		// TODO: only call once a day or something like that
+		// only refresh the cache once a day:
+		$last_refresh_cache = new Cache( 'global', 'last_cache_refresh' );
+		$last_refresh_timestamp = $last_refresh_cache->get_data();
+
+		$day_in_seconds = 60*60*24;
+		if( $last_refresh_timestamp && $last_refresh_timestamp < time()+$day_in_seconds ) {
+			return;
+		}
+
+		$last_refresh_cache->add_data(time());
 
 
 		// clear out old cache files:
