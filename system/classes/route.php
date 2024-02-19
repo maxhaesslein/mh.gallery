@@ -110,7 +110,6 @@ class Route {
 				$type = array_pop($image_name);
 				$image_name = implode('.', $image_name);
 				$image_name = explode('_', $image_name);
-				$cache_fragment = array_pop($image_name);
 				$image_args = array_pop($image_name);
 				$image_name = implode('_', $image_name);
 
