@@ -110,7 +110,6 @@ class Route {
 				$type = array_pop($image_name);
 				$image_name = implode('.', $image_name);
 				$image_name = explode('_', $image_name);
-				$cache_fragment = array_pop($image_name);
 				$image_args = array_pop($image_name);
 				$image_name = implode('_', $image_name);
 
@@ -124,8 +123,6 @@ class Route {
 
 					$width = (int) $size[0];
 					$height = (int) $size[1];
-
-					$type = array_pop($image_args);
 
 					$crop = array_shift($image_args);
 					if( $crop == 'crop' ) {

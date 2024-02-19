@@ -274,7 +274,7 @@ class Image {
 
 		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
 		if( $args['crop'] ) $filename .= '-crop';
-		$filename .= '-'.$args['quality'].'-'.$args['type'].'.'.$args['type'];
+		$filename .= '-'.$args['quality'].'.'.$args['type'];
 
 		return $filename;
 	}
@@ -609,7 +609,7 @@ class Image {
 	function get_cache( $query = [] ) {
 
 		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $query );
-		$cache = new Cache( 'image', $cache_filename, true, false, true );
+		$cache = new Cache( 'image', $cache_filename, true, true );
 
 		return $cache;
 	}

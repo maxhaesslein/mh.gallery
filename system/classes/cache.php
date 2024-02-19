@@ -10,10 +10,9 @@ class Cache {
 	private $hash;
 	private $cache_file_name;
 	private $filesize;
-	private $lifetime;
 	private $file_extension;
 	
-	function __construct( $type, $input, $input_is_hash = false, $lifetime = false, $keep_file_extension = false ) {
+	function __construct( $type, $input, $input_is_hash = false, $keep_file_extension = false ) {
 
 		if( ! $type && ! $input ) return;
 
@@ -47,47 +46,15 @@ class Cache {
 			$this->hash = get_hash( $input );
 		}
 
-		if( ! $lifetime ) {
-			$lifetime = get_config( 'cache_lifetime' );
-		}
-		$this->lifetime = $lifetime;
-
-		$this->cache_file_name = $this->get_file_name( false );
+		$this->cache_file_name = $this->get_file_name();
 		$this->cache_file = $this->get_file_path();
 
 	}
 
 
-	function get_file_name( $force_new_filename = false ){
+	function get_file_name(){
 
-		if( ! $force_new_filename ) {
-			$folderpath = $this->cache_folder;
-			$folder = new Folder($this->cache_folder);
-			$files = $folder->get();
-			foreach( $files as $filepath ) {
-
-				if( is_dir($filepath) ) continue;
-				if( str_ends_with($filepath, '.placeholder') ) continue;
-				
-				$filename = str_replace($this->cache_folder, '', $filepath);
-
-				if( str_starts_with($filename, $this->hash) ) {
-					$current_timestamp = time();
-					$expire_timestamp = $this->get_expire_timestamp( $filename );
-					if( $expire_timestamp < $current_timestamp ) { // cachefile too old
-						@unlink(get_abspath($filepath)); // delete old cache file; fail silently
-						break;
-					}
-					return $filename;
-				}
-			}
-		}
-
-		// no file yet, create new name:
-		
-		$target_timestamp = time() + $this->lifetime;
-
-		$filename = $this->hash.'_'.$target_timestamp;
+		$filename = $this->hash;
 
 		if( $this->file_extension ) $filename .= '.'.$this->file_extension;
 
@@ -112,7 +79,7 @@ class Cache {
 
 		if( ! $this->exists() ) return false;
 
-		if( get_config('cache_disabled') ) return false; // cache is disabled
+		if( get_config('cache_disabled') ) return false;
 
 		$cache_content = file_get_contents(get_abspath($this->cache_file));
 
@@ -136,7 +103,7 @@ class Cache {
 
 	function add_data( $data ) {
 
-		if( get_config('cache_disabled') ) return $this; // cache is disabled, don't write any data
+		if( get_config('cache_disabled') ) return $this; // don't write any data
 
 		if( ! file_put_contents( get_abspath($this->cache_file), $data ) ) {
 			debug( 'could not create cache file', $this->cache_file );
@@ -160,12 +127,7 @@ class Cache {
 	function refresh_lifetime() {
 		if( ! $this->exists() ) return $this;
 
-		$old_filename = $this->get_file_name();
-		$new_filename = $this->get_file_name(true);
-		if( rename( $this->cache_folder.$old_filename, $this->cache_folder.$new_filename ) ) {
-			$this->cache_file_name = $new_filename;
-			$this->cache_file = $this->cache_folder.$this->cache_file_name;
-		}
+		touch( $this->cache_file );
 
 		return $this;
 	}
@@ -185,40 +147,11 @@ class Cache {
 	}
 
 
-	function clear_cache_folder(){
-		// this function clears out old cache files.
-
-		$folder = new Folder('cache/', false, true);
-		$files = $folder->get();
-
-		$current_timestamp = time();
-
-		foreach( $files as $file ) {
-
-			if( is_dir($file) ) continue;
-			if( str_ends_with($file, '.placeholder') ) continue;
-
-			$expire_timestamp = $this->get_expire_timestamp( $file );
-
-			if( $expire_timestamp < $current_timestamp ) { // cachefile too old
-				// delete old cache file; fail silently
-
-				@unlink(get_abspath($file)); // delete old cache file; fail silently
-
-			}
-
-		}
-	}
-
-
 	function get_expire_timestamp( $file ) {
-		
-		$file_explode = explode( '_', $file );
-		$expire_timestamp = end($file_explode);
 
-		// remove file extension, if provided:
-		$expire_timestamp = explode('.', $expire_timestamp);
-		$expire_timestamp = (int) $expire_timestamp[0];
+		$timestamp = filemtime( $this->cache_file );
+
+		$expire_timestamp = $timestamp + get_config( 'cache_lifetime' );
 
 		return $expire_timestamp;
 	}
