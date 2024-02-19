@@ -1,3 +1,8 @@
+v.0.5.5
+
+- …
+
+
 v.0.5.4
 
 if you depend on automatically generated slugs, this update may introduce breaking changes (depending on your folder names)
