@@ -159,13 +159,8 @@ class Cache {
 
 	function get_placeholder_filename( $include_path = false ) {
 
-		$filename = $this->get_file_name();
-
-		// remove timestamp and file extension
-		$filename_explode = explode( '_', $filename );
-		unset( $filename_explode[count($filename_explode)-1] );
-		$filename = implode('_', $filename_explode);
-
+		$filename = $this->hash;
+		
 		$filename .= '.placeholder';
 
 		if( $include_path ) {
