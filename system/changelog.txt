@@ -1,17 +1,14 @@
+v.0.6.0
 
+ all cache files will be re-created with this update. old cache files should be cleaned out automatically after 30 days, but you can also manually delete everything in the `cache/` folder when updating to save some space.
 
 - create a placeholder for to-be-cached image files, so we can validate that the specific image is allowed to be generated. this will ensure that only sizes are allowed to be generated, that we explicitly want to create.
-
-
-v.0.5.5
-
 - show the PHP execution time as a HTML comment before the closing </body> tag, if debug mode is active
 - new config option `webp_enabled` with default value `true`; set to `false` to disable webp support
 - the cache now uses the filemtime instead of a filename fragment to determine the cache file age
 - the config option `zip_lifetime` was removed (it now uses `cache_lifetime` instead)
-- better cache handling (this means, all cachefiles will be re-created with this update. old cachefiles should be cleaned out automatically, but you can also manually delete everything in the `cache/` folder when updating)
+- updated cache handling
 - small bug fixes & enhancements
->>>>>>> dev
 
 
 v.0.5.4
