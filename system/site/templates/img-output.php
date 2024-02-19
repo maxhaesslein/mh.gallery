@@ -17,4 +17,6 @@ if( $args['quality'] ) {
 	$image->set_quality($args['quality']);
 }
 
-$image->output();
+if( ! $image->output() ) { // output the image and check, if this fails; if it does, show error:
+	echo 'could not load image';
+}
