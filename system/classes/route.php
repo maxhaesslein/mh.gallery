@@ -25,7 +25,7 @@ class Route {
 		}
 
 		if( $mode == 'download' ) {
-			$request[count($request)-1] = str_replace('.zip', '', $request[count($request)-1]);
+			$request[count($request)-1] = preg_replace( '/\.zip$/', '', $request[count($request)-1] );
 		}
 
 

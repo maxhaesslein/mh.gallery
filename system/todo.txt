@@ -14,6 +14,8 @@
 
 - support for sub-pages (for example an 'about' or 'imprint' page)
 
+- sort option 'random' re-sorts on every request; if we want to keep this option, we need to make sure that it is at least consistent (maybe save the sort order in a session variable, and re-sort every time the gallery overview get's viewed?)
+
 - image display
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
 	- support for image alt tag
@@ -34,3 +36,5 @@
 
 - support for heic/heif as source images
 - support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research
+
+- performance enhancements, so we can possibly use galleries with hundreds or thousands of images

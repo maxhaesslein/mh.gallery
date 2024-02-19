@@ -21,6 +21,7 @@ return [
 	'download_gallery_enabled' => true, // set to false to disable download of the whole gallery
 	'download_filetype' => 'jpg', // set to false to use original filetype
 	'site_sharing_tags' => true, // add OpenGraph sharing tags to HTML head, for better link previews
+	'webp_enabled' => true,
 	'avif_enabled' => false, // for now, avif is disabled by default. if you enable it, there is still an additional check to see if the hosting environment supports avif. you need to be at least on PHP 8.1 to use avif; TODO: enable avif by default
 	'image_sort_order' => 'filename', // sort images by this option; can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
 	'gallery_sort_order' => 'title', // sort (sub-)galleries by this option; can be 'title', 'slug', 'foldername' (folder on disk); can be overwritten via gallery.txt for sub-galleries

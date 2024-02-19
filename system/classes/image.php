@@ -90,7 +90,7 @@ class Image {
 			$this->set_image_type('png');
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
 			$this->set_image_type('webp');
-		} elseif( $this->avif_supported() && $this->image_type == IMAGETYPE_AVIF ) {
+		} elseif( $this->type_supported('avif') && $this->image_type == IMAGETYPE_AVIF ) {
 			$this->set_image_type('avif');
 		} else {
 			debug( 'unknown image type '.$this->image_type);
@@ -105,15 +105,18 @@ class Image {
 	}
 
 
-	function avif_supported() {
+	function type_supported( $type ) {
 
-		if( ! get_config('avif_enabled') ) return false;
+		if( $type == 'jpg' || $type == 'jpeg' ) return true;
 
-		if( ! defined('IMAGETYPE_AVIF') ) return false;
+		// config can have 'webp_enabled', 'avif_enabled' and so on ..
+		if( ! get_config($type.'_enabled') ) return false;
 
-		if( ! function_exists('imagecreatefromavif') ) return false;
+		if( ! defined('IMAGETYPE_'.strtoupper($type)) ) return false;
 
-		if( ! function_exists('imageavif') ) return false;
+		if( ! function_exists('imagecreatefrom'.$type) ) return false;
+
+		if( ! function_exists('image'.$type) ) return false;
 
 		return true;
 	}
@@ -432,11 +435,9 @@ class Image {
 
 		foreach( $picture as $type => $sources ) {
 
-			if( $type == 'avif' && ! $this->avif_supported() ) {
-				// skip avif, if we do not support generating avif images
+			if( ! $this->type_supported($type) ) {
 				continue;
 			}
-
 
 			$srcset = [];
 
@@ -493,7 +494,7 @@ class Image {
 		} elseif( $new_type == 'webp' ) {
 			$this->mime_type = 'image/webp';
 			$this->output_type = 'webp';
-		} elseif( $this->avif_supported() && $new_type == 'avif' ) {
+		} elseif( $this->type_supported('avif') && $new_type == 'avif' ) {
 			$this->mime_type = 'image/avif';
 			$this->output_type = 'avif';
 		}
@@ -536,7 +537,7 @@ class Image {
 			imageAlphaBlending( $image, false );
 			imageSaveAlpha( $image, true );
 
-		} elseif( $this->avif_supported() && $this->image_type == IMAGETYPE_AVIF ) {
+		} elseif( $this->type_supported('avif') && $this->image_type == IMAGETYPE_AVIF ) {
 
 			$image = imagecreatefromavif( $this->path );
 
@@ -716,7 +717,7 @@ class Image {
 			header( 'Content-Type: image/webp' );
 			echo $data;
 
-		} elseif( $this->avif_supported() && $type == 'avif' ) {
+		} elseif( $this->type_supported('avif') && $type == 'avif' ) {
 
 			ob_start();
 			imageavif( $image_blob );

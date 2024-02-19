@@ -11,5 +11,7 @@ if( doing_ajax() ) return;
 	<a href="https://github.com/maxhaesslein/mh.gallery/" target="_blank" rel="noopener">mh.gallery v.<?= get_version() ?></a>
 </footer>
 
+<?php measure_execution_time(); ?>
+
 </body>
 </html>
