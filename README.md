@@ -119,7 +119,9 @@ Create a folder called `custom/assets/js/` and add `.js` files into this folder.
 
 All thumbnails and images will be resized on view. The resized images will be automatically cached inside the `cache/` subfolder. Old cached files will be cleared out automatically after about 30 days. You can disable the cache to save space (at the cost of loading time) via the config option `'cache_disabled' => true` or change the lifetime of cache files (in seconds) via the config option `cache_lifetime`. If possible, the cache should never be disabled.
 
-### avif support
+### Modern image formats
+
+webp support is enabled by default. You can disable it by adding `'webp_enabled' => false` to the `custom/config.php`.
 
 avif support is disabled by default, until we reach a more stable version. You can enable it by adding `'avif_supported' => true` to the `custom/config.php`. You need at least `PHP 8.1`, `GD` compiled with avif support and `libavif v.0.8.2` or higher.
 
