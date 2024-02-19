@@ -1,4 +1,7 @@
 
+- rewrite cache handling. cache filenames should not have a trailing _{timestamp}, but instead use the filemtime() to determine the age. this solves the problem, that image file names change when generating them (and then reloading the page)
+	- maybe we should get rid of the Cache() class and handle it by ourselves?
+
 - image placeholders. see branch 'image-placeholder' for current progress & todos
 
 - theme support
