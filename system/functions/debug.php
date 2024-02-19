@@ -15,3 +15,20 @@ function debug( ...$messages ) {
 	echo '</pre></div>';
 
 }
+
+
+function measure_execution_time() {
+
+	if( ! get_config('debug') ) return;
+
+	global $global_script_execution_start_time;
+
+	if( ! $global_script_execution_start_time ) return;
+
+	$diff = hrtime(true)-$global_script_execution_start_time;
+	$diff /= 1e+6; // nanoseconds to milliseconds
+
+	?><!-- execution time was <?= $diff ?>ms -->
+	<?php
+
+}

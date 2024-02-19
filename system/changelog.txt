@@ -1,6 +1,7 @@
 v.0.5.5
 
-- …
+- show the PHP execution time as a HTML comment before the closing </body> tag, if debug mode is active
+- small bug fixes & enhancements
 
 
 v.0.5.4
