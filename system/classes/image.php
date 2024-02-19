@@ -274,7 +274,7 @@ class Image {
 
 		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
 		if( $args['crop'] ) $filename .= '-crop';
-		$filename .= '-'.$args['quality'].'-'.$args['type'].'.'.$args['type'];
+		$filename .= '-'.$args['quality'].'.'.$args['type'];
 
 		return $filename;
 	}

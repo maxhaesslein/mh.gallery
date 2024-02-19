@@ -4,6 +4,7 @@ v.0.5.5
 - new config option `webp_enabled` with default value `true`; set to `false` to disable webp support
 - the cache now uses the filemtime instead of a filename fragment to determine the cache file age
 - the config option `zip_lifetime` was removed (it now uses `cache_lifetime` instead)
+- better cache handling (this means, all cachefiles will be re-created with this update. old cachefiles should be cleaned out automatically, but you can also manually delete everything in the `cache/` folder when updating)
 - small bug fixes & enhancements
 
 
