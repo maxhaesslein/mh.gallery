@@ -3,6 +3,7 @@ v.0.5.5
 - show the PHP execution time as a HTML comment before the closing </body> tag, if debug mode is active
 - new config option `webp_enabled` with default value `true`; set to `false` to disable webp support
 - the cache now uses the filemtime instead of a filename fragment to determine the cache file age
+- the config option `zip_lifetime` was removed (it now uses `cache_lifetime` instead)
 - small bug fixes & enhancements
 
 

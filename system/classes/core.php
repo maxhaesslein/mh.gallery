@@ -146,10 +146,43 @@ class Core {
 
 	function refresh_cache(){
 
-		$cache = new Cache( false, false );
+		// TODO: only call once a day or something like that
 
-		$cache->clear_cache_folder();
-		
+
+		// clear out old cache files:
+
+		$folder = new Folder('cache/', false, true);
+		$files = $folder->get();
+
+		$timestamp_limit = time() + get_config( 'cache_lifetime' );
+
+		foreach( $files as $file ) {
+
+			if( is_dir($file) ) continue;
+
+			$timestamp = filemtime( get_abspath($file) );
+
+			if( $timestamp > $timestamp_limit ) { // cachefile too old
+				@unlink(get_abspath($file)); // delete old cache file; fail silently
+			}
+
+		}
+
+
+		// delete empty folders:
+
+		$subfolders_collection = new Folder('cache/', 'folder', true);
+		$subfolders = $subfolders_collection->get();
+
+		foreach( $subfolders as $subfolder ) {
+			$files_collection = new Folder( $subfolder, false, true );
+			$files = $files_collection->get();
+
+			if( count($files) === 0 ) {
+				@rmdir(get_abspath($subfolder));
+			}
+		}
+
 	}
 
 

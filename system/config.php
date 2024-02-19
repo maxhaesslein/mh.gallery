@@ -15,7 +15,6 @@ return [
 	'thumbnail_aspect_ratio' => 3/2, // the aspect ratio of thumbnails; width/height
 	'cache_disabled' => false, // you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_lifetime' => 60*60*24*30, // cache time: 30 days in seconds
-	'zip_lifetime' => 60*60*24*7, // cache time of gallery zip files; 7 days in seconds
 	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'], // search for these extensions while loading gallery images; TODO: add avif
 	'download_image_enabled' => true, // set to false to disable download of single images
 	'download_gallery_enabled' => true, // set to false to disable download of the whole gallery

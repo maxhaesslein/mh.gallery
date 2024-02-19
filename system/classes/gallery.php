@@ -676,8 +676,7 @@ class Gallery {
 		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
 		$cache_filename = $this->get_zip_filename().$this->get_image_count();
 
-		$cache_lifetime = get_config( 'zip_lifetime' );
-		$cache = new Cache( 'zip', $cache_filename, false, $cache_lifetime );
+		$cache = new Cache( 'zip', $cache_filename );
 		
 		return $cache;
 	}

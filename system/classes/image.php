@@ -596,7 +596,7 @@ class Image {
 	function get_cache( $query = [] ) {
 
 		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $query );
-		$cache = new Cache( 'image', $cache_filename, true, false, true );
+		$cache = new Cache( 'image', $cache_filename, true, true );
 
 		return $cache;
 	}

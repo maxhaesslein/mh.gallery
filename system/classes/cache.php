@@ -10,10 +10,9 @@ class Cache {
 	private $hash;
 	private $cache_file_name;
 	private $filesize;
-	private $lifetime;
 	private $file_extension;
 	
-	function __construct( $type, $input, $input_is_hash = false, $lifetime = false, $keep_file_extension = false ) {
+	function __construct( $type, $input, $input_is_hash = false, $keep_file_extension = false ) {
 
 		if( ! $type && ! $input ) return;
 
@@ -46,11 +45,6 @@ class Cache {
 		} else {
 			$this->hash = get_hash( $input );
 		}
-
-		if( ! $lifetime ) {
-			$lifetime = get_config( 'cache_lifetime' );
-		}
-		$this->lifetime = $lifetime;
 
 		$this->cache_file_name = $this->get_file_name();
 		$this->cache_file = $this->get_file_path();
@@ -149,37 +143,11 @@ class Cache {
 	}
 
 
-	// TODO: move this into core() or something, because this operates on all cache files, not only the current one
-	function clear_cache_folder(){
-		
-		return; // DEBUG: disabled atm
-
-		// this function clears out old cache files.
-
-		$folder = new Folder('cache/', false, true);
-		$files = $folder->get();
-
-		$current_timestamp = time();
-
-		foreach( $files as $file ) {
-
-			if( is_dir($file) ) continue;
-
-			$expire_timestamp = $this->get_expire_timestamp( $file );
-
-			if( $expire_timestamp < $current_timestamp ) { // cachefile too old
-				@unlink(get_abspath($file)); // delete old cache file; fail silently
-			}
-
-		}
-	}
-
-
 	function get_expire_timestamp( $file ) {
 
 		$timestamp = filemtime( $this->cache_file );
 
-		$expire_timestamp = $timestamp + $this->lifetime;
+		$expire_timestamp = $timestamp + get_config( 'cache_lifetime' );
 
 		return $expire_timestamp;
 	}
