@@ -207,3 +207,43 @@ function doing_ajax() {
 
 	return DOING_AJAX;
 }
+
+
+function menu( $type ) {
+
+	// NOTE: currently, we only support $type = 'footer'; may be expanded later
+	if( $type != 'footer' ) return;
+
+	$menu = get_config($type.'_menu');
+	if( ! $menu ) return;
+
+	?>
+	<menu class="footer-menu">
+		<?php
+		foreach( $menu as $item ) {
+			if( empty($item['title']) ) continue;
+		?>
+		<li>
+			<?php
+
+			if( ! empty($item['url']) ) {
+				echo '<a href="'.$item['url'].'"';
+				if( ! empty($item['target']) ) echo ' target="'.$item['target'].'"';
+				echo ' rel="noopener">';
+			}
+
+			echo $item['title'];
+
+			if( ! empty($item['url']) ) {
+				echo '</a>';
+			}
+
+			?>
+		</li>
+		<?php
+		}
+		?>
+	</menu>
+	<?php
+
+}

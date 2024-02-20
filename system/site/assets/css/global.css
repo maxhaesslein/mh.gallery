@@ -34,10 +34,15 @@ body {
 	}
 
 footer {
-	position: absolute;
-	right: 1em;
-	font-size: 0.7rem;
-	opacity: 0.4;
+	position: relative;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	margin-top: 1em;
+	box-sizing: border-box;
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
 }
 
 	footer a {
@@ -47,6 +52,29 @@ footer {
 		footer a:hover {
 			text-decoration: underline;
 		}
+
+	footer menu {
+		display: block;
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+		line-height: 1.3em;
+	}
+
+		footer menu li {
+			display: inline;
+		}
+		
+			footer menu li + li {
+				margin-left: 0.5em;
+			}
+
+	footer .gallery-copyright {
+		font-size: 0.7rem;
+		opacity: 0.4;
+		margin-left: 1em;
+		line-height: 1.3em;
+	}
 
 hr {
 	width: 100%;
@@ -67,7 +95,7 @@ hr {
 	}
 
 main {
-	min-height: calc(100vh - 2.8em);
+	min-height: calc(100vh - 4.8em);
 }
 
 picture {
