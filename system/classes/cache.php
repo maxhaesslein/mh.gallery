@@ -147,17 +147,7 @@ class Cache {
 	}
 
 
-	function get_expire_timestamp( $file ) {
-
-		$timestamp = filemtime( $this->cache_file );
-
-		$expire_timestamp = $timestamp + get_config( 'cache_lifetime' );
-
-		return $expire_timestamp;
-	}
-
-
-	function get_placeholder_filename( $include_path = false ) {
+	private function get_placeholder_filename( $include_path = false ) {
 
 		$filename = $this->get_file_name();
 		
@@ -202,7 +192,7 @@ class Cache {
 	}
 
 
-	function remove_placeholder_file() {
+	private function remove_placeholder_file() {
 
 		$placeholder_file = $this->get_placeholder_filename(true);
 

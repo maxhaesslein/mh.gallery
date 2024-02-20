@@ -18,7 +18,7 @@ class Folder {
 	}
 
 
-	function read_folder( $path = false, $filter = false, $recursive = false ) {
+	private function read_folder( $path = false, $filter = false, $recursive = false ) {
 
 		if( ! $path ) $path = $this->path;
 

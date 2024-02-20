@@ -17,7 +17,7 @@ class Config {
 	}
 
 
-	function load_config_file( $config_file ) {
+	private function load_config_file( $config_file ) {
 
 		if( ! file_exists($config_file) ) {
 			debug( 'config file not found', $config_file );

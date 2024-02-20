@@ -45,7 +45,8 @@ class Core {
 	}
 
 
-	function check_required_files_and_folders() {
+	private function check_required_files_and_folders() {
+
 		// NOTE: this checks, if all the files we need are there, and creates them if they are missing
 
 		// TODO: also check, if our content block with "# BEGIN mh.gallery" until "END mh.gallery" is present in the .htaccess file, because the user could have created their own .htaccess file.
@@ -90,7 +91,7 @@ class Core {
 	}
 
 
-	function check_hash_algo() {
+	private function check_hash_algo() {
 
 		$possible_algorithms = $this->config->get('hash_algorithm');
 
@@ -144,7 +145,7 @@ class Core {
 	}
 
 
-	function refresh_cache(){
+	private function refresh_cache(){
 
 		// only refresh the cache once a day:
 		$last_refresh_cache = new Cache( 'global', 'last_cache_refresh' );

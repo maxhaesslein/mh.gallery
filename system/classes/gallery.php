@@ -44,8 +44,6 @@ class Gallery {
 			$this->is_root_gallery = true;
 		}
 
-		$this->load_sub_galleries();
-
 	}
 	
 
@@ -87,7 +85,7 @@ class Gallery {
 	}
 
 
-	function inherit_setting( $setting_name ) {
+	private function inherit_setting( $setting_name ) {
 
 		$value = $this->get_config( $setting_name, true );
 
@@ -104,7 +102,7 @@ class Gallery {
 	}
 
 
-	function load_sub_galleries(){
+	private function load_sub_galleries(){
 
 		$galleries_folder = new Folder( $this->path, 'gallery.txt', true );
 		$subgallery_paths = $galleries_folder->get();
@@ -368,23 +366,15 @@ class Gallery {
 	}
 
 
-	function get_sub_gallery( $slug ) {
+	private function get_sub_gallery( $slug ) {
 
-		if( ! array_key_exists($slug, $this->sub_galleries) ) {
+		$sub_galleries = $this->get_sub_galleries();
+
+		if( ! array_key_exists($slug, $sub_galleries) ) {
 			return false;
 		}
 
-		return $this->sub_galleries[$slug];
-	}
-
-
-	function sub_gallery_exists( $slug ) {
-
-		if( $this->get_sub_gallery($slug) ) {
-			return true;
-		}
-
-		return false;
+		return $sub_galleries[$slug];
 	}
 
 
@@ -398,13 +388,13 @@ class Gallery {
 
 	function get_image( $slug ) {
 
-		if( $this->images == NULL ) $this->load_images();
+		$images = $this->get_images();
 
 		$image_key = get_image_key_from_slug($slug);
 
-		if( ! array_key_exists($image_key, $this->images) ) return false;
+		if( ! array_key_exists($image_key, $images) ) return false;
 
-		return $this->images[$image_key];
+		return $images[$image_key];
 	}
 
 
@@ -412,22 +402,26 @@ class Gallery {
 
 		if( $slug ) {
 
-			if( $this->get_sub_gallery($slug) ) {
-				return $this->get_sub_gallery($slug);
-			} else if( $this->get_image($slug) ) {
-				return $this->get_image($slug);
-			}
+			$sub_gallery = $this->get_sub_gallery($slug);
+			if( $sub_gallery ) return $sub_gallery;
+
+			$image = $this->get_image($slug);
+			if( $image ) return $image;
 
 			return false;
 		}
 
-		$gallery_content = array_merge($this->sub_galleries, $this->images);
+		$sub_galleries = $this->get_sub_galleries();
+
+		$images = $this->get_images();
+
+		$gallery_content = array_merge($sub_galleries, $images);
 
 		return $gallery_content;
 	}
 
 
-	function get_thumbnail_slug( $thumbnail_slug = false ) {
+	private function get_thumbnail_slug( $thumbnail_slug = false ) {
 
 		$images = $this->get_images();
 
@@ -450,7 +444,7 @@ class Gallery {
 	}
 
 
-	function sanitize_thumbnail_slug( $thumbnail_slug ) {
+	private function sanitize_thumbnail_slug( $thumbnail_slug ) {
 
 		$thumbnail_slug = remove_fileextension($thumbnail_slug);
 		$thumbnail_slug = sanitize_string($thumbnail_slug, true);
@@ -518,31 +512,19 @@ class Gallery {
 	}
 
 
-	function get_image_link( $slug ) {
-
-		if( $this->images == NULL ) $this->load_images();
-
-		$image_key = get_image_key_from_slug($slug);
-
-		if( ! array_key_exists($image_key, $this->images) ) return false;
-
-		return $this->images[$image_key]->get_link();
-	}
-
-
 	function get_image_count() {
 
-		if( $this->images == NULL ) $this->load_images();
+		$images = $this->get_images();
 
-		return count($this->images);
+		return count($images);
 	}
 
 
 	function get_adjacent_image_slug( $current_image_slug, $direction = 'next' ) {
 
-		if( $this->images == NULL ) $this->load_images();
+		$images = $this->get_images();
 
-		$indexes = array_keys($this->images);
+		$indexes = array_keys($images);
 
 		$current_image_key = get_image_key_from_slug($current_image_slug);
 		$current_index = array_search($current_image_key, $indexes);
@@ -564,7 +546,7 @@ class Gallery {
 	}
 
 
-	function load_images() {
+	private function load_images() {
 
 		$extensions = get_config('image_extensions');
 
@@ -672,8 +654,10 @@ class Gallery {
 	}
 
 
-	function get_zip_cache() {
+	private function get_zip_cache() {
+
 		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
+
 		$cache_filename = $this->get_zip_filename().$this->get_image_count();
 
 		$cache = new Cache( 'zip', $cache_filename );
@@ -682,7 +666,7 @@ class Gallery {
 	}
 
 
-	function get_missing_zip_images() {
+	private function get_missing_zip_images() {
 
 		$expected_images = $this->get_images();
 

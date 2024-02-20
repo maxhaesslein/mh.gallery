@@ -277,6 +277,7 @@ class Image {
 
 		$cache->add_placeholder_file();
 
+		return $this;
 	}
 
 

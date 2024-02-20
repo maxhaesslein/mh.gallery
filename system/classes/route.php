@@ -188,7 +188,7 @@ class Route {
 	}
 
 
-	function get_include_path( $template_name ) {
+	private function get_include_path( $template_name ) {
 
 		$template_path = 'templates/'.$template_name.'.php';
 		
@@ -202,6 +202,7 @@ class Route {
 		
 		return false;
 	}
+
 
 	function get( $option = false ) {
 
