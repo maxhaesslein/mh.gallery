@@ -36,7 +36,11 @@ if( $gallery->is_download_gallery_enabled() ) {
 	$download_gallery_url = $gallery->get_zip_download_url();
 }
 
-$image->resize(get_config('default_image_width'));
+
+$image_args = [
+	'width' => get_config('default_image_width')
+];
+
 
 snippet( 'header' );
 
@@ -89,7 +93,7 @@ if( ! doing_ajax() ) {
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
-		<?= $image->get_html() ?>
+		<?= $image->get_html( $image_args ) ?>
 	</div>
 	<div class="meta meta-bottom">
 		<ul class="info">

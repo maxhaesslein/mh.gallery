@@ -3,24 +3,19 @@
 class Image {
 	
 	private $filename;
+	private $file_extension;
 	private $path;
 	private $gallery;
 	private $slug; // this is the slug for the url
 	private $key; // this is the key this image inside the gallery images array
 
-	private $src_width;
-	private $src_height;
 	private $image_type;
 	private $orientation;
 	private $rotated = false;
 	private $format;
-	private $alt;
 
 	private $width;
 	private $height;
-	private $crop = false;
-	private $quality;
-	private $output_type;
 
 	private $adjacent_image = [];
 	private $file_mod_time = NULL;
@@ -38,15 +33,13 @@ class Image {
 		$this->slug = sanitize_string($slug);
 
 		$this->key = get_image_key_from_slug($this->slug);
-		
-		$this->quality = get_config( 'default_image_quality' );
 
 		$this->load_image_meta();
 
 	}
 
 
-	function load_image_meta() {
+	private function load_image_meta() {
 
 		$filepath = $this->path;
 
@@ -62,8 +55,8 @@ class Image {
 			return false;
 		}
 
-		$this->src_width = $image_meta[0];
-		$this->src_height = $image_meta[1];
+		$this->width = $image_meta[0];
+		$this->height = $image_meta[1];
 		$this->image_type = $image_meta[2];
 
 
@@ -76,9 +69,9 @@ class Image {
 			$this->rotated = true;
 		}
 
-		if( $this->src_width > $this->src_height ) {
+		if( $this->width > $this->height ) {
 			$this->format = 'landscape';
-		} elseif( $this->src_width < $this->src_height ) {
+		} elseif( $this->width < $this->height ) {
 			$this->format = 'portrait';
 		} else {
 			$this->format = 'square';
@@ -96,16 +89,11 @@ class Image {
 			debug( 'unknown image type '.$this->image_type);
 		}
 
-		$this->width = $this->src_width;
-		$this->height = $this->src_height;
-
-		$this->alt = false; // TODO: add support for alt tag
-
 		return $this;
 	}
 
 
-	function type_supported( $type ) {
+	private function type_supported( $type ) {
 
 		if( $type == 'jpg' || $type == 'jpeg' ) return true;
 
@@ -181,7 +169,7 @@ class Image {
 	}
 
 
-	function get_index() {
+	private function get_index() {
 
 		if( ! $this->gallery ) return false;
 
@@ -199,32 +187,6 @@ class Image {
 		if( $index === false ) return false;
 
 		return $index+1;
-	}
-
-
-	function resize( $width = false, $height = false, $crop = false ) {
-
-		if( ! $crop ) {
-			if( $width ) {
-				$ratio = $this->src_height/$this->src_width;
-				if( $this->rotated ) {
-					$ratio = $this->src_width/$this->src_height;
-				}
-				$height = (int) round($width * $ratio);
-			} elseif( $height ) {
-				$ratio = $this->src_width/$this->src_height;
-				if( $this->rotated ) {
-					$ratio = $this->src_height/$this->src_width;
-				}
-				$width = (int) round($height * $ratio);
-			}
-		}
-
-		$this->width = $width;
-		$this->height = $height;
-		$this->crop = $crop;
-
-		return $this;
 	}
 
 
@@ -260,17 +222,23 @@ class Image {
 	}
 
 
-	function get_filename( $query = [] ) {
+	private function get_default_args() {
 
 		$defaults = [
 			'width' => $this->width,
 			'height' => $this->height,
-			'crop' => $this->crop,
-			'type' => $this->output_type,
-			'quality' => $this->quality,
+			'crop' => false,
+			'type' => $this->file_extension,
+			'quality' => get_config( 'default_image_quality' ),
 		];
 
-		$args = array_merge($defaults, $query);
+		return $defaults;
+	}
+
+
+	private function get_filename( $args = [] ) {
+
+		$args = array_merge($this->get_default_args(), $args);
 
 		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
 		if( $args['crop'] ) $filename .= '-crop';
@@ -280,9 +248,9 @@ class Image {
 	}
 
 
-	function get_image_path( $query = [] ) {
+	private function get_image_path( $args = [] ) {
 
-		$cache = $this->get_cache( $query );
+		$cache = $this->get_cache( $args );
 		$cache_filename = $cache->get_file_name();
 
 		$path = 'img/'.trailing_slash_it($this->gallery->get_url(false)).$cache_filename;
@@ -291,30 +259,29 @@ class Image {
 	}
 
 
-	function get_image_url( $query = [] ) {
+	function get_image_url( $args = [] ) {
 
-		$this->create_placeholder_file($query);
+		$this->create_placeholder_file($args);
 
-		$url = get_baseurl($this->get_image_path($query));
+		$url = get_baseurl($this->get_image_path($args));
 
 		return $url;
 	}
 
 
-	function create_placeholder_file( $query ) {
+	private function create_placeholder_file( $args ) {
 
 		// NOTE: this checks, if the cached version of this image file exists. if it does not exist, it creates an empty placeholder file, so that when we generate the file, we know that we are approved to create this image file. this is a safety measure, so that the server can't be killed by accessing a lot of different versions of a file.
 
-		$cache = $this->get_cache($query);
+		$cache = $this->get_cache($args);
 
 		$cache->add_placeholder_file();
 
 	}
 
 
-	function get_picture_srcset() {
+	private function get_picture_srcset( $width ) {
 
-		$width = $this->width;
 		$default_image_quality = get_config('default_image_quality');
 		$default_modern_image_quality = get_config('default_modern_image_quality');
 
@@ -412,21 +379,38 @@ class Image {
 	}
 
 
-	function get_html( $lazyloading = true, $skip_container = false, $sizes = false ) {
+	function get_html( $args = [], $skip_container = false, $sizes = false, $lazyloading = true ) {
 
 		$classes = [ 'image', 'image-'.$this->format ];
 
-		$width = $this->width;
-		$height = $this->height;
+		if( ! empty($args['width']) ) {
+			$width = $args['width'];
+		} else {
+			$width = $this->width;
+		}
 
-		$picture = $this->get_picture_srcset();
+		if( ! empty($args['height']) ) {
+			$height = $args['height'];
+		} else {
+			$height = round($width*$this->height/$this->width);
+		}
+
+		$crop = false;
+		if( ! empty($args['crop']) ) $crop = $args['crop'];
+
+		if( $this->rotated && ! $crop ) {
+			$tmp_height = $height;
+			$height = $width;
+			$width = $tmp_height;
+		}
+
+		$picture = $this->get_picture_srcset( $width );
 
 		$main_src = $this->get_image_url([
-			'width' => $this->width,
-			'height' => $this->height,
-			'crop' => $this->crop,
+			'width' => $width,
+			'height' => $height,
+			'crop' => $crop,
 		]);
-		$alt = $this->alt;
 
 		$html = '';
 
@@ -445,9 +429,12 @@ class Image {
 
 				$image_url_args['type'] = $type;
 
-				if( $this->crop ) {
+				if( $crop ) {
 					$image_url_args['height'] = round($image_url_args['width']*$height/$width);
 					$image_url_args['crop'] = true;
+				} else {
+					$image_url_args['height'] = round($image_url_args['width']*$this->height/$this->width);
+					$image_url_args['crop'] = false;
 				}
 
 				$image_url = $this->get_image_url($image_url_args);
@@ -463,7 +450,7 @@ class Image {
 					if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
 					else $html .= ' fetchpriority="high" decoding="sync"';
 				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-				$html .= 'srcset="'.$srcset.'" alt="'.$alt.'">';
+				$html .= 'srcset="'.$srcset.'">';
 
 			} else { // webp/avif/...
 
@@ -483,37 +470,27 @@ class Image {
 	}
 
 
-	function set_image_type( $new_type ) {
+	private function set_image_type( $new_type ) {
 
 		if( $new_type == 'jpg' ) {
 			$this->mime_type = 'image/jpeg';
-			$this->output_type = 'jpg';
+			$this->file_extension = 'jpg';
 		} elseif( $new_type == 'png' ) {
 			$this->mime_type = 'image/png';
-			$this->output_type = 'png';
+			$this->file_extension = 'png';
 		} elseif( $new_type == 'webp' ) {
 			$this->mime_type = 'image/webp';
-			$this->output_type = 'webp';
+			$this->file_extension = 'webp';
 		} elseif( $this->type_supported('avif') && $new_type == 'avif' ) {
 			$this->mime_type = 'image/avif';
-			$this->output_type = 'avif';
+			$this->file_extension = 'avif';
 		}
 
 		return $this;
 	}
 
 
-	function set_quality( $new_quality ) {
-
-		if( ! $new_quality ) return $this;
-
-		$this->quality = $new_quality;
-
-		return $this;
-	}
-
-
-	function read_image() {
+	private function read_image() {
 
 		$image = false;
 
@@ -558,20 +535,20 @@ class Image {
 	}
 
 
-	function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
+	private function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
 
-		$src_width = $this->src_width;
-		$src_height = $this->src_height;
+		$width = $this->width;
+		$height = $this->height;
 		if( $this->rotated ) {
-			$src_width = $this->src_height;
-			$src_height = $this->src_width;
+			$width = $this->height;
+			$height = $this->width;
 		}
 
-		$background_image = imagecreatetruecolor( $src_width, $src_height );
+		$background_image = imagecreatetruecolor( $width, $height );
 		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
 
 		imagefill( $background_image, 0, 0, $background_color );
-		imagecopy( $background_image, $image, 0, 0, 0, 0, $src_width, $src_height );
+		imagecopy( $background_image, $image, 0, 0, 0, 0, $width, $height );
 
 		$image = $background_image;
 
@@ -581,7 +558,7 @@ class Image {
 	}
 
 
-	function image_rotate( $image, $src_width, $src_height ) {
+	private function image_rotate( $image, $src_width, $src_height ) {
 
 		$width = $src_width;
 		$height = $src_height;
@@ -606,26 +583,40 @@ class Image {
 	}
 
 
-	function get_cache( $query = [] ) {
+	private function get_cache( $args = [] ) {
 
-		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $query );
+		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $args );
 		$cache = new Cache( 'image', $cache_filename, true, true );
 
 		return $cache;
 	}
 
 
-	function output() {
+	function output( $args = [] ) {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
-		$quality = $this->quality;
-		$type = $this->output_type;
+		if( $args['width'] && ! $args['height'] ) {
+			$args['height'] = $args['width']*$this->height/$this->width;
+			$args['crop'] = false;
+		}
 
-		$src_width = $this->src_width;
-		$src_height = $this->src_height;
+		$args = array_merge($this->get_default_args(), $args);
 
-		$width = $this->width;
-		$height = $this->height;
+		$src_width = $this->width;
+		$src_height = $this->height;
+
+		$crop = false;
+		if( ! empty($args['crop']) ) $crop = $args['crop'];
+
+		$width = $args['width'];
+		$height = $args['height'];
+		if( $this->rotated && ! $crop ) {
+			$width = $args['height'];
+			$height = $args['width'];
+		}
+
+		$type = $args['type'];
+		$quality = $args['quality'];
 
 		$image_blob = $this->read_image();
 		if( ! $image_blob ) {
@@ -669,14 +660,8 @@ class Image {
 
 		}
 
-		$query = [
-			'width' => $width,
-			'height' => $height,
-			'crop' => $this->crop,
-			'type' => $type,
-			'quality' => $quality,
-		];
-		$cache = $this->get_cache( $query );
+
+		$cache = $this->get_cache( $args );
 
 
 		// check, if a placeholder file exists. if it does not exist, we are not allowed to create this image! see create_placeholder_file() for more info.

@@ -159,7 +159,7 @@ class Cache {
 
 	function get_placeholder_filename( $include_path = false ) {
 
-		$filename = $this->hash;
+		$filename = $this->get_file_name();
 		
 		$filename .= '.placeholder';
 
