@@ -175,7 +175,12 @@ class Cache {
 
 		// NOTE: we may need a placeholder file to determine, if the cache file is allowed to be created at a later point. a placeholder file has no timestamp and no content.
 
-		if( $this->exists() ) return $this;
+		if( $this->exists() ) {
+
+			$this->refresh_lifetime();
+
+			return $this;
+		}
 
 		$placeholder_file = $this->get_placeholder_filename(true);
 
