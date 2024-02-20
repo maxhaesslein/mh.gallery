@@ -32,5 +32,3 @@
 
 - support for heic/heif as source images
 - support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research
-
-- performance enhancements, so we can possibly use galleries with hundreds or thousands of images
