@@ -173,7 +173,7 @@ class Cache {
 
 	function add_placeholder_file() {
 
-		// NOTE: we may need a placeholder file to determine, if the cache file is allowed to be created at a later point. a placeholder file has no timestamp and no content.
+		// NOTE: we may need a placeholder file to determine, if the cache file is allowed to be created at a later point. a placeholder file has no content.
 
 		if( $this->exists() ) {
 
