@@ -2,6 +2,7 @@ v.0.6.1
 
 - added simple footer menu; use config option `footer_menu` to add entries
 - refresh lifetime of cached images, so resized images that are still in use do not expire
+- system/config.php is now more readable
 
 
 v.0.6.0
