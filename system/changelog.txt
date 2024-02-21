@@ -1,6 +1,7 @@
 v.0.6.2
 
 - when using a random image sort order, the sort order is now kept for the session, so that image navigation works correctly
+- allow setting cache lifetime by type; the obsolete config option `zip_lifetime` is re-added as `zip_cache_lifetime`
 - small bug fixes
 
 

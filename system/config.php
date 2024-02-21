@@ -41,8 +41,9 @@ return [
 	// you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_disabled' => false,
 
-	// default cache time: 30 days in seconds
-	'cache_lifetime' => 60*60*24*30,
+	// cache lifetimes
+	'cache_lifetime' => 60*60*24*30, // default; 30 days in seconds
+	'zip_cache_lifetime' => 60*60*24*7, // gallery zip files; 7 days in seconds
 
 	// search for these extensions while loading gallery images
 	// TODO: add avif

@@ -164,11 +164,21 @@ class Core {
 		$folder = new Folder('cache/', false, true);
 		$files = $folder->get();
 
-		$timestamp_limit = time() + get_config( 'cache_lifetime' );
+		$current_time = time();
 
 		foreach( $files as $file ) {
 
 			if( is_dir($file) ) continue;
+		
+			$file_exp = explode( '/', $file );
+			$type = $file_exp[1]; // type is deduced from the filepath: cache/{type}/...
+
+			$lifetime = get_config( $type.'_cache_lifetime' );
+			if( ! $lifetime ) {
+				$lifetime = get_config( 'cache_lifetime' );
+			}
+
+			$timestamp_limit = $current_time + $lifetime;
 
 			$timestamp = filemtime( get_abspath($file) );
 
