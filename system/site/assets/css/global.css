@@ -69,6 +69,10 @@ footer {
 				margin-left: 0.5em;
 			}
 
+	footer .spacer {
+		height: 1.3em;
+	}
+
 	footer .gallery-copyright {
 		font-size: 0.7rem;
 		opacity: 0.4;

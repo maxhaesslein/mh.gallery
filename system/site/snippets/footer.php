@@ -11,6 +11,8 @@ if( doing_ajax() ) return;
 
 	<?php menu('footer'); ?>
 
+	<span class="spacer"></span>
+
 	<a class="gallery-copyright" href="https://github.com/maxhaesslein/mh.gallery/" target="_blank" rel="noopener">mh.gallery v.<?= get_version() ?></a>
 
 </footer>
