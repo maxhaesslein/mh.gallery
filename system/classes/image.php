@@ -21,6 +21,8 @@ class Image {
 	private $file_mod_time = NULL;
 	private $exif_data = NULL;
 
+	private $image_meta_loaded = false;
+
 
 	function __construct( $filename, $gallery ) {
 
@@ -34,20 +36,20 @@ class Image {
 
 		$this->key = get_image_key_from_slug($this->slug);
 
-		$this->load_image_meta();
+
+		if( ! file_exists($this->path) ) {
+			debug("image file not found", $this->path);
+			return false;
+		}
 
 	}
 
 
 	private function load_image_meta() {
 
+		if( $this->image_meta_loaded ) return $this;
+
 		$filepath = $this->path;
-
-		if( ! file_exists($filepath) ) {
-			debug("image file not found", $filepath);
-			return false;
-		}
-
 
 		$image_meta = getimagesize( $filepath );
 		if( ! $image_meta ) {
@@ -88,6 +90,8 @@ class Image {
 		} else {
 			debug( 'unknown image type '.$this->image_type);
 		}
+
+		$this->image_meta_loaded = true;
 
 		return $this;
 	}
@@ -223,6 +227,8 @@ class Image {
 
 
 	private function get_default_args() {
+
+		$this->load_image_meta();
 
 		$defaults = [
 			'width' => $this->width,
@@ -382,6 +388,8 @@ class Image {
 
 	function get_html( $args = [], $skip_container = false, $sizes = false, $lazyloading = true ) {
 
+		$this->load_image_meta();
+
 		$classes = [ 'image', 'image-'.$this->format ];
 
 		if( ! empty($args['width']) ) {
@@ -493,6 +501,8 @@ class Image {
 
 	private function read_image() {
 
+		$this->load_image_meta();
+
 		$image = false;
 
 		if( $this->image_type == IMAGETYPE_JPEG ) {
@@ -538,6 +548,8 @@ class Image {
 
 	private function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
 
+		$this->load_image_meta();
+
 		$width = $this->width;
 		$height = $this->height;
 		if( $this->rotated ) {
@@ -560,6 +572,8 @@ class Image {
 
 
 	private function image_rotate( $image, $src_width, $src_height ) {
+
+		$this->load_image_meta();
 
 		$width = $src_width;
 		$height = $src_height;
@@ -595,6 +609,8 @@ class Image {
 
 	function output( $args = [] ) {
 		// NOTE: this assumes we did not output any headers or HTML yet!
+
+		$this->load_image_meta();
 
 		if( $args['width'] && ! $args['height'] ) {
 			$args['height'] = $args['width']*$this->height/$this->width;
