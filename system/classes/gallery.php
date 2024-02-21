@@ -612,6 +612,21 @@ class Gallery {
 			$images_sort[] = $sort;
 		}
 
+		if( $image_sort_order == 'random' ) {
+			// NOTE: we need to keep this sort order around, otherwise it would re-sort on every request (and image navigation would not work correctly)
+
+			if( ! isset($_SESSION['image_sort_order']) || ! is_array($_SESSION['image_sort_order']) ) {
+				$_SESSION['image_sort_order'] = [];
+			}
+
+			$sort_id = get_hash($this->path);
+			if( array_key_exists($sort_id, $_SESSION['image_sort_order']) ) {
+				$images_sort = $_SESSION['image_sort_order'][$sort_id];
+			} else {
+				$_SESSION['image_sort_order'][$sort_id] = $images_sort;
+			}
+		}
+
 		array_multisort($images_sort, SORT_NATURAL|SORT_FLAG_CASE, $images);
 
 		$this->images = $images;

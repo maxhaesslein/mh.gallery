@@ -1,3 +1,9 @@
+v.0.6.2
+
+- when using a random image sort order, the sort order is now kept for the session, so that image navigation works correctly
+- small bug fixes
+
+
 v.0.6.1
 
 - added simple footer menu; use config option `footer_menu` to add entries
