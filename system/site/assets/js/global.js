@@ -1,6 +1,17 @@
 (function(){
 
 
+function init() {
+	Ajax.init();
+	HideCursor.init();
+	KeyboardNavigation.init();
+	TouchNavigation.init();
+	FullscreenButton.init();
+	Preload.init();
+};
+window.addEventListener( 'load', init );
+
+
 var Ajax = {
 
 	init: function(){
@@ -378,17 +389,5 @@ var Preload = {
 
 };
 
-
-function init() {
-	Ajax.init();
-	HideCursor.init();
-	KeyboardNavigation.init();
-	TouchNavigation.init();
-	FullscreenButton.init();
-	Preload.init();
-};
-
-
-window.addEventListener( 'load', init );
 
 })();
