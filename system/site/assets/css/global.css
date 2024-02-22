@@ -128,12 +128,23 @@ a {
 h1 {
 	text-align: center;
 	margin: 0.2em 0 0.8em;
+
+	text-wrap: balance;
+
+	-ms-word-break: break-all;
+	word-break: break-all;
+	word-break: break-word;
+	-webkit-hyphens: auto;
+	-moz-hyphens: auto;
+	hyphens: auto;
 }
 
 .description {
 	text-align: center;
 	max-width: 800px;
 	margin: 0 auto 1em;
+
+	text-wrap: balance;
 }
 
 	.description + .gallery-list {
@@ -207,6 +218,15 @@ h1 {
 		display: block;
 		padding: 0.4em 0 0;
 		font-size: 0.9em;
+
+		text-wrap: balance;
+
+		-ms-word-break: break-all;
+		word-break: break-all;
+		word-break: break-word;
+		-webkit-hyphens: auto;
+		-moz-hyphens: auto;
+		hyphens: auto;
 	}
 
 	.gallery-list .empty-thumbnail {
