@@ -46,7 +46,7 @@ snippet( 'header' );
 		<?php
 	} else {
 		?>
-		<hr>
+		<p>The .zip file contains <em><?= $image_count ?></em> images and weights <em><?= $size ?></em>.</p>
 		<p><a class="button" href="<?= $download_url ?>" download="<?= $filename ?>">download .zip (<?= $size ?>)</a></p>
 		<?php
 	}
