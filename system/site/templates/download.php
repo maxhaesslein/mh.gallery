@@ -47,7 +47,7 @@ snippet( 'header' );
 	} else {
 		?>
 		<hr>
-		<p><a href="<?= $download_url ?>" download="<?= $filename ?>">click here download <em><?= $filename ?></em> (<?= $size ?>)</a></p>
+		<p><a class="button" href="<?= $download_url ?>" download="<?= $filename ?>">download .zip (<?= $size ?>)</a></p>
 		<?php
 	}
 	?>
