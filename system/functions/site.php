@@ -129,6 +129,8 @@ function head() {
 	<?= get_site_sharing_tags() ?>
 <?php
 
+	favicon();
+
 	// CSS
 	$css_filter = 'extension=css';
 	$css_tag = '
@@ -246,4 +248,19 @@ function menu( $type ) {
 	</menu>
 	<?php
 
+}
+
+
+function favicon() {
+
+	$favicon_path = 'system/site/assets/img/favicon/';
+
+	?>
+
+	<link rel="icon" href="<?= url($favicon_path.'favicon.ico', false) ?>">
+	<link rel="icon" href="<?= url($favicon_path.'favicon.svg', false) ?>" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="<?= url($favicon_path.'favicon-180x180.png', false) ?>">
+	<link rel="manifest" href="<?= url($favicon_path.'favicon-webmanifest.json', false) ?>">
+
+<?php
 }

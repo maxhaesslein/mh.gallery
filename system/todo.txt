@@ -6,8 +6,6 @@
 		- image needs to move, next image needs to be visible
 	- lightmode/darkmode
 
-- favicon
-
 - support for sub-pages (for example an 'about' or 'imprint' page)
 
 - image display
