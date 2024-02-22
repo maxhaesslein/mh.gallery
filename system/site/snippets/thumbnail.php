@@ -14,6 +14,6 @@ $image_args = [
 	'height' => $height,
 	'crop' => true
 ];
-$thumbnail_html = $image->get_html( $image_args, false, '(min-width: 1700px) 640px, 320px' );
+$thumbnail_html = $image->get_html( $image_args, '(min-width: 1700px) 640px, 320px' );
 
 echo $thumbnail_html;

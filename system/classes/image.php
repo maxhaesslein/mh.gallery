@@ -386,7 +386,7 @@ class Image {
 	}
 
 
-	function get_html( $args = [], $skip_container = false, $sizes = false, $lazyloading = true ) {
+	function get_html( $args = [], $sizes = false, $lazyloading = true ) {
 
 		$this->load_image_meta();
 
