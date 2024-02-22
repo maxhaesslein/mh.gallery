@@ -13,7 +13,7 @@ if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 	];
 
 	$json = [
-		'content' => $image->get_html( $image_args, true ),
+		'content' => $image->get_html( $image_args ),
 	];
 
 	header("Content-type: application/json");

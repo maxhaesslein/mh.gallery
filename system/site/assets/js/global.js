@@ -348,8 +348,8 @@ var FullscreenButton = {
 var Preload = {
 
 	preloaded: [],
-	timeout: false,
-	request: false,
+	timeouts: [],
+	requests: [],
 
 	init: function(){
 
@@ -357,20 +357,34 @@ var Preload = {
 
 		var next = document.getElementById('navigate-next');
 		if( next ) {
-			imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug;
-
-			Preload.timeout = setTimeout(function(){
+			Preload.timeouts.push(setTimeout(function(){
+				var imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug
 				Preload.load(imageSlug);
-			}, 500);
+			}, 50));
+		}
+
+		var prev = document.getElementById('navigate-prev');
+		if( prev ) {
+			Preload.timeouts.push(setTimeout(function(){
+				imageSlug = prev.dataset.gallerySlug+'/'+prev.dataset.prevImageSlug;
+				Preload.load(imageSlug);
+			}, 50));
 		}
 
 	},
 
 	cancel: function(){
-		clearTimeout(Preload.timeout);
-		Preload.timeout = false;
+
+		for( var timeout of Preload.timeouts ) {
+			clearTimeout(timeout);
+		}
+		Preload.timeouts = [];
 		
-		if( Preload.request ) Preload.request.abort();
+		for( var request of Preload.requests ) {
+			request.abort();
+		}
+		Preload.requests = [];
+
 	},
 
 	load: function(imageSlug) {
@@ -381,37 +395,30 @@ var Preload = {
 
 		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
 
-		Preload.request = new XMLHttpRequest();
-		Preload.request.open( 'GET', requestUrl );
+		var request = new XMLHttpRequest();
+		request.open( 'GET', requestUrl );
 
-		Preload.request.onreadystatechange = function(){
+		request.onreadystatechange = function(){
 
-			if( Preload.request.readyState !== XMLHttpRequest.DONE ) return;
+			if( request.readyState !== XMLHttpRequest.DONE ) return;
 
-			if( Preload.request.status !== 200 ) return;
+			if( request.status !== 200 ) return;
 
-			var response = Preload.request.response;
+			var response = request.response;
 
 			if( ! response ) return;
 
 			response = JSON.parse(response);
 
-			// TODO: do we really want to remove all preloaders? maybe a preloaded image is still loading? this is relevant, if we need to preload the next AND the previous image.
-			var oldPreloaders = document.querySelectorAll('.image-preload');
-			for( var oldPreloader of oldPreloaders ) {
-				oldPreloader.remove();
-			}
-
 			var wrapper = document.createElement('div');
-			wrapper.classList.add('image-preload');
+			wrapper.classList.add('preload-wrapper');
 			wrapper.innerHTML = response.content;
-
-			// TODO: this should not be appended to the image-container, because it is wrong if the aspect ratios don't match
-			var container = document.getElementById('image-wrapper').querySelector('.image-container');
-			container.appendChild(wrapper);
+			document.body.querySelector('main').appendChild(wrapper);
 
 		}
-		Preload.request.send();
+		request.send();
+
+		Preload.requests.push(request);
 
 	},
 
