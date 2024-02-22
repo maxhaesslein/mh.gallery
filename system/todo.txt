@@ -1,10 +1,10 @@
 
-- theme support
+- enhance slide navigation
+	- image needs to move, next image needs to be visible
 
-- design update
-	- enhance slide navigation
-		- image needs to move, next image needs to be visible
-	- lightmode/darkmode
+- lightmode & darkmode with toggle & cookie; fallback to system default
+
+- theme support
 
 - support for sub-pages (for example an 'about' or 'imprint' page)
 
