@@ -1,6 +1,9 @@
 
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
+	- when zooming, we should never, ever load another image
+
+- keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
 
 - lightmode & darkmode with toggle & cookie; fallback to system default
 
