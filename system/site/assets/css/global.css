@@ -197,7 +197,7 @@ h1 {
 		@media ( max-width: 640px ) {
 			
 			.gallery-list {
-				margin: 0;
+				margin: -5px;
 			}
 
 			.gallery-list li {
