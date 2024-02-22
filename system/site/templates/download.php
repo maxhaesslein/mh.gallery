@@ -35,8 +35,11 @@ snippet( 'header' );
 	if( $missing_image_count > 0 ) {
 		?>
 		<p><progress value="<?= $image_count-$missing_image_count ?>" max="<?= $image_count ?>"></p>
-		<p>generating zip file (<?= $image_count-$missing_image_count ?>/<?= $image_count ?> images), please wait …</p>
-		<p class="refresh-link-wrapper"><a href="<?= $refresh_url ?>">reload this page</a></p>
+		<p>generating zip file (<?= $image_count-$missing_image_count ?>/<?= $image_count ?> images), please wait<?php
+		if( $missing_image_count > 50 ) echo ', this may take some time';
+		?> …</p>
+		<p>(leave this window open while the zip file is generated)</p>
+		<p class="refresh-link-wrapper"><a class="button" href="<?= $refresh_url ?>">reload this page</a></p>
 
 		<script type="text/javascript">
 			setTimeout(function(){
