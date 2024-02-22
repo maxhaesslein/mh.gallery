@@ -388,34 +388,27 @@ var Preload = {
 
 			if( Preload.request.readyState !== XMLHttpRequest.DONE ) return;
 
-			if( Preload.request.status === 200 ) {
+			if( Preload.request.status !== 200 ) return;
 
-				var response = Preload.request.response;
+			var response = Preload.request.response;
 
-				if( ! response ) {
-					// ignore error case
-					return;
-				}
+			if( ! response ) return;
 
-				response = JSON.parse(response);
+			response = JSON.parse(response);
 
-				var oldPreloaders = document.querySelectorAll('.image-preload');
-				for( var oldPreloader of oldPreloaders ) {
-					oldPreloader.remove();
-				}
-
-				var wrapper = document.createElement('div');
-				wrapper.classList.add('image-preload');
-				wrapper.innerHTML = response.content;
-
-				var container = document.getElementById('image-wrapper').querySelector('.image-container');
-				container.appendChild(wrapper);
-
-			} else {
-				// something went wrong …
-				// ignore error case
-				return;
+			// TODO: do we really want to remove all preloaders? maybe a preloaded image is still loading? this is relevant, if we need to preload the next AND the previous image.
+			var oldPreloaders = document.querySelectorAll('.image-preload');
+			for( var oldPreloader of oldPreloaders ) {
+				oldPreloader.remove();
 			}
+
+			var wrapper = document.createElement('div');
+			wrapper.classList.add('image-preload');
+			wrapper.innerHTML = response.content;
+
+			// TODO: this should not be appended to the image-container, because it is wrong if the aspect ratios don't match
+			var container = document.getElementById('image-wrapper').querySelector('.image-container');
+			container.appendChild(wrapper);
 
 		}
 		Preload.request.send();
