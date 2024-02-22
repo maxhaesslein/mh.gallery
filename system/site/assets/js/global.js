@@ -5,9 +5,9 @@ function init() {
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
+	Preload.init();
 	TouchNavigation.init();
 	FullscreenButton.init();
-	Preload.init();
 };
 window.addEventListener( 'load', init );
 
@@ -188,6 +188,8 @@ var TouchNavigation = {
 
 	threshold: 50, // minimum pixels to move
 	posX: false,
+	startX: false,
+	offset: 0,
 
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
@@ -199,61 +201,93 @@ var TouchNavigation = {
 		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
 	},
 
+	updateImageOffset: function(){
+
+		var offset = TouchNavigation.offset;
+
+		var direction = Math.sign(offset);
+
+		percent = Math.abs(offset) / (window.innerWidth);
+
+		percent = 1 - (1 - percent/2) * (1 - percent/2); // easeOutQuad
+
+		offset = window.innerWidth*4/5 * percent * direction;
+
+		document.documentElement.style.setProperty('--image-offset', offset+'px');
+
+	},
+
 	navigateStart: function(e){
 
 		var touches = TouchNavigation.getTouches(e);
-
 		if( ! touches || touches.length != 1 ) {
+			// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
 			TouchNavigation.navigateCancel();
 			return;
 		}
 
 		TouchNavigation.posX = touches[0].clientX;
+		TouchNavigation.startX = touches[0].clientX;
+
+		TouchNavigation.offset = 0;
+		TouchNavigation.updateImageOffset();
 
 	},
 
 	navigateCancel: function(e){
 
 		TouchNavigation.posX = false;
+		TouchNavigation.startX = false;
+
+		TouchNavigation.offset = 0;
+		TouchNavigation.updateImageOffset();
 
 	},
 
 	navigateMove: function(e){
 
 		var touches = TouchNavigation.getTouches(e);
+		if( ! touches || touches.length != 1 ) {
+			// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
+			TouchNavigation.navigateCancel();
+			return;
+		}
 
-		if( ! touches ) return;
+		var prevX = TouchNavigation.posX;
 
-		if( touches.length == 1 ) return;
+		TouchNavigation.posX = touches[0].clientX;
 
-		// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
+		var distance = TouchNavigation.posX - prevX; // negative: touch moves from right to left; positive: touch moves from left to right
 
-		TouchNavigation.navigateCancel();
+		TouchNavigation.offset += distance;
+		TouchNavigation.updateImageOffset();
 
 	},
 
 	navigateEnd: function(e){
 
-		if( TouchNavigation.posX === false ) return;
+		if( TouchNavigation.startX === false ) return;
 
 		var touches = TouchNavigation.getTouches(e);
-
 		if( ! touches || touches.length != 1 ) {
+			// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
 			TouchNavigation.navigateCancel();
 			return;
 		}
 
-		var newClientX = touches[0].clientX;
+		var currentX = touches[0].clientX;
 
-		var delta = newClientX - TouchNavigation.posX;
+		var delta = currentX - TouchNavigation.startX;
 
 		var direction = Math.sign(delta);
 
 		delta = Math.abs(delta);
 
-		TouchNavigation.posX = false;
+		TouchNavigation.navigateCancel(); // this resets important variables
 
-		if( delta < TouchNavigation.threshold ) return;
+		if( delta < TouchNavigation.threshold ) {
+			return;
+		}
 
 		var target = false;
 
@@ -334,8 +368,9 @@ var Preload = {
 
 	cancel: function(){
 		clearTimeout(Preload.timeout);
-		Preload.request.abort();
 		Preload.timeout = false;
+		
+		if( Preload.request ) Preload.request.abort();
 	},
 
 	load: function(imageSlug) {
