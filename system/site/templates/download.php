@@ -23,7 +23,13 @@ snippet( 'header' );
 ?>
 <main>
 
-	<h1><a href="<?= $overview_link ?>"><?= $gallery->get_title() ?></a></h1>
+	<div class="meta meta-top" style="padding: 0;">
+		<ul class="action">
+			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
+		</ul>
+	</div>
+
+	<h1><?= $gallery->get_title() ?></h1>
 
 	<?php
 	if( $missing_image_count > 0 ) {
