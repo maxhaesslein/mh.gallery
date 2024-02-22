@@ -1,6 +1,8 @@
 v.0.6.3
 
 - design update
+- the image preloader now selects the correct image when the aspect ratio changes from one image to the next
+- the previous image gets now also preloaded
 - added favicon
 
 
