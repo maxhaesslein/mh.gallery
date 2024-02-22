@@ -14,9 +14,9 @@ This is an early version, there may still be bugs.
 
 ## Screenshots
 
-![Screenshot of the overview page](system/readme/mh-gallery-1.png)
+![Screenshot of the overview page](system/readme/mh-gallery-1.jpg)
 
-![Screenshot of the image detail page](system/readme/mh-gallery-3.png)
+![Screenshot of the image detail page](system/readme/mh-gallery-3.jpg)
 
 ## Requirements
 
