@@ -423,57 +423,57 @@ class Image {
 
 		$html = '';
 
-		if( ! $skip_container ) $html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
-		$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">';
+		$html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
+			$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">';
 
-		foreach( $picture as $type => $sources ) {
+			foreach( $picture as $type => $sources ) {
 
-			if( ! $this->type_supported($type) ) {
-				continue;
-			}
-
-			$srcset = [];
-
-			foreach( $sources as $size => $image_url_args ) {
-
-				$image_url_args['type'] = $type;
-
-				if( $crop ) {
-					$image_url_args['height'] = round($image_url_args['width']*$height/$width);
-					$image_url_args['crop'] = true;
-				} else {
-					$image_url_args['height'] = round($image_url_args['width']*$this->height/$this->width);
-					$image_url_args['crop'] = false;
+				if( ! $this->type_supported($type) ) {
+					continue;
 				}
 
-				$image_url = $this->get_image_url($image_url_args);
-				$srcset[] = $image_url.' '.$size;
+				$srcset = [];
+
+				foreach( $sources as $size => $image_url_args ) {
+
+					$image_url_args['type'] = $type;
+
+					if( $crop ) {
+						$image_url_args['height'] = round($image_url_args['width']*$height/$width);
+						$image_url_args['crop'] = true;
+					} else {
+						$image_url_args['height'] = round($image_url_args['width']*$this->height/$this->width);
+						$image_url_args['crop'] = false;
+					}
+
+					$image_url = $this->get_image_url($image_url_args);
+					$srcset[] = $image_url.' '.$size;
+				}
+
+				$srcset = implode(', ', $srcset);
+
+
+				if( $type == 'jpg' ) { 
+
+					$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
+						if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
+						else $html .= ' fetchpriority="high" decoding="sync"';
+					if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
+					$html .= 'srcset="'.$srcset.'">';
+
+				} else { // webp/avif/...
+
+					$html .= '<source ';
+					if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
+					$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
+
+				}
+
+
 			}
 
-			$srcset = implode(', ', $srcset);
-
-
-			if( $type == 'jpg' ) { 
-
-				$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
-					if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
-					else $html .= ' fetchpriority="high" decoding="sync"';
-				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-				$html .= 'srcset="'.$srcset.'">';
-
-			} else { // webp/avif/...
-
-				$html .= '<source ';
-				if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-				$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
-
-			}
-
-
-		}
-
-		$html .= '</picture>';
-		if( ! $skip_container ) $html .= '</div>';
+			$html .= '</picture>';
+		$html .= '</div>'; // .image-container
 
 		return $html;
 	}
