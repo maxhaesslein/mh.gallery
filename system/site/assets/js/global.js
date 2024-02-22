@@ -127,6 +127,7 @@ var Ajax = {
 
 var HideCursor = {
 
+	eventHandlersAdded: false,
 	delay: 2000,
 	timer: false,
 
@@ -134,7 +135,11 @@ var HideCursor = {
 
 		HideCursor.startTimeout();
 
+		if( HideCursor.eventHandlersAdded ) return;
+
 		document.addEventListener( 'mousemove', HideCursor.showCursor );
+		HideCursor.eventHandlersAdded = true;
+
 	},
 
 	startTimeout: function(){
@@ -154,10 +159,17 @@ var HideCursor = {
 
 var KeyboardNavigation = {
 
+	eventHandlersAdded: false,
+
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
 
+		if( KeyboardNavigation.eventHandlersAdded ) return;
+
 		document.addEventListener( 'keydown', KeyboardNavigation.navigate );
+
+		KeyboardNavigation.eventHandlersAdded = true;
+
 	},
 
 	navigate: function(e){
@@ -187,6 +199,7 @@ var KeyboardNavigation = {
 var TouchNavigation = {
 
 	threshold: 50, // minimum pixels to move
+	eventHandlersAdded: false,
 	posX: false,
 	startX: false,
 	offset: 0,
@@ -194,11 +207,16 @@ var TouchNavigation = {
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
 
+		if( TouchNavigation.eventHandlersAdded ) return;
+
 		document.addEventListener( 'touchstart', TouchNavigation.navigateStart, false );
 		document.addEventListener( 'touchend', TouchNavigation.navigateEnd, false );
 		document.addEventListener( 'touchcancel', TouchNavigation.navigateCancel, false );
 		document.addEventListener( 'touchmove', TouchNavigation.navigateMove, false );
 		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
+
+		TouchNavigation.eventHandlersAdded = true;
+
 	},
 
 	updateImageOffset: function(){
