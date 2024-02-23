@@ -51,7 +51,7 @@ var Ajax = {
 
 	navigate: function( el ) {
 
-		// TOOD: maybe cancel TouchNavigation requests?
+		// TODO: maybe cancel TouchNavigation requests?
 		//Preload.cancel();
 
 		var imageSlug = false;

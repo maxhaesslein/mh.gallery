@@ -1,9 +1,12 @@
 
 - enhance slide navigation
+	- we should always load the prev/next image, and then slide on click/keyboard navigation
+	- slide navigation flashes, because the whole content gets replaced. still needs some reworking!
+	- keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
 
 - zooming on mobile is currently very broken, needs fixing!
 
-- keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
+- .placeholder files probably should be in their own '.placeholder' subfolder; this subfolder will be automatically skipped by the Folder() class, so they won't slow down execution times
 
 - lightmode & darkmode with toggle & cookie; fallback to system default
 
