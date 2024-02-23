@@ -11,6 +11,10 @@
 
 - support for sub-pages (for example an 'about' or 'imprint' page)
 
+- zip creation: first page should not zip images, so the loading is faster
+	- call zipping function via ajax and update progress/text via js
+	- fall back to html if js is disabled; use <meta http-equiv="refresh" .. for this (see https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta#http-equiv )
+
 - image display
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
 	- support for image alt tag
