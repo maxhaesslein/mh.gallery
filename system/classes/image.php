@@ -711,7 +711,7 @@ class Image {
 		} elseif( $type == 'webp' ) {
 
 			ob_start();
-			imagewebp( $image_blob );
+			imagewebp( $image_blob, null, $quality );
 			$data = ob_get_contents();
 			ob_end_clean();
 			$cache->add_data( $data );
@@ -722,7 +722,7 @@ class Image {
 		} elseif( $this->type_supported('avif') && $type == 'avif' ) {
 
 			ob_start();
-			imageavif( $image_blob );
+			imageavif( $image_blob, null, $quality );
 			$data = ob_get_contents();
 			ob_end_clean();
 			$cache->add_data( $data );

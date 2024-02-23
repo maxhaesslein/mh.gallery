@@ -1,3 +1,10 @@
+v.0.6.4
+
+you may want to delete all avif and webp files inside the `cache/image/` folder to regenerate those files with the correct quality
+
+- Bugfix: use image quality argument for avif & webp files
+
+
 v.0.6.3
 
 - design update
