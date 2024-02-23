@@ -425,9 +425,24 @@ var TouchNavigation = {
 			offset = Math.abs(offset);
 
 		if( offset > offsetThreshold ) {
+			// scroll to prev/next image
+
 			offset = window.innerWidth*direction;
+
+			// make sure prev/next image exists
+			if( direction > 0 ) {
+				// prev
+				if( ! document.getElementById('navigate-prev') ) offset = 0;
+			} else {
+				// next
+				if( ! document.getElementById('navigate-next') ) offset = 0;
+			}
+
 		} else {
+			// scroll back to current image
+
 			offset = 0;
+
 		}
 
 		TouchNavigation.posX = false;
