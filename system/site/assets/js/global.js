@@ -193,11 +193,13 @@ var KeyboardNavigation = {
 
 var TouchNavigation = {
 
+	offsetThreshold: 1/4,
 	threshold: 50, // minimum pixels to move
 	eventHandlersAdded: false,
 	posX: false,
 	startX: false,
 	offset: 0,
+	animation: false,
 
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
@@ -216,7 +218,7 @@ var TouchNavigation = {
 		document.addEventListener( 'touchend', TouchNavigation.navigateEnd, false );
 		document.addEventListener( 'touchcancel', TouchNavigation.navigateCancel, false );
 		document.addEventListener( 'touchmove', TouchNavigation.navigateMove, false );
-		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
+		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge; TODO: check, if this fix is still needed
 
 		TouchNavigation.eventHandlersAdded = true;
 
@@ -264,11 +266,11 @@ var TouchNavigation = {
 
 		request.onreadystatechange = function(){
 
-			console.log('   finished', imageSlug, container);
-
 			if( request.readyState !== XMLHttpRequest.DONE ) return;
 
 			if( request.status === 200 ) {
+
+				console.log('   finished', imageSlug, container);
 
 				var response = request.response;
 
@@ -306,19 +308,63 @@ var TouchNavigation = {
 
 	},
 
-	updateImageOffset: function(){
+	updateImageOffset: function( offset, animate = false ){
 
-		var offset = TouchNavigation.offset;
 
-		var direction = Math.sign(offset);
+		if( animate ) {
+			// animate to new position
 
-		percent = Math.abs(offset) / (window.innerWidth);
+			TouchNavigation.animation = true;
 
+			TouchNavigation.animateImageOffset( offset, 0 );
+
+		} else {
+			// instantly jump to new position
+
+			TouchNavigation.animation = false;
+
+			document.documentElement.style.setProperty('--image-offset', offset+'px');
+			TouchNavigation.offset = offset;
+
+		}
+
+	},
+
+	animateImageOffset: function( targetOffset, timeStep) {
+
+		var maxSteps = 50; // this sets the length of the animation. the higher this number, the slower the animation.
+
+		if( ! TouchNavigation.animation ) return;
+
+		if( timeStep >= maxSteps ) {
+			// this should never happen, but if it does this is our safeguard:
+			TouchNavigation.offset = targetOffset;
+			TouchNavigation.animation = false;
+			return;
+		}
+
+		if( Math.round(TouchNavigation.offset) == Math.round(targetOffset) ) {
+			TouchNavigation.offset = Math.round(targetOffset);
+			TouchNavigation.animation = false;
+			return;
+		}
+
+		var distance = TouchNavigation.offset - targetOffset,
+			direction = Math.sign(distance);
+
+		distance = Math.abs(distance);
+
+		var percent = timeStep/maxSteps;
 		percent = 1 - (1 - percent/2) * (1 - percent/2); // easeOutQuad
 
-		offset = window.innerWidth*4/5 * percent * direction;
+		var offset = TouchNavigation.offset - (distance*(percent)*direction);
 
 		document.documentElement.style.setProperty('--image-offset', offset+'px');
+		TouchNavigation.offset = offset;
+
+		requestAnimationFrame(function(){
+			TouchNavigation.animateImageOffset(targetOffset, (timeStep+1));
+		});
 
 	},
 
@@ -334,8 +380,7 @@ var TouchNavigation = {
 		TouchNavigation.posX = touches[0].clientX;
 		TouchNavigation.startX = touches[0].clientX;
 
-		TouchNavigation.offset = 0;
-		TouchNavigation.updateImageOffset();
+		TouchNavigation.updateImageOffset(0);
 
 	},
 
@@ -344,8 +389,7 @@ var TouchNavigation = {
 		TouchNavigation.posX = false;
 		TouchNavigation.startX = false;
 
-		TouchNavigation.offset = 0;
-		TouchNavigation.updateImageOffset();
+		TouchNavigation.updateImageOffset(0);
 
 	},
 
@@ -364,8 +408,7 @@ var TouchNavigation = {
 
 		var distance = TouchNavigation.posX - prevX; // negative: touch moves from right to left; positive: touch moves from left to right
 
-		TouchNavigation.offset += distance;
-		TouchNavigation.updateImageOffset();
+		TouchNavigation.updateImageOffset(TouchNavigation.offset + distance);
 
 	},
 
@@ -373,10 +416,34 @@ var TouchNavigation = {
 
 		if( TouchNavigation.startX === false ) return;
 
+		var offsetThreshold = window.innerWidth*TouchNavigation.offsetThreshold; 
+
+		var offset = TouchNavigation.offset;
+
+		var direction = Math.sign(offset),
+			offset = Math.abs(offset);
+
+		if( offset > offsetThreshold ) {
+			offset = window.innerWidth*direction;
+		} else {
+			offset = 0;
+		}
+
+		TouchNavigation.posX = false;
+		TouchNavigation.startX = false;
+
+		TouchNavigation.updateImageOffset(offset, true);
+
+		// TODO: trigger next/prev navigation if needed
+
+/*
+		// old code to navigate:
 		var touches = TouchNavigation.getTouches(e);
+
+		TouchNavigation.navigateCancel(); // this resets important variables
+
 		if( ! touches || touches.length != 1 ) {
 			// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
-			TouchNavigation.navigateCancel();
 			return;
 		}
 
@@ -388,12 +455,9 @@ var TouchNavigation = {
 
 		delta = Math.abs(delta);
 
-		TouchNavigation.navigateCancel(); // this resets important variables
-
 		if( delta < TouchNavigation.threshold ) {
 			return;
 		}
-
 		var target = false;
 
 		if( direction < 0 ) {
@@ -409,6 +473,7 @@ var TouchNavigation = {
 		if( ! target ) return;
 		
 		target.click();
+*/
 
 	},
 
