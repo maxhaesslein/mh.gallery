@@ -1,3 +1,9 @@
+v.0.6.4
+
+- better touch navigation
+	- the previous and next image are now visible when swiping
+
+
 v.0.6.3
 
 - design update

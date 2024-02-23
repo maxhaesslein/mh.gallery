@@ -5,7 +5,6 @@ function init() {
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
-	Preload.init();
 	TouchNavigation.init();
 	FullscreenButton.init();
 };
@@ -52,7 +51,8 @@ var Ajax = {
 
 	navigate: function( el ) {
 
-		Preload.cancel();
+		// TOOD: maybe cancel TouchNavigation requests?
+		//Preload.cancel();
 
 		var imageSlug = false;
 		if( el.id == 'navigate-next' ) {
@@ -64,6 +64,8 @@ var Ajax = {
 		}
 
 		requestUrl = GALLERY.apiUrl+imageSlug+'/';
+
+		// TODO: maybe keep the request around and cancel it, if we trigger navigate() again before it finished?
 
 		var request = new XMLHttpRequest();
 		request.open( 'GET', requestUrl );
@@ -95,13 +97,6 @@ var Ajax = {
 				if( response.title ) {
 					title = response.title;
 					Ajax.updateTitle( title );
-				}
-
-				if( response.prev_image_url ) {
-					document.getElementById('prev-image-preload').href = response.prev_image_url;
-				}
-				if( response.next_image_url ) {
-					document.getElementById('next-image-preload').href = response.next_image_url;
 				}
 
 				init(); // re-init all event listeners
@@ -207,6 +202,14 @@ var TouchNavigation = {
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
 
+		TouchNavigation.addEventListeners();
+
+		TouchNavigation.loadAdjacentImages();
+
+	},
+
+	addEventListeners: function(){
+
 		if( TouchNavigation.eventHandlersAdded ) return;
 
 		document.addEventListener( 'touchstart', TouchNavigation.navigateStart, false );
@@ -216,6 +219,90 @@ var TouchNavigation = {
 		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
 
 		TouchNavigation.eventHandlersAdded = true;
+
+	},
+
+	loadAdjacentImages: function(){
+
+		var imageWrapper = document.getElementById('image-wrapper');
+
+		if( ! imageWrapper ) return;
+
+		var navigateNext = document.getElementById('navigate-next'),
+			navigatePrev = document.getElementById('navigate-prev');
+
+		if( navigateNext ) {
+			var nextImageContainer = document.createElement('div');
+			nextImageContainer.classList.add('image-canvas', 'image-canvas-next');
+			imageWrapper.appendChild(nextImageContainer);
+
+			var nextImageSlug = navigateNext.dataset.gallerySlug+'/'+navigateNext.dataset.nextImageSlug;
+			TouchNavigation.requestImage( nextImageSlug, nextImageContainer );
+		}
+
+		if( navigatePrev ) {
+			var prevImageContainer = document.createElement('div');
+			prevImageContainer.classList.add('image-canvas', 'image-canvas-prev');
+			imageWrapper.insertBefore(prevImageContainer, imageWrapper.firstChild);
+
+			var prevImageSlug = navigatePrev.dataset.gallerySlug+'/'+navigatePrev.dataset.prevImageSlug;
+			TouchNavigation.requestImage( prevImageSlug, prevImageContainer );
+		}
+
+	},
+
+	requestImage: function( imageSlug, container ) {
+
+		// TODO: we probably want to be able to abort this request
+
+		console.log('request', imageSlug, container );
+
+		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
+
+		var request = new XMLHttpRequest();
+		request.open( 'GET', requestUrl );
+
+		request.onreadystatechange = function(){
+
+			console.log('   finished', imageSlug, container);
+
+			if( request.readyState !== XMLHttpRequest.DONE ) return;
+
+			if( request.status === 200 ) {
+
+				var response = request.response;
+
+				if( response ) {
+
+					response = JSON.parse(response);
+
+					if( response.content ) {
+
+						if( container ) {
+							container.innerHTML = response.content;
+						} else {
+							// TODO: handle error case
+							console.warn('container does no longer exist', imageSlug, container)
+						}
+
+					} else {
+						// TODO: handle error case
+						console.warn('response.content is empty', response);
+					}
+
+				} else {
+					// TODO: handle error case
+					console.warn('no response', request)
+				}
+
+			} else {
+				// TODO: handle error case
+				console.warn( 'AJAX request failed.', request ); // DEBUG
+			}
+
+		}
+
+		request.send();
 
 	},
 
@@ -359,86 +446,6 @@ var FullscreenButton = {
 			document.exitFullscreen();
 		}
 	}
-
-};
-
-
-var Preload = {
-
-	preloaded: [],
-	timeouts: [],
-	requests: [],
-
-	init: function(){
-
-		if( ! document.body.classList.contains('template-image') ) return;
-
-		var next = document.getElementById('navigate-next');
-		if( next ) {
-			Preload.timeouts.push(setTimeout(function(){
-				var imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug
-				Preload.load(imageSlug);
-			}, 50));
-		}
-
-		var prev = document.getElementById('navigate-prev');
-		if( prev ) {
-			Preload.timeouts.push(setTimeout(function(){
-				imageSlug = prev.dataset.gallerySlug+'/'+prev.dataset.prevImageSlug;
-				Preload.load(imageSlug);
-			}, 50));
-		}
-
-	},
-
-	cancel: function(){
-
-		for( var timeout of Preload.timeouts ) {
-			clearTimeout(timeout);
-		}
-		Preload.timeouts = [];
-		
-		for( var request of Preload.requests ) {
-			request.abort();
-		}
-		Preload.requests = [];
-
-	},
-
-	load: function(imageSlug) {
-
-		if( Preload.preloaded.includes(imageSlug) ) return;
-
-		Preload.preloaded.push(imageSlug);
-
-		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
-
-		var request = new XMLHttpRequest();
-		request.open( 'GET', requestUrl );
-
-		request.onreadystatechange = function(){
-
-			if( request.readyState !== XMLHttpRequest.DONE ) return;
-
-			if( request.status !== 200 ) return;
-
-			var response = request.response;
-
-			if( ! response ) return;
-
-			response = JSON.parse(response);
-
-			var wrapper = document.createElement('div');
-			wrapper.classList.add('preload-wrapper');
-			wrapper.innerHTML = response.content;
-			document.body.querySelector('main').appendChild(wrapper);
-
-		}
-		request.send();
-
-		Preload.requests.push(request);
-
-	},
 
 };
 

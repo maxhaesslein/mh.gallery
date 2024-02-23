@@ -93,7 +93,9 @@ if( ! doing_ajax() ) {
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
-		<?= $image->get_html( $image_args ) ?>
+		<div class="image-canvas">
+			<?= $image->get_html( $image_args ) ?>
+		</div>
 	</div>
 	<div class="meta meta-bottom">
 		<ul class="info">
