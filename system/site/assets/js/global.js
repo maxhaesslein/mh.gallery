@@ -92,6 +92,7 @@ var Ajax = {
 				response = JSON.parse(response);
 				if( response.content ) {
 					document.getElementById('fullscreen-target').innerHTML = response.content;
+					TouchNavigation.updateImageOffset(0);
 				}
 
 				if( response.title ) {
@@ -308,15 +309,14 @@ var TouchNavigation = {
 
 	},
 
-	updateImageOffset: function( offset, animate = false ){
-
+	updateImageOffset: function( offset, animate = false, callback = false ){
 
 		if( animate ) {
 			// animate to new position
 
 			TouchNavigation.animation = true;
 
-			TouchNavigation.animateImageOffset( offset, 0 );
+			TouchNavigation.animateImageOffset( offset, 0, callback );
 
 		} else {
 			// instantly jump to new position
@@ -330,7 +330,7 @@ var TouchNavigation = {
 
 	},
 
-	animateImageOffset: function( targetOffset, timeStep) {
+	animateImageOffset: function( targetOffset, timeStep, callback) {
 
 		var maxSteps = 50; // this sets the length of the animation. the higher this number, the slower the animation.
 
@@ -346,6 +346,7 @@ var TouchNavigation = {
 		if( Math.round(TouchNavigation.offset) == Math.round(targetOffset) ) {
 			TouchNavigation.offset = Math.round(targetOffset);
 			TouchNavigation.animation = false;
+			callback();
 			return;
 		}
 
@@ -363,7 +364,7 @@ var TouchNavigation = {
 		TouchNavigation.offset = offset;
 
 		requestAnimationFrame(function(){
-			TouchNavigation.animateImageOffset(targetOffset, (timeStep+1));
+			TouchNavigation.animateImageOffset(targetOffset, (timeStep+1), callback);
 		});
 
 	},
@@ -432,48 +433,25 @@ var TouchNavigation = {
 		TouchNavigation.posX = false;
 		TouchNavigation.startX = false;
 
-		TouchNavigation.updateImageOffset(offset, true);
+		var callback = function(){
 
-		// TODO: trigger next/prev navigation if needed
+			var target = false;;
 
-/*
-		// old code to navigate:
-		var touches = TouchNavigation.getTouches(e);
+			if( TouchNavigation.offset > 10 ) {
+				// prev image
+				target = document.getElementById('navigate-prev');
+			} else if( TouchNavigation.offset < -10 ) {
+				// next image
+				target = document.getElementById('navigate-next');
+			} else {
+				// stay at current image
+				return;
+			}
 
-		TouchNavigation.navigateCancel(); // this resets important variables
-
-		if( ! touches || touches.length != 1 ) {
-			// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
-			return;
+			if( target ) target.click();
 		}
 
-		var currentX = touches[0].clientX;
-
-		var delta = currentX - TouchNavigation.startX;
-
-		var direction = Math.sign(delta);
-
-		delta = Math.abs(delta);
-
-		if( delta < TouchNavigation.threshold ) {
-			return;
-		}
-		var target = false;
-
-		if( direction < 0 ) {
-			// swipe to left, next image
-			target = document.getElementById('navigate-next');
-			e.preventDefault();
-		} else {
-			// swipe to right, prev image
-			target = document.getElementById('navigate-prev');
-			e.preventDefault();
-		}
-
-		if( ! target ) return;
-		
-		target.click();
-*/
+		TouchNavigation.updateImageOffset(offset, true, callback);
 
 	},
 
