@@ -5,8 +5,6 @@
 
 - keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
 
-- .placeholder files probably should be in their own '.placeholder' subfolder; this subfolder will be automatically skipped by the Folder() class, so they won't slow down execution times
-
 - lightmode & darkmode with toggle & cookie; fallback to system default
 
 - theme support
