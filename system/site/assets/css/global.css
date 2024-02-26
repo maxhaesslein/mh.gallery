@@ -574,7 +574,3 @@ body.template-image {
 .template-download main {
 	text-align: center;
 }
-	
-	body:not(.nojs).template-download .refresh-link-wrapper {
-		display: none;
-	}

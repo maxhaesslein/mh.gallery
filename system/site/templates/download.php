@@ -4,9 +4,7 @@ if( ! $core ) exit;
 
 // NOTE: there is also the download_refresh() function inside sysetm/functions/site.php which is responsible for auto-reloading this page (without JavaScript)
 
-
 $gallery = $core->route->get('gallery');
-
 
 $overview_link = $gallery->get_url();
 $refresh_url = $gallery->get_zip_download_url( true );
@@ -55,9 +53,7 @@ snippet( 'header' );
 	}
 	?>
 
-
 </main>
 <?php
 
 snippet( 'footer' );
-
