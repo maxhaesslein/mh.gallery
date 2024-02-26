@@ -131,14 +131,16 @@ function head() {
 
 	favicon();
 
+	download_refresh();
+
 	// CSS
 	$css_filter = 'extension=css';
 	$css_tag = '
 	<link rel="stylesheet" href="{url}" type="text/css" media="all">';
-	if( get_config('system_css') ) {
+	if( get_config('system_css') ) :
 		$css_system_path = 'system/site/assets/css/';
 		head_load_files( $css_system_path, $css_filter, $css_tag );
-	}
+	endif; // if( get_config('system_css') )
 
 	$css_custom_path = 'custom/assets/css/';
 	head_load_files( $css_custom_path, $css_filter, $css_tag );
@@ -147,7 +149,7 @@ function head() {
 	$js_filter = 'extension=js';
 	$js_tag = '
 	<script async src="{url}"></script>';
-	if( get_config('system_js') ) {
+	if( get_config('system_js') ) :
 		$js_system_path = 'system/site/assets/js/';
 		head_load_files( $js_system_path, $js_filter, $js_tag );
 	?>
@@ -157,8 +159,28 @@ function head() {
 			'apiUrl': '<?= url('api') ?>',
 		};
 	</script><?php
-	} // get_config('system_js')
+	endif; // if( get_config('system_js') )
 
+	// prerender/prefetch previous and next image
+	$image = $core->route->get('image');
+	if( $image ) :
+
+		$prev_image = $image->get_adjacent_image('prev');
+		$next_image = $image->get_adjacent_image('next');
+
+		$next_link = '';
+		if( $next_image ) $next_link = $next_image->get_link();
+		?>
+	
+	<link id="next-image-preload" rel="prefetch next" href="<?= $next_link ?>"><?php
+
+		$prev_link = '';
+		if( $prev_image ) $prev_link = $prev_image->get_link();
+		?>
+
+	<link id="prev-image-preload" rel="prefetch prev" href="<?= $prev_link ?>"><?php
+
+	endif; // if( $image )
 	
 	$js_custom_path = 'custom/assets/js/';
 	head_load_files( $js_custom_path, $js_filter, $js_tag );
@@ -241,4 +263,30 @@ function favicon() {
 	<link rel="manifest" href="<?= url($favicon_path.'favicon-webmanifest.json', false) ?>">
 
 <?php
+}
+
+
+function download_refresh() {
+
+	if( ! is_template('download') ) return;
+
+	global $core;
+	$gallery = $core->route->get('gallery');
+
+	if( ! $gallery ) return;
+
+	if( $gallery->is_zipfile_ready() ) return;
+
+	$missing_image_count = $gallery->get_missing_image_count();
+	if( $missing_image_count === 0 ) return; 
+
+	$refresh_url = $gallery->get_zip_download_url( true );
+	if( ! $refresh_url ) return;
+
+	// this automatically refreshes the current page, if the zip file is not yet ready
+	?>
+
+	<meta http-equiv="refresh" content="1;url=<?= $refresh_url ?>" />
+<?php
+	
 }
