@@ -131,6 +131,8 @@ function head() {
 
 	favicon();
 
+	download_refresh();
+
 	// CSS
 	$css_filter = 'extension=css';
 	$css_tag = '
@@ -263,4 +265,31 @@ function favicon() {
 	<link rel="manifest" href="<?= url($favicon_path.'favicon-webmanifest.json', false) ?>">
 
 <?php
+}
+
+
+function download_refresh() {
+
+	if( ! is_template('download') ) return;
+
+	global $core;
+	$gallery = $core->route->get('gallery');
+
+	if( ! $gallery ) return;
+
+
+	if( $gallery->is_zipfile_ready() ) return;
+
+	$missing_image_count = $gallery->get_missing_image_count();
+	if( $missing_image_count === 0 ) return; 
+
+	$refresh_url = $gallery->get_zip_download_url();
+	if( ! $refresh_url ) return;
+
+	// this automatically refreshes the current page, if the zip file is not yet ready
+	?>
+
+	<meta http-equiv="refresh" content="3;url=<?= $refresh_url ?>" />
+<?php
+	
 }

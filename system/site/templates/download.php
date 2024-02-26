@@ -40,12 +40,6 @@ snippet( 'header' );
 		?> …</p>
 		<p>(leave this window open while the zip file is being generated)</p>
 		<p class="refresh-link-wrapper"><a class="button" href="<?= $refresh_url ?>">reload this page</a></p>
-
-		<script type="text/javascript">
-			setTimeout(function(){
-				window.location.href = '<?= $refresh_url ?>';
-			}, 500);
-		</script>
 		<?php
 	} else {
 		?>

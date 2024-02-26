@@ -37,3 +37,17 @@ function get_version() {
 	return trim(file_get_contents($path));
 }
 
+
+function get_template() {
+	global $core;
+
+	$template = $core->route->get('template_name');
+
+	return $template;
+}
+
+
+function is_template( $test_template ) {
+	return ( get_template() == $test_template );
+}
+

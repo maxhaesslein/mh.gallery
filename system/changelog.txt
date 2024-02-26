@@ -3,6 +3,7 @@ v.0.6.4
 you may want to delete all avif and webp files inside the `cache/image/` folder to regenerate those files with the correct quality
 
 - Bugfix: use image quality argument for avif & webp files
+- zip download auto-refresh now works without JavaScript
 
 
 v.0.6.3

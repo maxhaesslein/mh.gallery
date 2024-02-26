@@ -750,6 +750,11 @@ class Gallery {
 
 		$zip->close();
 
+		return $this->get_missing_image_count();
+	}
+
+
+	function get_missing_image_count() {
 		return count($this->get_missing_zip_images());
 	}
 
