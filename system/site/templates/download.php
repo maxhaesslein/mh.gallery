@@ -6,17 +6,20 @@ $gallery = $core->route->get('gallery');
 
 
 $overview_link = $gallery->get_url();
-$refresh_url = $gallery->get_zip_download_url();
+$refresh_url = $gallery->get_zip_download_url( true );
 $image_count = count($gallery->get_images());
+$missing_image_count = $gallery->get_missing_image_count();
 
-$missing_image_count = 0;
-
-if( ! $gallery->is_zipfile_ready() ) {
+if( ! $gallery->is_zipfile_ready() && isset($_GET['create']) ) {
 	$missing_image_count = $gallery->add_batch_to_zip();
 }
-$download_url = $gallery->get_zip_url();
-$size = $gallery->get_zip_size();
-$filename = $gallery->get_zip_filename();
+
+$zip_file_exists = $gallery->is_zipfile_created();
+if( $zip_file_exists ) {
+	$download_url = $gallery->get_zip_url();
+	$size = $gallery->get_zip_size();
+	$filename = $gallery->get_zip_filename();
+}
 
 snippet( 'header' );
 

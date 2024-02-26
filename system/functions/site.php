@@ -283,13 +283,13 @@ function download_refresh() {
 	$missing_image_count = $gallery->get_missing_image_count();
 	if( $missing_image_count === 0 ) return; 
 
-	$refresh_url = $gallery->get_zip_download_url();
+	$refresh_url = $gallery->get_zip_download_url( true );
 	if( ! $refresh_url ) return;
 
 	// this automatically refreshes the current page, if the zip file is not yet ready
 	?>
 
-	<meta http-equiv="refresh" content="3;url=<?= $refresh_url ?>" />
+	<meta http-equiv="refresh" content="1;url=<?= $refresh_url ?>" />
 <?php
 	
 }

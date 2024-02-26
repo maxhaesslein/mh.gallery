@@ -238,9 +238,11 @@ class Gallery {
 	}
 
 
-	function get_zip_download_url() {
+	function get_zip_download_url( $create = false ) {
 
 		$url = get_baseurl('download/').un_trailing_slash_it($this->get_url(false)).'.zip';
+
+		if( $create ) $url .= '?create';
 
 		return $url;
 	}
@@ -707,6 +709,14 @@ class Gallery {
 	}
 
 
+	function is_zipfile_created() {
+
+		$cache = $this->get_zip_cache();
+
+		return $cache->exists();
+	}
+
+
 	function is_zipfile_ready() {
 
 		if( count($this->get_missing_zip_images()) > 0 ) return false;
@@ -718,6 +728,8 @@ class Gallery {
 	function get_zip_size() {
 		
 		$cache = $this->get_zip_cache();
+
+		if( ! $cache->exists() ) return 0;
 
 		$size = filesize(get_abspath($cache->get_file_path()));
 
