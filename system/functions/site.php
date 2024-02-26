@@ -277,7 +277,6 @@ function download_refresh() {
 
 	if( ! $gallery ) return;
 
-
 	if( $gallery->is_zipfile_ready() ) return;
 
 	$missing_image_count = $gallery->get_missing_image_count();

@@ -42,7 +42,7 @@ snippet( 'header' );
 		if( $missing_image_count > 40 ) echo ', this may take some time';
 		?> …</p>
 		<p>(leave this window open while the zip file is being generated)</p>
-		<p class="refresh-link-wrapper"><a class="button" href="<?= $refresh_url ?>">reload this page</a></p>
+		<p class="refresh-link-wrapper">this page should <a class="button" href="<?= $refresh_url ?>">reload automatically</a> in a few seconds</p>
 		<?php
 	} else {
 		?>
