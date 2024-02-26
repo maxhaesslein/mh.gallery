@@ -161,7 +161,7 @@ function head() {
 	</script><?php
 	endif; // if( get_config('system_js') )
 
-	// prerender/prefetch previous and next image
+	// prefetch previous and next image
 	$image = $core->route->get('image');
 	if( $image ) :
 
