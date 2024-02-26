@@ -135,10 +135,10 @@ function head() {
 	$css_filter = 'extension=css';
 	$css_tag = '
 	<link rel="stylesheet" href="{url}" type="text/css" media="all">';
-	if( get_config('system_css') ) {
+	if( get_config('system_css') ) :
 		$css_system_path = 'system/site/assets/css/';
 		head_load_files( $css_system_path, $css_filter, $css_tag );
-	}
+	endif; // if( get_config('system_css') )
 
 	$css_custom_path = 'custom/assets/css/';
 	head_load_files( $css_custom_path, $css_filter, $css_tag );
@@ -147,7 +147,7 @@ function head() {
 	$js_filter = 'extension=js';
 	$js_tag = '
 	<script async src="{url}"></script>';
-	if( get_config('system_js') ) {
+	if( get_config('system_js') ) :
 		$js_system_path = 'system/site/assets/js/';
 		head_load_files( $js_system_path, $js_filter, $js_tag );
 	?>
@@ -157,12 +157,12 @@ function head() {
 			'apiUrl': '<?= url('api') ?>',
 		};
 	</script><?php
-	} // get_config('system_js')
+	endif; // if( get_config('system_js') )
 
 
 	// prerender/prefetch previous and next image
 	$image = $core->route->get('image');
-	if( $image ) {
+	if( $image ) :
 
 		$prev_image = $image->get_adjacent_image('prev');
 		$next_image = $image->get_adjacent_image('next');
@@ -179,7 +179,7 @@ function head() {
 
 	<link id="prev-image-preload" rel="prefetch prev" href="<?= $prev_link ?>"><?php
 
-	} // $image
+	endif; // if( $image )
 
 	
 	$js_custom_path = 'custom/assets/js/';
