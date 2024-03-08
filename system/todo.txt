@@ -5,8 +5,6 @@
 
 - keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
 
-- lightmode & darkmode with toggle & cookie; fallback to system default
-
 - theme support
 
 - support for sub-pages (for example an 'about' or 'imprint' page)
