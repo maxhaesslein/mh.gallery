@@ -240,29 +240,26 @@ h1 {
 		position: relative;
 	}
 
-		.gallery-list .gallery-link:before,
-		.gallery-list .image-link:before {
-			content: "";
-			display: block;
-			left: -5px;
-			top: -5px;
-			width: calc(100% + 5px + 5px);
-			height: calc(100% + 5px + 5px);
-			position: absolute;
-			z-index: -1;
-			border-radius: 3px;
-			background: var(--color-black);
-			pointer-events: none;
-			opacity: 0;
-		}
-
 		.gallery-list .gallery-link:hover {
 			text-decoration: none;
 		}
 
-			.gallery-list .gallery-link:hover:before,
-			.gallery-list .image-link:hover:before {
-				opacity: 1;
+		.gallery-list .gallery-link .image-container,
+		.gallery-list .image-link .image-container {
+			box-shadow: 0 0 20px rgba(0,0,0,0);
+			-webkit-transition: all 200ms ease-in-out;
+			-o-transition: all 200ms ease-in-out;
+			transition: all 200ms ease-in-out;
+		}
+
+			.gallery-list .gallery-link:hover .image-container,
+			.gallery-list .image-link:hover .image-container {
+				box-shadow: 0 0 10px rgba(0,0,0,.6);
+				-moz-transform: scale(1.05);
+				-webkit-transform: scale(1.05);
+				-o-transform: scale(1.05);
+				-ms-transform: scale(1.05);
+				transform: scale(1.05);
 			}
 
 .meta {

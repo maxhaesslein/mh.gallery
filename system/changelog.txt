@@ -4,6 +4,7 @@ you may want to delete all avif and webp files inside the `cache/image/` folder 
 
 - Bugfix: use image quality argument for avif & webp files
 - zip download auto-refresh now works without JavaScript
+- updated thumbnail hover effect
 
 
 v.0.6.3
