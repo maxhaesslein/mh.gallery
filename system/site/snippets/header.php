@@ -26,7 +26,7 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 <body<?= get_class_attribute($classes) ?>>
 <script type="text/javascript">document.body.classList.remove('nojs');</script>
 
-<div id="darkmode-toggle" class="darkmode-toggle"></div>
+<div id="lightmode-toggle" class="lightmode-toggle"></div>
 <script type="text/javascript">
 (function(){
 
@@ -34,14 +34,14 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 
 	if( typeof(Storage) !== 'undefined' ) {
 		// show toggle if we can use localStorage
-		document.getElementById('darkmode-toggle').classList.add('visible');
+		document.getElementById('lightmode-toggle').classList.add('visible');
 	}
 
-	if( typeof(Storage) === "undefined" || ! localStorage.getItem( 'darkmode_state' ) ) {
+	if( typeof(Storage) === "undefined" || ! localStorage.getItem( 'lightmode_state' ) ) {
 
-		if( window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ) {
-			// browser says user prefers darkmode!
-			document.body.classList.add('darkmode');
+		if( window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ) {
+			// browser says user prefers lightmode, or has no preference set
+			document.body.classList.add('lightmode');
 			// we don't set a localStorage item though,
 			// because the user did not explicitly choose this view
 		}
@@ -49,10 +49,10 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 		return;
 	}
 
-	if( localStorage.getItem( 'darkmode_state' ) == 'dark' ) {
-		document.body.classList.add('darkmode');
+	if( localStorage.getItem( 'lightmode_state' ) == 'light' ) {
+		document.body.classList.add('lightmode');
 	} else {
-		document.body.classList.remove('darkmode');
+		document.body.classList.remove('lightmode');
 	}
 
 })();

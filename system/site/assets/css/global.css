@@ -15,19 +15,19 @@ body {
 	font-weight: normal;
 	font-size: 18px;
 
-	--color-empty: #fff;
-	--color-button: #ddd;
-	--color-button-hover: #fff;
-	--color-background: #f2f2f2;
-	--color-text: #222;
+	--color-empty: #000;
+	--color-button: #000;
+	--color-button-hover: #333;
+	--color-background: #181818;
+	--color-text: #eee;
 }
 
-	body.darkmode {
-		--color-empty: #000;
-		--color-button: #000;
-		--color-button-hover: #333;
-		--color-background: #181818;
-		--color-text: #eee;
+	body.lightmode {
+		--color-empty: #fff;
+		--color-button: #ddd;
+		--color-button-hover: #fff;
+		--color-background: #f2f2f2;
+		--color-text: #222;
 	}
 
 	body.soft-fade,
@@ -44,8 +44,8 @@ body {
 
 	}
 
-.darkmode-toggle {
-	border: 1px solid #ccc;
+.lightmode-toggle {
+	border: 1px solid #333;
 	border-radius: 50%;
 	height: 20px;
 	width: 20px;
@@ -65,11 +65,11 @@ body {
 	transition: opacity 500ms ease-in-out;
 }
 
-	.darkmode-toggle.visible {
+	.lightmode-toggle.visible {
 		display: block;
 	}
 
-	.darkmode-toggle:before {
+	.lightmode-toggle:before {
 		content: "";
 		display: block;
 		width: 100%;
@@ -77,11 +77,11 @@ body {
 		position: absolute;
 		left: 0;
 		top: 0;
-		background: #fff;
+		background: #000;
 		z-index: -2;
 	}
 
-	.darkmode-toggle:after {
+	.lightmode-toggle:after {
 		content: "";
 		display: block;
 		width: 200%;
@@ -89,36 +89,36 @@ body {
 		position: absolute;
 		left: -50%;
 		bottom: -50%;
-		background: #aaa;
+		background: #ccc;
 		z-index: -1;
 		transform: rotate(330deg);
 
 		transition: height 500ms ease-in-out, background 200ms ease-in-out;
 	}
 
-		.darkmode-toggle:hover:after {
+		.lightmode-toggle:hover:after {
 			height: 200%;
-			background: #000;
+			background: #fff;
 		}
 
-	body.cursor-hidden .darkmode-toggle {
+	body.cursor-hidden .lightmode-toggle {
 		opacity: 0;
 	}
 
-	body.darkmode .darkmode-toggle {
-		border-color: #333;
+	body.lightmode .lightmode-toggle {
+		border-color: #ccc;
 	}
 
-		body.darkmode .darkmode-toggle:before {
-			background: #000;
-		}
-
-		body.darkmode .darkmode-toggle:after {
-			background: #ccc;
-		}
-
-		body.darkmode .darkmode-toggle:hover:after {
+		body.lightmode .lightmode-toggle:before {
 			background: #fff;
+		}
+
+		body.lightmode .lightmode-toggle:after {
+			background: #aaa;
+		}
+
+		body.lightmode .lightmode-toggle:hover:after {
+			background: #000;
 		}
 
 footer {
@@ -410,7 +410,7 @@ h1 {
 		width: 26px;
 		height: 30px;
 		display: inline-block;
-		margin-right: 30px; /* spacing for darkmode-toggle */
+		margin-right: 30px; /* spacing for lightmode-toggle */
 	}
 
 	.meta .button-more {

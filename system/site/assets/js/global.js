@@ -2,7 +2,7 @@
 
 
 function init() {
-	Darkmode.init();
+	Lightmode.init();
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
@@ -13,47 +13,47 @@ function init() {
 window.addEventListener( 'load', init );
 
 
-var Darkmode = {
+var Lightmode = {
 
 	init: function(){
 
-		var toggle = document.getElementById('darkmode-toggle');
+		var toggle = document.getElementById('lightmode-toggle');
 
 		if( ! toggle ) return;
 
 		// don't bother with showing the toggle, if we can't save the state.
-		// we fall back to the default (light) view, or use darkmode if the
-		// user has darkmode set and the browser reports this to us
+		// we fall back to the default (light) view, or use lightmode if the
+		// user has lightmode set and the browser reports this to us
 		// (see snippets/header.php for the loading code)
 		if( typeof(Storage) === "undefined" ) return;
 
 		toggle.addEventListener( 'click', function(e){
 
-			if( document.body.classList.contains( 'darkmode' ) ) {
+			if( document.body.classList.contains( 'lightmode' ) ) {
 				
 				document.body.classList.add('soft-fade');
 				setTimeout( function(){
-					document.body.classList.remove('darkmode');
+					document.body.classList.remove('lightmode');
 					setTimeout( function(){
 						document.body.classList.remove('soft-fade');
 					}, 200 );
 				}, 40 );
 
 				if( typeof(Storage) !== "undefined" ) {
-					localStorage.setItem( 'darkmode_state', 'light' );
+					localStorage.setItem( 'lightmode_state', 'dark' );
 				}
 			} else {
 				
 				document.body.classList.add('soft-fade');
 				setTimeout( function(){
-					document.body.classList.add('darkmode');
+					document.body.classList.add('lightmode');
 					setTimeout( function(){
 						document.body.classList.remove('soft-fade');
 					}, 200 );
 				}, 40 );
 
 				if( typeof(Storage) !== "undefined" ) {
-					localStorage.setItem( 'darkmode_state', 'dark' );
+					localStorage.setItem( 'lightmode_state', 'light' );
 				}
 			}
 
