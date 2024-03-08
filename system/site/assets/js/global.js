@@ -186,6 +186,8 @@ var HideCursor = {
 
 	init: function(){
 
+		if( ! document.body.classList.contains('template-image') ) return;
+
 		HideCursor.startTimeout();
 
 		if( HideCursor.eventHandlersAdded ) return;
