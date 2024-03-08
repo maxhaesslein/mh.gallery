@@ -6,8 +6,6 @@
 
 - zooming on mobile is currently very broken, needs fixing!
 
-- lightmode & darkmode with toggle & cookie; fallback to system default
-
 - theme support
 
 - support for sub-pages (for example an 'about' or 'imprint' page)

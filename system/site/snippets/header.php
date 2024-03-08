@@ -26,3 +26,34 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 <body<?= get_class_attribute($classes) ?>>
 <script type="text/javascript">document.body.classList.remove('nojs');</script>
 
+<div id="lightmode-toggle" class="lightmode-toggle"></div>
+<script type="text/javascript">
+(function(){
+
+	// also see Darkmode class in assets/js/general.js
+
+	if( typeof(Storage) !== 'undefined' ) {
+		// show toggle if we can use localStorage
+		document.getElementById('lightmode-toggle').classList.add('visible');
+	}
+
+	if( typeof(Storage) === "undefined" || ! localStorage.getItem( 'lightmode_state' ) ) {
+
+		if( window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ) {
+			// browser says user prefers lightmode, or has no preference set
+			document.body.classList.add('lightmode');
+			// we don't set a localStorage item though,
+			// because the user did not explicitly choose this view
+		}
+
+		return;
+	}
+
+	if( localStorage.getItem( 'lightmode_state' ) == 'light' ) {
+		document.body.classList.add('lightmode');
+	} else {
+		document.body.classList.remove('lightmode');
+	}
+
+})();
+</script>
