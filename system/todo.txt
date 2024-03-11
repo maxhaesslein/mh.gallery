@@ -3,6 +3,7 @@
 	- we should always load the prev/next image, and then slide on click/keyboard navigation
 	- slide navigation flashes, because the whole content gets replaced. still needs some reworking!
 	- keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
+	- fade on slide effect
 
 - zooming on mobile is currently very broken, needs fixing!
 
