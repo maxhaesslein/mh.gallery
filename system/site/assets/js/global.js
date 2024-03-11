@@ -332,6 +332,7 @@ var TouchNavigation = {
 	startX: false,
 	offset: 0,
 	animation: false,
+	callback: false,
 
 	init: function(){
 		if( ! document.body.classList.contains('template-image') ) return;
@@ -465,14 +466,14 @@ var TouchNavigation = {
 
 	},
 
-	updateImageOffset: function( offset, animate = false, callback = false ){
+	updateImageOffset: function( offset, animate = false ){
 
 		if( animate ) {
 			// animate to new position
 
 			TouchNavigation.animation = true;
 
-			TouchNavigation.animateImageOffset( offset, 0, callback );
+			TouchNavigation.animateImageOffset( offset, 0 );
 
 		} else {
 			// instantly jump to new position
@@ -486,7 +487,7 @@ var TouchNavigation = {
 
 	},
 
-	animateImageOffset: function( targetOffset, timeStep, callback) {
+	animateImageOffset: function( targetOffset, timeStep) {
 
 		var maxSteps = 50; // this sets the length of the animation. the higher this number, the slower the animation.
 
@@ -502,7 +503,9 @@ var TouchNavigation = {
 		if( Math.round(TouchNavigation.offset) == Math.round(targetOffset) ) {
 			TouchNavigation.offset = Math.round(targetOffset);
 			TouchNavigation.animation = false;
-			callback();
+			if( TouchNavigation.callback ) {
+				TouchNavigation.callback();
+			}
 			return;
 		}
 
@@ -520,7 +523,7 @@ var TouchNavigation = {
 		TouchNavigation.offset = offset;
 
 		requestAnimationFrame(function(){
-			TouchNavigation.animateImageOffset(targetOffset, (timeStep+1), callback);
+			TouchNavigation.animateImageOffset(targetOffset, (timeStep+1));
 		});
 
 	},
@@ -539,6 +542,8 @@ var TouchNavigation = {
 
 		TouchNavigation.updateImageOffset(0);
 
+		TouchNavigation.callback = false;
+
 	},
 
 	navigateCancel: function(e){
@@ -547,6 +552,8 @@ var TouchNavigation = {
 		TouchNavigation.startX = false;
 
 		TouchNavigation.updateImageOffset(0);
+
+		TouchNavigation.callback = false;
 
 	},
 
@@ -604,8 +611,7 @@ var TouchNavigation = {
 		TouchNavigation.posX = false;
 		TouchNavigation.startX = false;
 
-		// TODO: allow cancelation of callback as soon as navigateStart gets called?
-		var callback = function(){
+		TouchNavigation.callback = function(){
 
 			var container = false,
 				otherContainer = false;
@@ -647,11 +653,11 @@ var TouchNavigation = {
 				TouchNavigation.loadAdjacentImages();
 
 			}
-			
+
 		}
 
 		// animate image to new offset:
-		TouchNavigation.updateImageOffset(offset, true, callback);
+		TouchNavigation.updateImageOffset(offset, true);
 
 	},
 
