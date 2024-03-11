@@ -189,6 +189,10 @@ picture {
 	background: var(--color-empty) url(../img/loading_white.svg) no-repeat center center / 40px auto;
 }
 
+	body.lightmode picture {
+		background-image: url(../img/loading_black.svg);
+	}
+
 	@media ( max-width: 740px ) {
 
 		picture {

@@ -1,3 +1,8 @@
+v.0.6.5
+
+- bugfix: show loading indicator in lightmode
+
+
 v.0.6.4
 
 you may want to delete all avif and webp files inside the `cache/image/` folder to regenerate those files with the correct quality
