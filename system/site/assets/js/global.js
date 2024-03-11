@@ -385,7 +385,7 @@ var TouchNavigation = {
 
 			TouchNavigation.animation = false;
 
-			document.documentElement.style.setProperty('--image-offset', offset+'px');
+			document.body.style.setProperty('--image-offset', offset+'px');
 			TouchNavigation.offset = offset;
 
 		}
@@ -422,7 +422,7 @@ var TouchNavigation = {
 
 		var offset = TouchNavigation.offset - (distance*(percent)*direction);
 
-		document.documentElement.style.setProperty('--image-offset', offset+'px');
+		document.body.style.setProperty('--image-offset', offset+'px');
 		TouchNavigation.offset = offset;
 
 		requestAnimationFrame(function(){
