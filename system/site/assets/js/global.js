@@ -207,6 +207,14 @@ var Ajax = {
 
 				response = JSON.parse(response);
 				if( response.content ) {
+					// TODO: instead of replacing ALL the content, and the re-initing all event listeners, change all the elements bit by bit
+					// we need to update:
+						// image-content
+						// url
+						// title
+						// image-number
+						// prev-link
+						// next-link
 					document.getElementById('fullscreen-target').innerHTML = response.content;
 					TouchNavigation.updateImageOffset(0);
 				}
@@ -237,11 +245,19 @@ var Ajax = {
 		return true;
 	},
 
-	updateHistoryState: function( url, title ) {
+	updateHistoryState: function( url, title, number ) {
 
-		document.title = title;
+		if( ! url ) return;
 
 		history.pushState( {url: url}, false, url );
+
+		if( title ) {
+			document.title = title;
+		}
+
+		if( number ) {
+			document.getElementById('image-number').innerText = number;
+		}
 
 	},
 
@@ -355,7 +371,7 @@ var TouchNavigation = {
 
 		// TODO: we probably want to be able to abort this request
 
-		console.log('request', imageSlug, container );
+		console.log('request', imageSlug, container ); // DEBUG
 
 		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
 
@@ -368,7 +384,7 @@ var TouchNavigation = {
 
 			if( request.status === 200 ) {
 
-				console.log('   finished', imageSlug, container);
+				console.log('   finished', imageSlug, container); // DEBUG
 
 				var response = request.response;
 
@@ -382,6 +398,7 @@ var TouchNavigation = {
 							container.innerHTML = response.content;
 							container.dataset.title = response.title;
 							container.dataset.url = response.url;
+							container.dataset.number = response.number;
 						} else {
 							// TODO: handle error case
 							console.warn('container does no longer exist', imageSlug, container)
@@ -547,6 +564,7 @@ var TouchNavigation = {
 		TouchNavigation.posX = false;
 		TouchNavigation.startX = false;
 
+		// TODO: allow cancelation of callback
 		var callback = function(){
 
 			var target = false,
@@ -565,15 +583,17 @@ var TouchNavigation = {
 				return;
 			}
 
-			if( target && container ) {
-				// target.click(); // this flashes the current image, because we replace the complete DOM
-
-				// TODO: remove current prev/next image, preload next/prev image
-				// TODO: update current image count
+			if( target && container ) { // TODO: do we need to check for target here?
 
 				var url = container.dataset.url,
-					title = container.dataset.title;
-				Ajax.updateHistoryState( url, title );
+					title = container.dataset.title,
+					number = container.dataset.number;
+
+				Ajax.updateHistoryState( url, title, number );
+
+				// TODO: remove current prev/next image, preload next/prev image
+				// or call target.click()
+				// target.click(); // this flashes the current image, because we replace the complete DOM
 
 			}
 		}

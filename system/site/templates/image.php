@@ -99,7 +99,7 @@ if( ! doing_ajax() ) {
 	</div>
 	<div class="meta meta-bottom">
 		<ul class="info">
-			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
+			<li><span id="image-number"><?= $image->get_number() ?></span>/<?= $gallery->get_image_count() ?></li>
 		</ul>
 	</div>
 <?php

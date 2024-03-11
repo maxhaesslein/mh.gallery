@@ -14,11 +14,13 @@ if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 
 	$url = $image->get_link();
 	$title = get_site_title();
+	$number = $image->get_number();
 
 	$json = [
 		'content' => $image->get_html( $image_args ),
 		'url' => $url,
 		'title' => $title,
+		'number' => $number,
 	];
 
 	header("Content-type: application/json");
