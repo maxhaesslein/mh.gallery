@@ -26,7 +26,7 @@ var Lightmode = {
 		if( ! toggle ) return;
 
 		// don't bother with showing the toggle, if we can't save the state.
-		// we fall back to the default (light) view, or use lightmode if the
+		// we fall back to the default (dark) view, or use lightmode if the
 		// user has lightmode set and the browser reports this to us
 		// (see snippets/header.php for the loading code)
 		if( typeof(Storage) === "undefined" ) return;
@@ -64,6 +64,69 @@ var Lightmode = {
 			e.preventDefault();
 		});
 
+	}
+
+};
+
+
+var HideCursor = {
+
+	eventHandlersAdded: false,
+	delay: 2000,
+	timer: false,
+
+	init: function(){
+
+		if( ! document.body.classList.contains('template-image') ) return;
+
+		HideCursor.startTimeout();
+
+		if( HideCursor.eventHandlersAdded ) return;
+
+		document.addEventListener( 'mousemove', HideCursor.showCursor );
+		HideCursor.eventHandlersAdded = true;
+
+	},
+
+	startTimeout: function(){
+		HideCursor.timer = setTimeout(function(){
+			document.body.classList.add('cursor-hidden');
+		}, HideCursor.delay);
+	},
+
+	showCursor: function(){
+		clearTimeout(HideCursor.timer);
+		document.body.classList.remove('cursor-hidden');
+		HideCursor.startTimeout();
+	}
+
+};
+
+
+var FullscreenButton = {
+
+	init: function(){
+		var button = document.getElementById('action-fullscreen');
+
+		if( ! button ) return;
+
+		button.addEventListener( 'click', FullscreenButton.toggle );
+
+	},
+
+	toggle: function( e ){
+
+		e.preventDefault();
+
+		var target = document.getElementById('fullscreen-target');
+
+		if( ! target ) return;
+
+		if( ! document.fullscreenElement ) {
+			document.documentElement.requestFullscreen( target );
+		} else if ( document.exitFullscreen ) {
+			document.exitFullscreen();
+		}
 	}
 
 };
@@ -136,11 +199,6 @@ var Ajax = {
 
 				var response = request.response;
 
-				var url = el.href;
-				if( url ) {
-					history.pushState( {url: url}, false, url );
-				}
-
 				if( ! response ) {
 					// TODO: handle error case
 					console.warn( 'AJAX request failed.', request ); // DEBUG
@@ -153,11 +211,11 @@ var Ajax = {
 					TouchNavigation.updateImageOffset(0);
 				}
 
-				if( response.title ) {
-					title = response.title;
-					Ajax.updateTitle( title );
+				var url = el.href;
+				if( url ) {
+					Ajax.updateHistoryState( url, response.title );
 				}
-
+				
 				if( response.prev_image_url ) {
 					document.getElementById('prev-image-preload').href = response.prev_image_url;
 				}
@@ -179,43 +237,13 @@ var Ajax = {
 		return true;
 	},
 
-	updateTitle: function( newTitle ) {
-		document.title = newTitle;
-	}
+	updateHistoryState: function( url, title ) {
 
-};
+		document.title = title;
 
-
-var HideCursor = {
-
-	eventHandlersAdded: false,
-	delay: 2000,
-	timer: false,
-
-	init: function(){
-
-		if( ! document.body.classList.contains('template-image') ) return;
-
-		HideCursor.startTimeout();
-
-		if( HideCursor.eventHandlersAdded ) return;
-
-		document.addEventListener( 'mousemove', HideCursor.showCursor );
-		HideCursor.eventHandlersAdded = true;
+		history.pushState( {url: url}, false, url );
 
 	},
-
-	startTimeout: function(){
-		HideCursor.timer = setTimeout(function(){
-			document.body.classList.add('cursor-hidden');
-		}, HideCursor.delay);
-	},
-
-	showCursor: function(){
-		clearTimeout(HideCursor.timer);
-		document.body.classList.remove('cursor-hidden');
-		HideCursor.startTimeout();
-	}
 
 };
 
@@ -530,9 +558,19 @@ var TouchNavigation = {
 				return;
 			}
 
-			if( target ) target.click();
+			if( target ) {
+				// target.click(); // this flashes the current image, because we replace the complete DOM
+
+				// TODO: remove current prev/next image, preload next/prev image
+				// TODO: pushState
+					// - update document title
+					// - update document URL slug
+					// - update current image count
+
+			}
 		}
 
+		// animate image to new offset:
 		TouchNavigation.updateImageOffset(offset, true, callback);
 
 	},
@@ -541,35 +579,6 @@ var TouchNavigation = {
 		if( ! e.changedTouches ) return new Array(e);
 
 		return e.changedTouches;
-	}
-
-};
-
-
-var FullscreenButton = {
-
-	init: function(){
-		var button = document.getElementById('action-fullscreen');
-
-		if( ! button ) return;
-
-		button.addEventListener( 'click', FullscreenButton.toggle );
-
-	},
-
-	toggle: function( e ){
-
-		e.preventDefault();
-
-		var target = document.getElementById('fullscreen-target');
-
-		if( ! target ) return;
-
-		if( ! document.fullscreenElement ) {
-			document.documentElement.requestFullscreen( target );
-		} else if ( document.exitFullscreen ) {
-			document.exitFullscreen();
-		}
 	}
 
 };
