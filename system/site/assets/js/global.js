@@ -604,21 +604,18 @@ var TouchNavigation = {
 		TouchNavigation.posX = false;
 		TouchNavigation.startX = false;
 
-		// TODO: allow cancelation of callback
+		// TODO: allow cancelation of callback as soon as navigateStart gets called?
 		var callback = function(){
 
-			var target = false,
-				container,
+			var container = false,
 				otherContainer = false;
 
 			if( TouchNavigation.offset > 10 ) {
 				// prev image
-				target = document.getElementById('navigate-prev');
 				container = document.getElementById('image-canvas-prev');
 				otherContainer = document.getElementById('image-canvas-next');
 			} else if( TouchNavigation.offset < -10 ) {
 				// next image
-				target = document.getElementById('navigate-next');
 				container = document.getElementById('image-canvas-next');
 				otherContainer = document.getElementById('image-canvas-prev');
 			} else {
@@ -626,7 +623,7 @@ var TouchNavigation = {
 				return;
 			}
 
-			if( target && container ) { // TODO: do we need to check for target here?
+			if( container ) {
 
 				var url = container.dataset.url,
 					title = container.dataset.title,
@@ -649,11 +646,8 @@ var TouchNavigation = {
 				TouchNavigation.updateImageOffset(0);
 				TouchNavigation.loadAdjacentImages();
 
-				// TODO: remove current prev/next image, preload next/prev image
-				// or call target.click()
-				// target.click(); // this flashes the current image, because we replace the complete DOM
-
 			}
+			
 		}
 
 		// animate image to new offset:
