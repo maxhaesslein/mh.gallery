@@ -1,6 +1,7 @@
 v.0.6.5
 
 - bugfix: show loading indicator in lightmode
+- loading indicator fades in softly, with a delay of 500ms
 
 
 v.0.6.4
