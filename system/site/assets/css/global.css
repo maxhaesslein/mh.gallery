@@ -186,11 +186,39 @@ main {
 
 picture {
 	display: block;
-	background: var(--color-empty) url(../img/loading_white.svg) no-repeat center center / 40px auto;
+	position: relative;
+	background: var(--color-empty);
 }
 
-	body.lightmode picture {
-		background-image: url(../img/loading_black.svg);
+	picture:after {
+		content: "";
+		display: block;
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 0;
+		background: url(../img/loading_white.svg) no-repeat center center / 40px auto;
+		opacity: 0;
+
+		-webkit-transition: opacity 500ms ease-in-out 500ms;
+		-o-transition: opacity 500ms ease-in-out 500ms;
+		transition: opacity 500ms ease-in-out 500ms;
+	}
+
+		body.lightmode picture:after {
+			background-image: url(../img/loading_black.svg);
+		}
+
+		body.nojs picture:after,
+		body.transition picture:after {
+			opacity: 1;
+		}
+
+	picture * {
+		position: relative;
+		z-index: 1;
 	}
 
 	@media ( max-width: 740px ) {

@@ -9,6 +9,10 @@ function init() {
 	TouchNavigation.init();
 	FullscreenButton.init();
 	Preload.init();
+
+	setTimeout( function(){
+		document.body.classList.add('transition');
+	}, 50 );
 };
 window.addEventListener( 'load', init );
 
