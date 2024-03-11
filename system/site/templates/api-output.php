@@ -12,8 +12,13 @@ if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 		'width' => get_config('default_image_width'),
 	];
 
+	$url = $image->get_link();
+	$title = get_site_title();
+
 	$json = [
 		'content' => $image->get_html( $image_args ),
+		'url' => $url,
+		'title' => $title,
 	];
 
 	header("Content-type: application/json");

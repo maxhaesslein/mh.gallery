@@ -332,6 +332,7 @@ var TouchNavigation = {
 		if( navigateNext ) {
 			var nextImageContainer = document.createElement('div');
 			nextImageContainer.classList.add('image-canvas', 'image-canvas-next');
+			nextImageContainer.id = 'image-canvas-next';
 			imageWrapper.appendChild(nextImageContainer);
 
 			var nextImageSlug = navigateNext.dataset.gallerySlug+'/'+navigateNext.dataset.nextImageSlug;
@@ -341,6 +342,7 @@ var TouchNavigation = {
 		if( navigatePrev ) {
 			var prevImageContainer = document.createElement('div');
 			prevImageContainer.classList.add('image-canvas', 'image-canvas-prev');
+			prevImageContainer.id = 'image-canvas-prev';
 			imageWrapper.insertBefore(prevImageContainer, imageWrapper.firstChild);
 
 			var prevImageSlug = navigatePrev.dataset.gallerySlug+'/'+navigatePrev.dataset.prevImageSlug;
@@ -378,6 +380,8 @@ var TouchNavigation = {
 
 						if( container ) {
 							container.innerHTML = response.content;
+							container.dataset.title = response.title;
+							container.dataset.url = response.url;
 						} else {
 							// TODO: handle error case
 							console.warn('container does no longer exist', imageSlug, container)
@@ -545,27 +549,31 @@ var TouchNavigation = {
 
 		var callback = function(){
 
-			var target = false;;
+			var target = false,
+				container;
 
 			if( TouchNavigation.offset > 10 ) {
 				// prev image
 				target = document.getElementById('navigate-prev');
+				container = document.getElementById('image-canvas-prev');
 			} else if( TouchNavigation.offset < -10 ) {
 				// next image
 				target = document.getElementById('navigate-next');
+				container = document.getElementById('image-canvas-next');
 			} else {
 				// stay at current image
 				return;
 			}
 
-			if( target ) {
+			if( target && container ) {
 				// target.click(); // this flashes the current image, because we replace the complete DOM
 
 				// TODO: remove current prev/next image, preload next/prev image
-				// TODO: pushState
-					// - update document title
-					// - update document URL slug
-					// - update current image count
+				// TODO: update current image count
+
+				var url = container.dataset.url,
+					title = container.dataset.title;
+				Ajax.updateHistoryState( url, title );
 
 			}
 		}
