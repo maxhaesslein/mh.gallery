@@ -578,7 +578,7 @@ body.template-image {
 		margin: 0;
 	}
 
-		.template-image .navigation a {
+		.template-image .navigation a[href] {
 			display: block;
 			position: fixed;
 			top: 0;

@@ -5,6 +5,7 @@ if( ! $core ) exit;
 define( 'DOING_AJAX', true );
 
 $image = $core->route->get('image');
+$gallery = $core->route->get('gallery');
 
 if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 
@@ -16,11 +17,33 @@ if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
 	$title = get_site_title();
 	$number = $image->get_number();
 
+	$prev_image = $image->get_adjacent_image('prev');
+	$prev = false;
+	if( $prev_image ) {
+		$prev = [
+			'url' => $prev_image->get_link(),
+			'slug' => $prev_image->get_slug(),
+			'gallerySlug' => $gallery->get_slug(),
+		];
+	}
+
+	$next_image = $image->get_adjacent_image('next');
+	$next = false;
+	if( $next_image ) {
+		$next = [
+			'url' => $next_image->get_link(),
+			'slug' => $next_image->get_slug(),
+			'gallerySlug' => $gallery->get_slug(),
+		];
+	}
+
 	$json = [
 		'content' => $image->get_html( $image_args ),
 		'url' => $url,
 		'title' => $title,
 		'number' => $number,
+		'prev' => $prev,
+		'next' => $next,
 	];
 
 	header("Content-type: application/json");

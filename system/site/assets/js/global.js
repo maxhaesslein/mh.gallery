@@ -8,7 +8,6 @@ function init() {
 	KeyboardNavigation.init();
 	TouchNavigation.init();
 	FullscreenButton.init();
-	Preload.init();
 
 	setTimeout( function(){
 		document.body.classList.add('transition');
@@ -173,7 +172,6 @@ var Ajax = {
 	navigate: function( el ) {
 
 		// TODO: maybe cancel TouchNavigation requests?
-		//Preload.cancel();
 
 		var imageSlug = false;
 		if( el.id == 'navigate-next' ) {
@@ -245,7 +243,7 @@ var Ajax = {
 		return true;
 	},
 
-	updateHistoryState: function( url, title, number ) {
+	updateHistoryState: function( url, title, number, prev, next ) {
 
 		if( ! url ) return;
 
@@ -257,6 +255,28 @@ var Ajax = {
 
 		if( number ) {
 			document.getElementById('image-number').innerText = number;
+		}
+
+		var prevEl = document.getElementById('navigate-prev');
+		if( prev && prevEl ) {
+			prevEl.href = prev.url;
+			prevEl.dataset.prevImageSlug = prev.slug;
+			prevEl.dataset.gallerySlug = prev.gallerySlug;
+		} else {
+			prevEl.href = '';
+			prevEl.dataset.prevImageSlug = false;
+			prevEl.dataset.gallerySlug = false;
+		}
+
+		var nextEl = document.getElementById('navigate-next');
+		if( next && nextEl ) {
+			nextEl.href = next.url;
+			nextEl.dataset.nextImageSlug = next.slug;
+			nextEl.dataset.gallerySlug = next.gallerySlug;
+		} else {
+			nextEl.href = '';
+			nextEl.dataset.nextImageSlug = false;
+			nextEl.dataset.gallerySlug = false;
 		}
 
 	},
@@ -351,8 +371,10 @@ var TouchNavigation = {
 			nextImageContainer.id = 'image-canvas-next';
 			imageWrapper.appendChild(nextImageContainer);
 
-			var nextImageSlug = navigateNext.dataset.gallerySlug+'/'+navigateNext.dataset.nextImageSlug;
-			TouchNavigation.requestImage( nextImageSlug, nextImageContainer );
+			if( navigateNext.dataset.nextImageSlug ) {
+				var nextImageSlug = navigateNext.dataset.gallerySlug+'/'+navigateNext.dataset.nextImageSlug;
+				TouchNavigation.requestImage( nextImageSlug, nextImageContainer );
+			}
 		}
 
 		if( navigatePrev ) {
@@ -361,8 +383,10 @@ var TouchNavigation = {
 			prevImageContainer.id = 'image-canvas-prev';
 			imageWrapper.insertBefore(prevImageContainer, imageWrapper.firstChild);
 
-			var prevImageSlug = navigatePrev.dataset.gallerySlug+'/'+navigatePrev.dataset.prevImageSlug;
-			TouchNavigation.requestImage( prevImageSlug, prevImageContainer );
+			if( navigatePrev.dataset.prevImageSlug ) {
+				var prevImageSlug = navigatePrev.dataset.gallerySlug+'/'+navigatePrev.dataset.prevImageSlug;
+				TouchNavigation.requestImage( prevImageSlug, prevImageContainer );
+			}
 		}
 
 	},
@@ -370,6 +394,8 @@ var TouchNavigation = {
 	requestImage: function( imageSlug, container ) {
 
 		// TODO: we probably want to be able to abort this request
+
+		if( ! imageSlug || ! container ) return;
 
 		console.log('request', imageSlug, container ); // DEBUG
 
@@ -395,10 +421,24 @@ var TouchNavigation = {
 					if( response.content ) {
 
 						if( container ) {
+
 							container.innerHTML = response.content;
 							container.dataset.title = response.title;
 							container.dataset.url = response.url;
 							container.dataset.number = response.number;
+
+							if( response.prev ) {
+								container.dataset.prev = JSON.stringify(response.prev);
+							} else {
+								response.prev = false;
+							}
+
+							if( response.next ) {
+								container.dataset.next = JSON.stringify(response.next);
+							} else {
+								response.next = false;
+							}
+
 						} else {
 							// TODO: handle error case
 							console.warn('container does no longer exist', imageSlug, container)
@@ -568,16 +608,19 @@ var TouchNavigation = {
 		var callback = function(){
 
 			var target = false,
-				container;
+				container,
+				otherContainer = false;
 
 			if( TouchNavigation.offset > 10 ) {
 				// prev image
 				target = document.getElementById('navigate-prev');
 				container = document.getElementById('image-canvas-prev');
+				otherContainer = document.getElementById('image-canvas-next');
 			} else if( TouchNavigation.offset < -10 ) {
 				// next image
 				target = document.getElementById('navigate-next');
 				container = document.getElementById('image-canvas-next');
+				otherContainer = document.getElementById('image-canvas-prev');
 			} else {
 				// stay at current image
 				return;
@@ -587,9 +630,24 @@ var TouchNavigation = {
 
 				var url = container.dataset.url,
 					title = container.dataset.title,
-					number = container.dataset.number;
+					number = container.dataset.number,
+					prev = false,
+					next = false;
 
-				Ajax.updateHistoryState( url, title, number );
+				if( container.dataset.prev ) prev = JSON.parse(container.dataset.prev);
+				if( container.dataset.next ) next = JSON.parse(container.dataset.next);
+
+				Ajax.updateHistoryState( url, title, number, prev, next );
+
+				var canvas = document.getElementById('image-canvas');
+				canvas.remove();
+				if( otherContainer ) otherContainer.remove();
+
+				container.id = 'image-canvas';
+				container.classList.remove('image-canvas-next', 'image-canvas-prev');
+
+				TouchNavigation.updateImageOffset(0);
+				TouchNavigation.loadAdjacentImages();
 
 				// TODO: remove current prev/next image, preload next/prev image
 				// or call target.click()

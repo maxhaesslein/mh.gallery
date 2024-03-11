@@ -88,12 +88,23 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">prev</a></li>';
-		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">next</a></li>';
+
+		if( $prev_link ) {
+			echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">prev</a></li>';
+		} else {
+			echo '<li><a id="navigate-prev" class="navigate-prev" rel="prev">prev</a></li>';
+		}
+
+		if( $next_link ) {
+			echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">next</a></li>';
+		} else {
+			echo '<li><a id="navigate-next" class="navigate-next" rel="next">next</a></li>';
+		}
+
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
-		<div class="image-canvas">
+		<div id="image-canvas" class="image-canvas">
 			<?= $image->get_html( $image_args ) ?>
 		</div>
 	</div>
