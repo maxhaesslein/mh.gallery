@@ -587,10 +587,6 @@ body.template-image {
 			height: 100%;
 			z-index: 42;
 			background: no-repeat center center / 20px auto;
-
-			-webkit-transition: opacity 500ms ease-in-out;
-			-o-transition: opacity 500ms ease-in-out;
-			transition: opacity 500ms ease-in-out;
 		}
 		
 			.template-image .navigation a.navigate-prev {
@@ -605,22 +601,24 @@ body.template-image {
 				background-image: url(../img/arrow-right_white.svg);
 			}
 
-			.template-image .navigation a:hover {
-				opacity: 0.6;
-			}
+			@media( hover: hover ) { /* has mouse */
 
-			body.cursor-hidden.template-image .navigation a {
-				opacity: 0;
+				.template-image .navigation a {
+					-webkit-transition: opacity 500ms ease-in-out;
+					-o-transition: opacity 500ms ease-in-out;
+					transition: opacity 500ms ease-in-out;
+				}
 
-				-webkit-transition-delay: 300ms;
-				-o-transition-delay: 300ms;
-				transition-delay: 300ms
-			}
-
-			@media( hover: none ) { /* is touchscreen */
-				
 				body.cursor-hidden.template-image .navigation a {
-					opacity: 1;
+					opacity: 0;
+
+					-webkit-transition-delay: 300ms;
+					-o-transition-delay: 300ms;
+					transition-delay: 300ms
+				}
+
+				.template-image .navigation a:hover {
+					opacity: 0.6;
 				}
 
 			}
