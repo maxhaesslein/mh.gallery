@@ -1,7 +1,7 @@
 v.0.6.5
 
 - removed swipe navigation (has problems with image zoom)
-- don't hide arrow buttons, if device has a touchscreen
+- don't hide elements, if device has a touchscreen
 - loading indicator fades in softly, with a delay of 500ms
 - bugfix: show loading indicator in lightmode
 
