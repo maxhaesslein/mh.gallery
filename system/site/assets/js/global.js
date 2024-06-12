@@ -191,6 +191,9 @@ var HideCursor = {
 
 		if( ! document.body.classList.contains('template-image') ) return;
 
+		var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+		if( isTouchDevice ) return;
+
 		HideCursor.startTimeout();
 
 		if( HideCursor.eventHandlersAdded ) return;
