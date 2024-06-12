@@ -617,6 +617,14 @@ body.template-image {
 				transition-delay: 300ms
 			}
 
+			@media( hover: none ) { /* is touchscreen */
+				
+				body.cursor-hidden.template-image .navigation a {
+					opacity: 1;
+				}
+
+			}
+
 			@media( max-width: 480px ) {
 
 				.template-image .navigation a.navigate-prev {
