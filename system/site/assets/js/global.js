@@ -6,7 +6,6 @@ function init() {
 	Ajax.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
-	TouchNavigation.init();
 	FullscreenButton.init();
 	Preload.init();
 
@@ -250,110 +249,6 @@ var KeyboardNavigation = {
 		
 		target.click();
 
-	}
-
-};
-
-
-var TouchNavigation = {
-
-	threshold: 50, // minimum pixels to move
-	eventHandlersAdded: false,
-	posX: false,
-
-	init: function(){
-		if( ! document.body.classList.contains('template-image') ) return;
-
-		if( TouchNavigation.eventHandlersAdded ) return;
-
-		document.addEventListener( 'touchstart', TouchNavigation.navigateStart, false );
-		document.addEventListener( 'touchend', TouchNavigation.navigateEnd, false );
-		document.addEventListener( 'touchcancel', TouchNavigation.navigateCancel, false );
-		document.addEventListener( 'touchmove', TouchNavigation.navigateMove, false );
-		document.addEventListener( 'touchmove', function(e){e.preventDefault();}, false ); // fix for Edge
-
-		TouchNavigation.eventHandlersAdded = true;
-
-	},
-
-	navigateStart: function(e){
-
-		var touches = TouchNavigation.getTouches(e);
-
-		if( ! touches || touches.length != 1 ) {
-			TouchNavigation.navigateCancel();
-			return;
-		}
-
-		TouchNavigation.posX = touches[0].clientX;
-
-	},
-
-	navigateCancel: function(e){
-
-		TouchNavigation.posX = false;
-
-	},
-
-	navigateMove: function(e){
-
-		var touches = TouchNavigation.getTouches(e);
-
-		if( ! touches ) return;
-
-		if( touches.length == 1 ) return;
-
-		// as soon as we detect multitouch, we abort the navigation, because then the user most likely wants to zoom in
-
-		TouchNavigation.navigateCancel();
-
-	},
-
-	navigateEnd: function(e){
-
-		if( TouchNavigation.posX === false ) return;
-
-		var touches = TouchNavigation.getTouches(e);
-
-		if( ! touches || touches.length != 1 ) {
-			TouchNavigation.navigateCancel();
-			return;
-		}
-
-		var newClientX = touches[0].clientX;
-
-		var delta = newClientX - TouchNavigation.posX;
-
-		var direction = Math.sign(delta);
-
-		delta = Math.abs(delta);
-
-		TouchNavigation.posX = false;
-
-		if( delta < TouchNavigation.threshold ) return;
-
-		var target = false;
-
-		if( direction < 0 ) {
-			// swipe to left, next image
-			target = document.getElementById('navigate-next');
-			e.preventDefault();
-		} else {
-			// swipe to right, prev image
-			target = document.getElementById('navigate-prev');
-			e.preventDefault();
-		}
-
-		if( ! target ) return;
-		
-		target.click();
-
-	},
-
-	getTouches: function(e){
-		if( ! e.changedTouches ) return new Array(e);
-
-		return e.changedTouches;
 	}
 
 };
