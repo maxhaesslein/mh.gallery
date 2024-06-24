@@ -1,3 +1,8 @@
+v.0.6.6
+
+- fixed spacing for lightmode-toggle, if image and gallery download is disabled
+
+
 v.0.6.5
 
 - removed swipe navigation (has problems with image zoom)
