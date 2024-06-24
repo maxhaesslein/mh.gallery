@@ -1,6 +1,7 @@
 v.0.6.6
 
 - fixed spacing for lightmode-toggle, if image and gallery download is disabled
+- now released under the GNU General Public License (see LICENSE.md for details)
 
 
 v.0.6.5

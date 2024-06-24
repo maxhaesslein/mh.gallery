@@ -1,5 +1,14 @@
 <?php
 
+// This file is part of mh.gallery
+// Copyright (C) 2023-2024 maxhaesslein
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+// See the file LICENSE.md for more details.
+
+
 // NOTE: internally in our image array, the key of an image is their slug, but with a leading 'img-'; this is important to have the key exist as a string, instead of an int
 
 function get_image_key_from_slug( $image_slug ) {
