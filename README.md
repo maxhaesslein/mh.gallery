@@ -134,7 +134,7 @@ All thumbnails and images will be resized on view. The resized images will be au
 
 webp support is enabled by default. You can disable it by adding `'webp_enabled' => false` to the `custom/config.php`.
 
-avif support is disabled by default, until we reach a more stable version. You can enable it by adding `'avif_supported' => true` to the `custom/config.php`. You need at least `PHP 8.1`, `GD` compiled with avif support and `libavif v.0.8.2` or higher.
+avif support is disabled by default, until we reach a more stable version. You can enable it by adding `'avif_enabled' => true` to the `custom/config.php`. You need at least `PHP 8.1`, `GD` compiled with avif support and `libavif v.0.8.2` or higher.
 
 ## Update
 
