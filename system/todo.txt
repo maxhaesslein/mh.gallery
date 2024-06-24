@@ -20,10 +20,10 @@
 	- stepped, like zip creation
 
 - password protected galleries
+- protect galleries with private link / secret hash
+	- allow multiple secret hashes per gallery (could be: secret: 12345, 54321, abc)
 
 - collection.txt, which can combine several galleries by path and can be password protected
-
-- allow multiple secret hashes per gallery (could be: secret: 12345, 54321, abc)
 
 - add license
 
