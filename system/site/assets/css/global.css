@@ -442,7 +442,6 @@ h1 {
 		width: 26px;
 		height: 30px;
 		display: inline-block;
-		margin-right: 30px; /* spacing for lightmode-toggle */
 	}
 
 	.meta .button-more {
@@ -557,10 +556,12 @@ body.template-image {
 		left: 0;
 		z-index: 50;
 		padding: 10px;
+		box-sizing: border-box;
 	}
 
 		.template-image .meta-top {
 			top: 0;
+			padding-right: 40px; /* spacing for lightmode-toggle */
 		}
 
 		.template-image .meta-bottom {
