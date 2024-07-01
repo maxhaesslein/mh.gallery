@@ -10,6 +10,7 @@ A simple and lightweight PHP gallery, without any dependencies. A demo can be fo
 - images are automatically resized to the best resolution for the current viewport size, and are served in modern formats (webp, avif) if possible; resized images are cached on the server, so they don't need to be regenerated every time
 - galleries can be hidden or only accessible via a secret link
 - lightmode & darkmode
+- released under the GPL 3 license; see license.md for details
 
 This is an early version, there may still be bugs.
 
