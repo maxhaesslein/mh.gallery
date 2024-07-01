@@ -2,6 +2,7 @@ v.0.6.8
 
 - default to jpg for main source image, even if source file format is something else
 - icons are now implemented as masks, and the color is set via CSS
+- images are now also cropped if the source image is too small
 - small design tweaks
 
 

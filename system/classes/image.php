@@ -663,7 +663,7 @@ class Image {
 
 		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
 
-		if( $src_width > $width || $src_height > $height ) {
+		if( $src_width > $width || $src_height > $height || $crop ) {
 
 			$image_blob_resized = imagecreatetruecolor( $width, $height );
 
