@@ -64,7 +64,7 @@ image_sort_order: filename
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
 
-Add `.jpg` (or `.jpeg`, `.png` or `.webp`) files into the gallery folder, the images get detected automatically. (For supported extensions see the `image_extensions` option in `system/config.php`)
+Add `.jpg` (or `.jpeg`, `.png`, `.webp`, `avif` or `gif`) files into the gallery folder, the images get detected automatically. (For supported extensions see the `image_extensions` option in `system/config.php`; GIF files will lose their animation)
 
 The `image_sort_order` sets the sort order for images in a gallery and can be set via `custom/config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata if available, or file modification date otherwise), `bridge` (sort by a .BridgeSort file, created by Adobe Bridge) or `random` (sort randomly on every visit). This option gets inherited from the parent gallery.
 

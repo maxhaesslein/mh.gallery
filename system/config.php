@@ -54,8 +54,8 @@ return [
 	'cache_lifetime' => 60*60*24*30, // default; 30 days in seconds
 	'zip_cache_lifetime' => 60*60*24*7, // gallery zip files; 7 days in seconds
 
-	// search for these extensions while loading gallery images
-	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif'],
+	// search for these extensions while loading gallery images (gif images will lose their animation)
+	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
 
 	// set to false to disable download of single images
 	'download_image_enabled' => true,
@@ -69,7 +69,9 @@ return [
 	// add OpenGraph sharing tags to HTML head, for better link previews
 	'site_sharing_tags' => true,
 
-	// webp and avif are enabled by default. you can disable them by setting these options to false; see 'modern image formats' in README.md for more details
+	// these image formats are enabled by default. you can disable them by setting these options to false; for webp & avif see 'modern image formats' in README.md for more details
+	'png_enabled' => true,
+	'gif_enabled' => true,
 	'webp_enabled' => true,
 	'avif_enabled' => true,
 

@@ -93,8 +93,10 @@ class Image {
 			$this->set_image_type('png');
 		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
 			$this->set_image_type('webp');
-		} elseif( $this->type_supported('avif') && $this->image_type == IMAGETYPE_AVIF ) {
+		} elseif( $this->image_type == IMAGETYPE_AVIF ) {
 			$this->set_image_type('avif');
+		} elseif( $this->image_type == IMAGETYPE_GIF ) {
+			$this->set_image_type('gif');
 		} else {
 			debug( 'unknown image type '.$this->image_type);
 		}
@@ -498,9 +500,12 @@ class Image {
 		} elseif( $new_type == 'webp' ) {
 			$this->mime_type = 'image/webp';
 			$this->file_extension = 'webp';
-		} elseif( $this->type_supported('avif') && $new_type == 'avif' ) {
+		} elseif( $new_type == 'avif' ) {
 			$this->mime_type = 'image/avif';
 			$this->file_extension = 'avif';
+		} elseif( $new_type == 'gif' ) {
+			$this->mime_type = 'image/gif';
+			$this->file_extension = 'gif';
 		}
 
 		return $this;
@@ -513,33 +518,40 @@ class Image {
 
 		$image = false;
 
-		if( $this->image_type == IMAGETYPE_JPEG ) {
+		if( $this->image_type == IMAGETYPE_JPEG && $this->type_supported('jpg') ) {
 
 			$image = imagecreatefromjpeg( $this->path );
 
-		} elseif( $this->image_type == IMAGETYPE_PNG ) {
+		} elseif( $this->image_type == IMAGETYPE_PNG && $this->type_supported('png') ) {
 
 			$image = imagecreatefrompng( $this->path );
 
 			// handle transparency loading:
-			imageAlphaBlending( $image, false );
-			imageSaveAlpha( $image, true );
+			imagealphablending( $image, false );
+			imagesavealpha( $image, true );
 
-		} elseif( $this->image_type == IMAGETYPE_WEBP ) {
+		} elseif( $this->image_type == IMAGETYPE_WEBP && $this->type_supported('webp') ) {
 
 			$image = imagecreatefromwebp( $this->path );
 
 			// handle transparency loading:
-			imageAlphaBlending( $image, false );
-			imageSaveAlpha( $image, true );
+			imagealphablending( $image, false );
+			imagesavealpha( $image, true );
 
-		} elseif( $this->type_supported('avif') && $this->image_type == IMAGETYPE_AVIF ) {
+		} elseif( $this->image_type == IMAGETYPE_AVIF && $this->type_supported('avif') ) {
 
 			$image = imagecreatefromavif( $this->path );
 
 			// handle transparency loading:
-			imageAlphaBlending( $image, false );
-			imageSaveAlpha( $image, true );
+			imagealphablending( $image, false );
+			imagesavealpha( $image, true );
+
+		} elseif( $this->image_type == IMAGETYPE_GIF && $this->type_supported('gif') ) {
+
+			$image = imagecreatefromgif( $this->path );
+
+			// we need to make sure to convert this to true color, for other formats:
+			imagepalettetotruecolor( $image );
 
 		}
 
@@ -644,8 +656,7 @@ class Image {
 		$quality = $args['quality'];
 
 		$image_blob = $this->read_image();
-		if( ! $image_blob ) {
-			debug('could not load image', $image);
+		if( ! $image_blob ) {debug('could not load image', $image);
 			exit;
 		}
 
@@ -663,8 +674,8 @@ class Image {
 				|| $this->image_type == IMAGETYPE_WEBP 
 			) {
 				// handle alpha channel
-				imageAlphaBlending( $image_blob_resized, false );
-				imageSaveAlpha( $image_blob_resized, true );
+				imagealphablending( $image_blob_resized, false );
+				imagesavealpha( $image_blob_resized, true );
 			}
 
 			// NOTE: currently, we just center the image on crop
@@ -705,7 +716,7 @@ class Image {
 			header( 'Content-Type: image/jpeg' );
 			echo $data;
 
-		} elseif( $type == 'png' ) {
+		} elseif( $type == 'png' && $this->type_supported('png') ) {
 
 			ob_start();
 			imagepng( $image_blob );
@@ -716,7 +727,7 @@ class Image {
 			header( 'Content-Type: image/png' );
 			echo $data;
 
-		} elseif( $type == 'webp' ) {
+		} elseif( $type == 'webp' && $this->type_supported('webp') ) {
 
 			ob_start();
 			imagewebp( $image_blob, null, $quality );
@@ -727,7 +738,7 @@ class Image {
 			header( 'Content-Type: image/webp' );
 			echo $data;
 
-		} elseif( $this->type_supported('avif') && $type == 'avif' ) {
+		} elseif( $type == 'avif' && $this->type_supported('avif') ) {
 
 			ob_start();
 			imageavif( $image_blob, null, $quality );
@@ -736,9 +747,24 @@ class Image {
 			$cache->add_data( $data );
 
 			header( 'Content-Type: image/avif' );
-			echo $data;			
+			echo $data;
+
+		} elseif( $type == 'gif' && $this->type_supported('gif') ) {
+
+			ob_start();
+
+			imagetruecolortopalette($image_blob, true, 256);
+
+			imagegif( $image_blob, null );
+			$data = ob_get_contents();
+			ob_end_clean();
+			$cache->add_data( $data );
+
+			header( 'Content-Type: image/gif' );
+			echo $data;
 
 		}
+
 
 		imagedestroy( $image_blob );
 		exit;
