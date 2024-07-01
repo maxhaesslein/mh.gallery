@@ -148,6 +148,9 @@ class Gallery {
 
 			$gallery = new Gallery($subgallery_path.'gallery.txt', $this);
 
+			$count = $gallery->get_image_count();
+			if( $count <= 0 ) continue;
+
 			$slug = $gallery->get_slug( true );
 
 			if( ! $slug ) continue;
