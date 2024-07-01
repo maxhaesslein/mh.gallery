@@ -465,9 +465,13 @@ h1 {
 		height: 26px;
 		overflow: hidden;
 		vertical-align: middle;
-		background-image: url(../img/more.svg);
+		background-image: url(../img/more_white.svg);
 		cursor: pointer;
 	}
+
+		body.lightmode .meta .button-more {
+			background-image: url(../img/more_black.svg);
+		}
 
 		.meta .more-menu-wrapper:hover .button-more{
 			border-bottom-right-radius: 0;
@@ -520,8 +524,12 @@ h1 {
 		height: 24px;
 		overflow: hidden;
 		vertical-align: middle;
-		background-image: url(../img/fullscreen.svg);
+		background-image: url(../img/fullscreen_white.svg);
 	}
+
+		body.lightmode .meta .button-fullscreen a {
+			background-image: url(../img/fullscreen_black.svg);
+		}
 
 	@media ( pointer: none ), ( pointer: coarse ) {
 
