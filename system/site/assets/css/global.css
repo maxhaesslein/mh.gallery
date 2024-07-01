@@ -34,6 +34,7 @@ body {
 	--color-button-hover: #333;
 	--color-background: #181818;
 	--color-text: #eee;
+	--color-icon: #fff;
 }
 
 	body.lightmode {
@@ -42,6 +43,7 @@ body {
 		--color-button-hover: #fff;
 		--color-background: #f2f2f2;
 		--color-text: #222;
+		--color-icon: #000;
 	}
 
 	body.soft-fade,
@@ -428,7 +430,7 @@ h1 {
 	.button {
 		text-decoration: none;
 		display: inline-block;
-		background: var(--color-button) no-repeat center center / 70% auto;
+		background: var(--color-button);
 		border-radius: 4px;
 		padding: 5px 10px;
 		box-sizing: border-box;
@@ -465,12 +467,20 @@ h1 {
 		height: 26px;
 		overflow: hidden;
 		vertical-align: middle;
-		background-image: url(../img/more_white.svg);
 		cursor: pointer;
+		position: relative;
 	}
 
-		body.lightmode .meta .button-more {
-			background-image: url(../img/more_black.svg);
+		.meta .button-more:after {
+			content: "";
+			display: block;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: var(--color-icon);
+			mask: url(../img/more.svg) no-repeat center center / 70% auto;
 		}
 
 		.meta .more-menu-wrapper:hover .button-more{
@@ -524,11 +534,19 @@ h1 {
 		height: 24px;
 		overflow: hidden;
 		vertical-align: middle;
-		background-image: url(../img/fullscreen_white.svg);
+		position: relative;
 	}
 
-		body.lightmode .meta .button-fullscreen a {
-			background-image: url(../img/fullscreen_black.svg);
+		.meta .button-fullscreen a:after {
+			content: "";
+			display: block;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: var(--color-icon);
+			mask: url(../img/fullscreen.svg) no-repeat center center / 70% auto;
 		}
 
 	@media ( pointer: none ), ( pointer: coarse ) {
@@ -609,20 +627,38 @@ body.template-image {
 			min-width: 50px;
 			height: 100%;
 			z-index: 42;
-			background: no-repeat center center / 20px auto;
 		}
 		
+			.template-image .navigation a:after {
+				content: "";
+				display: block;
+				width: 100%;
+				height: 100%;
+				width: 20px;
+				height: 40px;
+				margin-top: -20px;
+				position: absolute;
+				top: 50%;
+				background-color: var(--color-icon);
+			}
+
 			.template-image .navigation a.navigate-prev {
 				left: 0;
-				background-position: left 40px center;
-				background-image: url(../img/arrow-left_white.svg);
 			}
+				
+				.template-image .navigation a.navigate-prev:after {
+					left: 40px;
+					mask: url(../img/arrow-left.svg) no-repeat center center / contain;
+				}
 
 			.template-image .navigation a.navigate-next {
 				right: 0;
-				background-position: right 40px center;
-				background-image: url(../img/arrow-right_white.svg);
 			}
+
+				.template-image .navigation a.navigate-next:after {
+					right: 40px;
+					mask: url(../img/arrow-right.svg) no-repeat center center / contain;
+				}
 
 			@media( hover: hover ) { /* has mouse */
 
@@ -648,14 +684,18 @@ body.template-image {
 
 			@media( max-width: 480px ) {
 
-				.template-image .navigation a.navigate-prev {
-					background-position: left 10px center;
-					background-size: 15px auto;
+				.template-image .navigation a:after {
+					width: 15px;
+					height: 20px;
+					margin-top: -10px;
 				}
 
-				.template-image .navigation a.navigate-next {
-					background-position: right 10px center;
-					background-size: 15px auto;
+				.template-image .navigation a.navigate-prev:after {
+					left: 10px;
+				}
+
+				.template-image .navigation a.navigate-next:after {
+					right: 10px;
 				}
 
 			}
