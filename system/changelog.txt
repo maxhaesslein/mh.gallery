@@ -1,6 +1,6 @@
 v.0.6.8
 
-- …
+- default to jpg for main source image, even if source file format is something else
 
 
 v.0.6.7

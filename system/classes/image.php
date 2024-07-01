@@ -429,6 +429,7 @@ class Image {
 			'width' => $width,
 			'height' => $height,
 			'crop' => $crop,
+			'type' => 'jpg'
 		]);
 
 		$html = '';
