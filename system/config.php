@@ -70,12 +70,9 @@ return [
 	// add OpenGraph sharing tags to HTML head, for better link previews
 	'site_sharing_tags' => true,
 
-	// webp is enabled by default. you can disable it by setting this option to false; if neither webp nor avif is enabled, only jpg files will be generated
+	// webp and avif are enabled by default. you can disable them by setting these options to false; see 'modern image formats' in README.md for more details
 	'webp_enabled' => true,
-
-	// for now, avif is disabled by default. if you enable it, there is still an additional check to see if the hosting environment supports avif. you need to be at least on PHP 8.1 to use avif
-	// TODO: enable avif by default
-	'avif_enabled' => false,
+	'avif_enabled' => true,
 
 	// sort images by this option; can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
 	'image_sort_order' => 'filename',
