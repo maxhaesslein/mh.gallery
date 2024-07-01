@@ -1,6 +1,7 @@
 v.0.6.7
 
 - the config option `avif_enabled` now defaults to `true`; the additional checks for server compatibility seem to work correctly, so even if avif is not supported, nothing should break; if you have problems, add `'avif_enabled' => false` to your `custom/config.php`
+- updated some descriptions and comments
 
 
 v.0.6.6

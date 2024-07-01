@@ -74,7 +74,7 @@ return [
 	'webp_enabled' => true,
 	'avif_enabled' => true,
 
-	// sort images by this option; can be 'filename', 'filedate' or 'exifdate'; can be overwritten via gallery.txt
+	// sort images by this option; can be 'filename', 'filedate' (file modification date), 'exifdate' (date recorderd in the exif metadata if available, or file modification date otherwise), 'bridge' (sort by a .BridgeSort file, created by Adobe Bridge) or 'random' (sort randomly on every visit); can be overwritten via gallery.txt
 	'image_sort_order' => 'filename',
 
 	// sort (sub-)galleries by this option; can be 'title', 'slug', 'foldername' (folder on disk); can be overwritten via gallery.txt for sub-galleries
