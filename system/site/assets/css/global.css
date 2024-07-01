@@ -75,9 +75,6 @@ body {
 	position: absolute;
 	right: 10px;
 	top: 12px;
-
-	-webkit-transition: opacity 500ms ease-in-out;
-	-o-transition: opacity 500ms ease-in-out;
 	transition: opacity 500ms ease-in-out;
 }
 
@@ -217,9 +214,6 @@ picture {
 		z-index: 0;
 		background: url(../img/loading_white.svg) no-repeat center center / 40px auto;
 		opacity: 0;
-
-		-webkit-transition: opacity 500ms ease-in-out 500ms;
-		-o-transition: opacity 500ms ease-in-out 500ms;
 		transition: opacity 500ms ease-in-out 500ms;
 	}
 
@@ -261,14 +255,8 @@ a {
 h1 {
 	text-align: center;
 	margin: 0.2em 0 0.8em;
-
 	text-wrap: balance;
-
-	-ms-word-break: break-all;
-	word-break: break-all;
 	word-break: break-word;
-	-webkit-hyphens: auto;
-	-moz-hyphens: auto;
 	hyphens: auto;
 }
 
@@ -351,14 +339,8 @@ h1 {
 		display: block;
 		padding: 0.4em 0 0;
 		font-size: 0.9em;
-
 		text-wrap: balance;
-
-		-ms-word-break: break-all;
-		word-break: break-all;
 		word-break: break-word;
-		-webkit-hyphens: auto;
-		-moz-hyphens: auto;
 		hyphens: auto;
 	}
 
@@ -380,18 +362,12 @@ h1 {
 		.gallery-list .gallery-link .image-container,
 		.gallery-list .image-link .image-container {
 			box-shadow: 0 0 20px rgba(0,0,0,0);
-			-webkit-transition: all 200ms ease-in-out;
-			-o-transition: all 200ms ease-in-out;
 			transition: all 200ms ease-in-out;
 		}
 
 			.gallery-list .gallery-link:hover .image-container,
 			.gallery-list .image-link:hover .image-container {
 				box-shadow: 0 0 10px rgba(0,0,0,.6);
-				-moz-transform: scale(1.05);
-				-webkit-transform: scale(1.05);
-				-o-transform: scale(1.05);
-				-ms-transform: scale(1.05);
 				transform: scale(1.05);
 			}
 
@@ -405,9 +381,6 @@ h1 {
 	width: 100%;
 	padding: 5px 0;
 	box-sizing: border-box;
-
-	-webkit-transition: opacity 500ms ease-in-out;
-	-o-transition: opacity 500ms ease-in-out;
 	transition: opacity 500ms ease-in-out;
 }
 
@@ -581,9 +554,6 @@ body.template-image {
 		width: calc(100% - 20px);
 		left: 10px;
 		bottom: 10px;
-
-		-webkit-transition: opacity 500ms ease-in-out;
-		-o-transition: opacity 500ms ease-in-out;
 		transition: opacity 500ms ease-in-out;
 	}
 
@@ -664,16 +634,11 @@ body.template-image {
 			@media( hover: hover ) { /* has mouse */
 
 				.template-image .navigation a {
-					-webkit-transition: opacity 500ms ease-in-out;
-					-o-transition: opacity 500ms ease-in-out;
 					transition: opacity 500ms ease-in-out;
 				}
 
 				body.cursor-hidden.template-image .navigation a {
 					opacity: 0;
-
-					-webkit-transition-delay: 300ms;
-					-o-transition-delay: 300ms;
 					transition-delay: 300ms
 				}
 
