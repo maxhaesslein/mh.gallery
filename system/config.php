@@ -55,8 +55,7 @@ return [
 	'zip_cache_lifetime' => 60*60*24*7, // gallery zip files; 7 days in seconds
 
 	// search for these extensions while loading gallery images
-	// TODO: add avif
-	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp'],
+	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif'],
 
 	// set to false to disable download of single images
 	'download_image_enabled' => true,
