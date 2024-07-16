@@ -94,7 +94,7 @@ snippet( 'header' );
 		<?php
 
 		if( $action == 'login' ) {
-			echo '<p>wrong password</p>';
+			echo '<p class="login-error">wrong password</p>';
 		}
 
 	}

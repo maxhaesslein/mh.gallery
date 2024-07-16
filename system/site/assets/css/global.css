@@ -35,6 +35,7 @@ body {
 	--color-background: #181818;
 	--color-text: #eee;
 	--color-icon: #fff;
+	--color-warning: #c00;
 }
 
 	body.lightmode {
@@ -44,6 +45,7 @@ body {
 		--color-background: #f2f2f2;
 		--color-text: #222;
 		--color-icon: #000;
+		--color-warning: #900;
 	}
 
 	body.soft-fade,
@@ -58,6 +60,22 @@ body {
 			padding: 10px;
 		}
 
+	}
+
+input,
+button {
+	display: inline-block;
+	box-sizing: border-box;
+	background: var(--color-text);
+	color: var(--color-background);
+	border: none;
+	border-radius: 3px;
+	padding: 7px 14px;
+	line-height: 1;
+}
+
+	button {
+		cursor: pointer;
 	}
 
 .lightmode-toggle {
@@ -739,4 +757,8 @@ body.template-image {
 		display: inline-block;
 		max-width: 1200px;
 		margin: 0 auto;
+	}
+
+	.template-admin .login-error {
+		color: var(--color-warning);
 	}
