@@ -18,11 +18,18 @@ $action = $_POST['action'] ?? false;
 $auth = $_SESSION['admin-auth'] ?? false;
 
 if( $action == 'login') {
-	$password = $_POST['admin-password'] ?? false;
-	if( $password == get_config('admin_password') ) {
-		$_SESSION['admin-auth'] = $password;
+	
+	$input_password = $_POST['admin-password'] ?? false;
+	$stored_password = get_config('admin_password');
+
+	if( password_verify($input_password, $stored_password) || $input_password === $stored_password ) {
+
+		// NOTE: currently, we only hash the stored password and save it directly in the session; TODO: generate a temporary key in the cache that expires after some time, don't use the password directly.
+		$_SESSION['admin-auth'] = get_hash(get_config('admin_password'));
 		redirect('admin');
+
 	}
+
 } elseif( ! empty($request[0]) && $request[0] == 'logout' ) {
 	unset($_SESSION['admin-auth']);
 	redirect('admin');
@@ -67,7 +74,7 @@ snippet( 'header' );
 
 	<?php
 
-	if( $auth == get_config('admin_password') ) {
+	if( $auth == get_hash(get_config('admin_password')) ) {
 
 		?>
 		<p><a href="<?= url('admin/logout') ?>">Logout</a></p>
