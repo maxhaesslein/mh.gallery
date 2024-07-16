@@ -127,6 +127,8 @@ var Ajax = {
 			return false;
 		}
 
+		document.getElementById('fullscreen-target').querySelector('img').style.opacity = 0;
+
 		requestUrl = GALLERY.apiUrl+imageSlug+'/';
 
 		var request = new XMLHttpRequest();
