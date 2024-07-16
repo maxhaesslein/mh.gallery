@@ -137,6 +137,14 @@ WEBP and AVIF support are enabled by default. You can disable them by adding `'w
 
 There is still an additional step, that checks if your server environment supports WEBP or AVIF. For AVIF, you need at least `PHP 8.1`, `GD` compiled with AVIF support and `libavif v.0.8.2` or higher.
 
+## Admin Area
+
+The admin area lists all available galleries, even secret and hidden ones, and even if the website index is disabled.
+
+The admin area is disabled by default. To enable it, add `'admin_area' => 'my super secret password'` to the `custom/config.php`, where `my super secret password` is a string that contains your password. This can either be a plaintext string, or hashed password. Use PHPs `password_hash()` function to create a hash.
+
+After adding this config option, the admin area is available at the `/admin` path of your website.
+
 ## Update
 
 ### manually
