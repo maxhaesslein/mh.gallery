@@ -148,8 +148,9 @@ class Gallery {
 
 			$gallery = new Gallery($subgallery_path.'gallery.txt', $this);
 
-			$count = $gallery->get_image_count();
-			if( $count <= 0 ) continue;
+			$image_count = $gallery->get_image_count();
+			$subgallery_count = $gallery->get_subgallery_count();
+			if( $image_count <= 0 && $subgallery_count <= 0 ) continue;
 
 			$slug = $gallery->get_slug( true );
 
@@ -376,6 +377,14 @@ class Gallery {
 		if( $this->sub_galleries == NULL ) $this->load_sub_galleries();
 
 		return $this->sub_galleries;
+	}
+
+
+	function get_subgallery_count() {
+
+		$sub_galleries = $this->get_sub_galleries();
+
+		return count($sub_galleries);
 	}
 
 
