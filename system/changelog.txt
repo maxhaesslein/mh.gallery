@@ -1,6 +1,6 @@
 v.0.6.9
 
-- …
+- small design enhancements
 
 
 v.0.6.8
