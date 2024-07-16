@@ -1,5 +1,6 @@
-v.0.6.9
+v.0.7.0
 
+- basic admin area, that lists all available galleries with their sub-galleries, even hidden and secret galleries; see 'admin area' in the README.md for details
 - small design enhancements
 - bugfix: don't hide galleries that have sub-galleries, but no images
 
