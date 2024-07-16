@@ -195,7 +195,13 @@ hr {
 main {
 	min-height: calc(100vh - 20px - 2.5em);
 	line-height: 1.3;
+	padding-top: 26px;
+	box-sizing: border-box;
 }
+
+	main:has(.button:first-child) {
+		padding-top: 0;
+	}
 
 picture {
 	display: block;
@@ -603,8 +609,6 @@ body.template-image {
 			.template-image .navigation a:after {
 				content: "";
 				display: block;
-				width: 100%;
-				height: 100%;
 				width: 20px;
 				height: 40px;
 				margin-top: -20px;
