@@ -736,6 +736,7 @@ body.template-image {
 
 	.template-admin .admin-gallery-list {
 		text-align: left;
-		max-width: 800px;
+		display: inline-block;
+		max-width: 1200px;
 		margin: 0 auto;
 	}
