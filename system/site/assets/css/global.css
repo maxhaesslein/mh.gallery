@@ -759,6 +759,10 @@ body.template-image {
 		margin: 0 auto;
 	}
 	
+		.template-admin .admin-gallery-list ul {
+			padding-inline-start: 1em;
+		}
+	
 		.template-admin .admin-gallery-list li.is-hidden {
 			opacity: 0.5;
 		}
