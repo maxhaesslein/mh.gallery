@@ -28,7 +28,7 @@ class Route {
 		$query_parameters = $_GET;
 
 		$mode = false;
-		if( count($request) > 0 && in_array($request[0], ['img', 'api', 'download']) ) {
+		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'admin' ]) ) {
 			$mode = array_shift($request);
 		}
 
@@ -171,6 +171,13 @@ class Route {
 
 			if( $image ) {
 				$template_name = 'api-output';
+			}
+
+		} elseif( $mode == 'admin' ) {
+
+			// NOTE: only allow admin area, if a login password is set
+			if( get_config('admin_password') ) {
+				$template_name = 'admin';
 			}
 
 		}

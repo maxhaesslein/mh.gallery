@@ -728,3 +728,14 @@ body.template-image {
 .template-download main {
 	text-align: center;
 }
+
+.template-admin main {
+	margin: 0 auto;
+	text-align: center;
+}
+
+	.template-admin .admin-gallery-list {
+		text-align: left;
+		max-width: 800px;
+		margin: 0 auto;
+	}

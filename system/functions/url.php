@@ -131,3 +131,12 @@ function implode_url( $url_parts ) {
 
 	return "$scheme$user$pass$host$port$path$query$fragment";
 }
+
+function redirect( $target_path = false ) {
+
+	$target = url($target_path);
+
+	header('Location: '.$target);
+	exit;
+
+}

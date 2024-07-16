@@ -9,7 +9,7 @@
 // See the file LICENSE.md for more details.
 
 
-session_start(); // we use this for secret links
+session_start(); // we use this for secret links and the admin area
 
 $global_script_execution_start_time = hrtime(true); // this is used in the measure_execution_time() function to render the execution time
 
