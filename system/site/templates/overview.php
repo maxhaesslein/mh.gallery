@@ -64,7 +64,17 @@ $imagecount = $gallery->get_image_count();
 				if( $sub_gallery->is_hidden() ) continue;
 
 				$url = $sub_gallery->get_url();
-				$thumbnail = $sub_gallery->get_thumbnail();
+
+				if( $gallery->is_secret() ) {
+					// NOTE: if this gallery has a secret, automatically append it to child galleries
+					$url .= '?secret='.$gallery->get_secret();
+				}
+
+				$thumbnail = false;
+				if( ! $sub_gallery->is_secret() || $sub_gallery->secret_provided() ) {
+					$thumbnail = $sub_gallery->get_thumbnail();
+				}
+
 				$title = $sub_gallery->get_title();
 				?>
 				<li>

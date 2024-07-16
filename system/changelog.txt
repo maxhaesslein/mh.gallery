@@ -1,6 +1,10 @@
 v.0.7.0
 
+breaking change: secret galleries will now be visible in the overview; add `hidden: true` to the `gallery.txt` to hide them again.
+
 - basic admin area, that lists all available galleries with their sub-galleries, even hidden and secret galleries; see 'admin area' in the README.md for details
+- changed the behaviour of secret galleries: they will now be visible in the overview (if they are not set to `hidden: true`), but their thumbnail will be blank; after the gallery is unlocked by visiting the secret link, the thumbnail will be visible
+- sub-galleries inherit the secret of their parent gallery, if they don't have their own secret
 - small design enhancements
 - bugfix: don't hide galleries that have sub-galleries, but no images
 

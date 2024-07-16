@@ -82,8 +82,7 @@ class Gallery {
 		}
 
 		if( isset($settings['secret']) ) {
-			$this->secret = $settings['secret'];
-			$this->hidden = true; // force gallery to be hidden, if a secret is set
+			$this->set_secret($settings['secret']);
 		}
 
 		$this->download_image_enabled = $this->inherit_setting( 'download_image_enabled' );
@@ -172,6 +171,11 @@ class Gallery {
 
 			if( array_key_exists($slug, $sub_galleries) ) continue;
 
+			if( $this->is_secret() && ! $gallery->is_secret() ) {
+				// NOTE: inherit secret hash to sub-gallery, if they don't have their own
+				$gallery->set_secret($this->secret);
+			}
+
 			$sub_galleries[$slug] = $gallery;
 			$galleries_sort[] = $sort;
 
@@ -190,6 +194,11 @@ class Gallery {
 	}
 
 
+	function set_secret( $secret ) {
+		$this->secret = $secret;
+	}
+
+
 	function is_secret() {
 
 		if( $this->secret ) {
@@ -197,6 +206,13 @@ class Gallery {
 		}
 
 		return false;
+	}
+
+
+	function get_secret() {
+		if( ! $this->secret ) return false;
+
+		return $this->secret;
 	}
 
 
@@ -351,7 +367,7 @@ class Gallery {
 		if( $full_url ) $url = url($url);
 
 		if( $include_secret_hash && $this->is_secret() ) {
-			$url .= '?secret='.$this->settings['secret'];
+			$url .= '?secret='.$this->get_secret();
 		}
 
 		return $url;
