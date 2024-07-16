@@ -46,8 +46,14 @@ function print_sub_galleries( $gallery ) {
 	<ul>
 		<?php
 		foreach( $sub_galleries as $sub_gallery ) {
+
+			$hidden = $sub_gallery->is_hidden();
+
+			$classes = ['admin-gallery-list_subgallery'];
+			if( $hidden ) $classes[] = 'is-hidden';
+
 			?>
-			<li>
+			<li<?= get_class_attribute($classes) ?>>
 				<a href="<?= $sub_gallery->get_url() ?>" target="_blank">
 					<?php
 					echo $sub_gallery->get_title();

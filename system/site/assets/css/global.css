@@ -758,6 +758,10 @@ body.template-image {
 		max-width: 1200px;
 		margin: 0 auto;
 	}
+	
+		.template-admin .admin-gallery-list li.is-hidden {
+			opacity: 0.5;
+		}
 
 	.template-admin .login-error {
 		color: var(--color-warning);
