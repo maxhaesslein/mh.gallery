@@ -80,7 +80,7 @@ snippet( 'header' );
 		<p><a href="<?= url('admin/logout') ?>">Logout</a></p>
 		<?php
 
-		$root_gallery = $core->route->get('gallery');
+		$root_gallery = $core->gallery;
 
 		?>
 		<div class="admin-gallery-list">
