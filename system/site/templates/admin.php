@@ -54,7 +54,7 @@ function print_sub_galleries( $gallery ) {
 
 			?>
 			<li<?= get_class_attribute($classes) ?>>
-				<a href="<?= $sub_gallery->get_url() ?>" target="_blank">
+				<a href="<?= $sub_gallery->get_url( true, true ) ?>" target="_blank">
 					<?php
 					echo $sub_gallery->get_title();
 					?>

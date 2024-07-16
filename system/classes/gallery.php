@@ -345,10 +345,14 @@ class Gallery {
 	}
 
 
-	function get_url( $full_url = true ) {
+	function get_url( $full_url = true, $include_secret_hash = false ) {
 		$url = $this->get_slug();
 
 		if( $full_url ) $url = url($url);
+
+		if( $include_secret_hash && $this->is_secret() ) {
+			$url .= '?secret='.$this->settings['secret'];
+		}
 
 		return $url;
 	}
