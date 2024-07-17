@@ -1,7 +1,8 @@
 v.0.7.1
 
 - admin session handling is now based on cache files, so we can delete the (admin-)cache to terminate all sessions
-- new config option `admin_cache_lifetime` which defaults to 1 day
+- added password protected galleries; see 'Password Protected Galleries' in the `README.md`
+- new config option `admin_cache_lifetime` and `session_cache_lifetime` which both default to 1 day
 
 
 v.0.7.0
