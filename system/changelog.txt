@@ -1,6 +1,7 @@
 v.0.7.1
 
-- …
+- admin session handling is now based on cache files, so we can delete the (admin-)cache to terminate all sessions
+- new config option `admin_cache_lifetime` which defaults to 1 day
 
 
 v.0.7.0
