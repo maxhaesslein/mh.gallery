@@ -182,6 +182,11 @@ class Gallery {
 				$gallery->set_secret($this->secret);
 			}
 
+			if( $this->is_password_protected() && ! $gallery->is_password_protected() ) {
+				// NOTE: inherit password to sub-gallery, if they don't have their own
+				$gallery->set_password($this->password);
+			}
+
 			$sub_galleries[$slug] = $gallery;
 			$galleries_sort[] = $sort;
 

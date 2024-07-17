@@ -99,6 +99,7 @@ To access the gallery, you need to append `?secret={string}` (for example `?secr
 
 Setting `password: ` to a hashed password string will hide the thumbnail of this gallery from the index and also add a password login form to the URL of this gallery. You can only view the gallery if you provide the correct password.
 To generate a hashed password string, visit the `/admin/create-hash` endpoint of your installation (for example, `https://www.example.com/admin/create-hash`). There you can enter a password and get the corresponding hashed string, which you can copy into your `gallery.txt` file.
+Sub-galleries will automatically inherit this password (or can have their own password).
 When you entered the correct password, a 'lock gallery' link will appear at the top left of the gallery, so you can log out again.
 
 ## Customization
