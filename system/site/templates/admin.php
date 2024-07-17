@@ -108,7 +108,7 @@ snippet( 'header' );
 
 		?>
 		<form action="<?= url('admin') ?>" method="POST">
-			<input type="password" name="admin-password" autofocus>
+			<input type="password" name="admin-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required>
 			<input type="hidden" name="action" value="login">
 			<button>login</button>
 		</form>
