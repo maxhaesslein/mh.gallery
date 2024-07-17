@@ -10,9 +10,11 @@
 
 if( ! $core ) exit;
 
-$gallery = $core->route->get('gallery');
+header('HTTP/1.1 401 Unauthorized');
 
 snippet( 'header' );
+
+$gallery = $core->route->get('gallery');
 
 $title = $gallery->get_title();
 
@@ -38,9 +40,23 @@ if( $overview_link ) {
 		<?php
 	}
 
-	snippet( 'password-form' );
-
 	?>
+	<form action="<?= get_current_url() ?>" method="POST">
+		<p>This gallery is password protected.</p>
+
+		<p>
+			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required><input type="hidden" name="action" value="login">
+			<button>login</button>
+		</p>
+
+		<?php
+		if( ! empty($_POST['gallery-password']) ) {
+			echo '<p class="login-error">wrong password</p>';
+		}
+		?>
+
+	</form>
+
 
 </main>
 <?php

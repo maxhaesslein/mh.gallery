@@ -14,10 +14,36 @@ header('HTTP/1.1 401 Unauthorized');
 
 snippet( 'header' );
 
+$gallery = $core->route->get('gallery');
+
+$title = $gallery->get_title();
+
+$overview_link = $gallery->get_parent_url();
+if( $overview_link ) {
+	$overview_link .= '#'.$gallery->get_slug();
+}
+
 ?>
 <main>
-	<h1>Unauthorized.</h1>
-	<p>You are not allowed to view this content.</p>
+
+	<?php
+
+	if( $overview_link ) {
+		?>
+		<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
+		<?php
+	}
+
+	if( $title ) {
+		?>
+		<h1><?= $title ?></h1>
+		<?php
+	}
+
+	?>
+
+	<p style="text-align: center;">You are not allowed to view this gallery.</p>
+
 </main>
 <?php
 

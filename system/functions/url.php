@@ -21,16 +21,6 @@ function url( $path = '', $trailing_slash = true ) {
 }
 
 
-function current_url() {
-
-	$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-	$host = $_SERVER['HTTP_HOST'];
-	$requestUri = $_SERVER['REQUEST_URI'];
-
-	return $protocol . $host . $requestUri;
-}
-
-
 function trailing_slash_it( $string ){
 	// add a slash at the end, if there isn't already one ..
 

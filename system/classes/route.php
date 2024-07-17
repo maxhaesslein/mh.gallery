@@ -100,8 +100,7 @@ class Route {
 				exit;
 			}
 
-			$gallery = false;
-			$template_name = '401';
+			$template_name = '401-secret';
 
 		}
 
@@ -119,14 +118,14 @@ class Route {
 				$input_password = $_POST['gallery-password'];
 
 				if( $gallery->check_password($input_password) ) {
-					header('Location: '.current_url());
+					header('Location: '.get_current_url());
 					exit;
 				}
 
 			}
 
 			if( ! $gallery->password_provided() ) {
-				$template_name = 'password';
+				$template_name = '401-password';
 			}
 
 		}
