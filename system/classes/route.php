@@ -105,6 +105,28 @@ class Route {
 
 		}
 
+		if( $gallery && $gallery->is_password_protected() ) {
+
+			if( isset($_GET['lock']) ) {
+				$gallery->password_lock();
+
+				header( 'Location: '.$gallery->get_url());
+				exit;
+			}
+
+			if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
+
+				$input_password = $_POST['gallery-password'];
+
+				if( $gallery->check_password($input_password) ) {
+					header('Location: '.$gallery->get_url());
+					exit;
+				}
+
+			}
+
+		}
+
 
 		if( $mode == 'img' ) {
 

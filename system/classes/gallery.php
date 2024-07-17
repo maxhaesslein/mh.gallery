@@ -22,6 +22,7 @@ class Gallery {
 	private $images = NULL;
 	private $hidden = false;
 	private $secret = false;
+	private $password = false;
 	private $download_image_enabled = NULL;
 	private $download_gallery_enabled = NULL;
 	private $bridge_sort_order = NULL;
@@ -83,6 +84,10 @@ class Gallery {
 
 		if( isset($settings['secret']) ) {
 			$this->set_secret($settings['secret']);
+		}
+
+		if( isset($settings['password']) ) {
+			$this->set_password($settings['password']);
 		}
 
 		$this->download_image_enabled = $this->inherit_setting( 'download_image_enabled' );
@@ -234,6 +239,85 @@ class Gallery {
 		}
 
 		return false;
+	}
+
+
+	function set_password( $password ) {
+		$this->password = $password;
+	}
+
+
+	function is_password_protected() {
+
+		if( $this->password ) {
+			return true;
+		}
+
+		return false;
+	}
+
+
+	function check_password( $password ) {
+
+		if( ! $this->is_password_protected() ) return true;
+
+		if( ! password_verify( $password, $this->password ) ) return false;
+
+		$cache_id = uniqid();
+		$cache_data = password_hash( $this->password, PASSWORD_DEFAULT );
+		$cache = new Cache( 'session', $cache_id );
+		$cache->add_data( $cache_data );
+
+		if( $cache->exists() && $cache->get_data() == $cache_data ) {
+			if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) $_SESSION['gallery-session'] = [];
+
+			$_SESSION['gallery-session'][$this->get_slug()] = $cache_id;
+
+			return true;
+		}
+
+		return false;
+	}
+
+
+	function password_provided() {
+
+		// TODO: cache in object
+
+		if( ! $this->is_password_protected() ) return true;
+
+		if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) return false;
+
+		if( empty($_SESSION['gallery-session'][$this->get_slug()]) ) return false;
+
+		$cache_id = $_SESSION['gallery-session'][$this->get_slug()];
+		
+		if( ! $cache_id ) return false;
+
+		$cache = new Cache( 'session', $cache_id );
+
+		if( ! $cache->exists() ) return false;
+
+		$cache_data = $cache->get_data();
+
+		if( ! $cache_data ) return false;
+
+		return password_verify( $this->password, $cache_data );
+	}
+
+
+	function password_lock() {
+
+		if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) return;
+
+		if( ! isset ($_SESSION['gallery-session'][$this->get_slug()]) ) return;
+
+		$cache_id = $_SESSION['gallery-session'][$this->get_slug()];
+		$cache = new Cache( 'session', $cache_id );
+		$cache->remove();
+
+		$_SESSION['gallery-session'][$this->get_slug()] = '';
+		unset($_SESSION['gallery-session'][$this->get_slug()]);
 	}
 
 

@@ -62,6 +62,15 @@ body {
 
 	}
 
+form {
+	text-align: center;
+}
+
+	form .login-error {
+		text-align: center;
+		color: var(--color-warning);
+	}
+
 input,
 button {
 	display: inline-block;
@@ -767,7 +776,3 @@ body.template-image {
 		.template-admin .admin-gallery-list li.is-hidden {
 			opacity: 0.5;
 		}
-
-	.template-admin .login-error {
-		color: var(--color-warning);
-	}

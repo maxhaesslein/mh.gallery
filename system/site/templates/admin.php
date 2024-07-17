@@ -84,12 +84,15 @@ snippet( 'header' );
 			<input type="password" name="admin-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required>
 			<input type="hidden" name="action" value="login">
 			<button>login</button>
+
+			<?php
+			if( ! empty($_POST['admin-password']) ) {
+				echo '<p class="login-error">wrong password</p>';
+			}
+			?>
+			
 		</form>
 		<?php
-
-		if( ! empty($_POST['admin-password']) ) {
-			echo '<p class="login-error">wrong password</p>';
-		}
 
 	}
 

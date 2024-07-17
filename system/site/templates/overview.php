@@ -42,93 +42,125 @@ $imagecount = $gallery->get_image_count();
 		<?php
 	}
 
+	if( $gallery->is_password_protected() && $gallery->password_provided() ) {
+		?>
+		<a class="button" href="<?= $gallery->get_url() ?>?lock">lock gallery</a>
+		<?php
+	}
+
 	if( $title ) {
 		?>
 		<h1><?= $title ?></h1>
 		<?php
 	}
 
-	if( $description ) {
-		?>
-		<p class="description"><?= $description ?></p>
-		<?php
-	}
+	if( $gallery->is_password_protected() && ! $gallery->password_provided() ) {
 
-	if( count($sub_galleries) ) {
 		?>
-		<ul class="gallery-list">
+		<form action="<?= $gallery->get_url() ?>" method="POST">
+			<p>this gallery is password protected</p>
+			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required>
+			<input type="hidden" name="action" value="login">
+			<button>login</button>
+
 			<?php
-
-			foreach( $sub_galleries as $sub_gallery ) {
-
-				if( $sub_gallery->is_hidden() ) continue;
-
-				$url = $sub_gallery->get_url();
-
-				if( $gallery->is_secret() ) {
-					// NOTE: if this gallery has a secret, automatically append it to child galleries
-					$url .= '?secret='.$gallery->get_secret();
-				}
-
-				$thumbnail = false;
-				if( ! $sub_gallery->is_secret() || $sub_gallery->secret_provided() ) {
-					$thumbnail = $sub_gallery->get_thumbnail();
-				}
-
-				$title = $sub_gallery->get_title();
-				?>
-				<li>
-					<a class="thumbnail-anchor anchor" name="<?= $sub_gallery->get_slug() ?>"></a>
-					<a class="gallery-link" href="<?= $url ?>">
-						<?php
-						if( $thumbnail ) {
-							snippet( 'thumbnail', [ 'image' => $thumbnail ] );
-						} else {
-							echo '<span class="empty-thumbnail" style="padding-top: calc('.(1/get_config('thumbnail_aspect_ratio')).' * 100%);"></span>';
-						}
-						?>
-						<span class="title"><?= $title ?></span>
-					</a>
-				</li>
-				<?php
+			if( ! empty($_POST['gallery-password']) ) {
+				echo '<p class="login-error">wrong password</p>';
 			}
 			?>
-		</ul>
+
+		</form>
 		<?php
-	}
 
 
-	if( $imagecount > 0 ) {
-		?>
-		<div class="meta">
-			<ul class="info">
-				<li><?= $imagecount ?> images</li>
+	} else {
+
+		if( $description ) {
+			?>
+			<p class="description"><?= $description ?></p>
+			<?php
+		}
+
+		if( count($sub_galleries) ) {
+			?>
+			<ul class="gallery-list">
 				<?php
-				if( $download_gallery_url ) {
+
+				foreach( $sub_galleries as $sub_gallery ) {
+
+					if( $sub_gallery->is_hidden() ) continue;
+
+					$url = $sub_gallery->get_url();
+
+					if( $gallery->is_secret() ) {
+						// NOTE: if this gallery has a secret, automatically append it to child galleries
+						$url .= '?secret='.$gallery->get_secret();
+					}
+
+					if( $sub_gallery->is_secret() && ! $sub_gallery->secret_provided() ) {
+						$thumbnail = false;
+					} elseif( $sub_gallery->is_password_protected() && ! $sub_gallery->password_provided() ) {
+						$thumbnail = false;
+					} else {
+						$thumbnail = $sub_gallery->get_thumbnail();
+					}
+
+					$title = $sub_gallery->get_title();
 					?>
-					<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+					<li>
+						<a class="thumbnail-anchor anchor" name="<?= $sub_gallery->get_slug() ?>"></a>
+						<a class="gallery-link" href="<?= $url ?>">
+							<?php
+							if( $thumbnail ) {
+								snippet( 'thumbnail', [ 'image' => $thumbnail ] );
+							} else {
+								echo '<span class="empty-thumbnail" style="padding-top: calc('.(1/get_config('thumbnail_aspect_ratio')).' * 100%);"></span>';
+							}
+							?>
+							<span class="title"><?= $title ?></span>
+						</a>
+					</li>
 					<?php
 				}
 				?>
 			</ul>
-		</div>
-
-		<ul class="gallery-list">
 			<?php
-			foreach( $images as $image ) {
-				$url = $image->get_link();
-				?>
-				<li>
-					<a class="thumbnail-anchor anchor" name="<?= $image->get_slug() ?>"></a>
-					<a class="image-link" href="<?= $url ?>">
-						<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
-					</a>
-				</li>
-				<?php
-			}
+		}
+
+
+		if( $imagecount > 0 ) {
 			?>
-		</ul>
-		<?php
+			<div class="meta">
+				<ul class="info">
+					<li><?= $imagecount ?> images</li>
+					<?php
+					if( $download_gallery_url ) {
+						?>
+						<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+						<?php
+					}
+					?>
+				</ul>
+			</div>
+
+			<ul class="gallery-list">
+				<?php
+				foreach( $images as $image ) {
+					$url = $image->get_link();
+					?>
+					<li>
+						<a class="thumbnail-anchor anchor" name="<?= $image->get_slug() ?>"></a>
+						<a class="image-link" href="<?= $url ?>">
+							<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
+						</a>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+			<?php
+		}
+
 	}
 	?>
 
