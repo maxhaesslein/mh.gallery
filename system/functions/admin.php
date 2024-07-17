@@ -35,11 +35,11 @@ function admin_login( $input_password ) {
 
 function admin_verify() {
 
-	$auth = $_SESSION['admin-auth'] ?? false;
+	$cache_id = $_SESSION['admin-auth'] ?? false;
 
-	if( ! $auth ) return false;
+	if( ! $cache_id ) return false;
 
-	$cache = new Cache( 'admin', $auth );
+	$cache = new Cache( 'admin', $cache_id );
 
 	if( ! $cache->exists() ) return false;
 
@@ -54,6 +54,10 @@ function admin_verify() {
 
 
 function admin_logout() {
+
+	$cache_id = $_SESSION['admin-auth'] ?? false;
+	$cache = new Cache( 'admin', $cache_id );
+	$cache->remove();
 
 	$_SESSION['admin-auth'] = '';
 	unset($_SESSION['admin-auth']);
