@@ -747,7 +747,8 @@ body.template-image {
 	text-align: center;
 }
 
-.template-admin main {
+.template-admin main,
+.template-admin_create-hash main {
 	margin: 0 auto;
 	text-align: center;
 }

@@ -175,8 +175,10 @@ class Route {
 
 		} elseif( $mode == 'admin' ) {
 
-			// NOTE: only allow admin area, if a login password is set
-			if( get_config('admin_password') ) {
+			if( ! empty($request[0]) && $request[0] == 'create-hash' ) {
+				$template_name = 'admin_create-hash';
+			} elseif( get_config('admin_password') ) {
+				// NOTE: only allow admin area, if a login password is set
 				$template_name = 'admin';
 			}
 
