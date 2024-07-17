@@ -1,3 +1,8 @@
+v.0.7.1
+
+- …
+
+
 v.0.7.0
 
 breaking change: secret galleries will now be visible in the overview; add `hidden: true` to the `gallery.txt` to hide them again. sub-galleries of secret galleries will now automatically inherit the secret of their parent, if they don't have their own secret.
