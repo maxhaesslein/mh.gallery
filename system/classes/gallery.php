@@ -23,6 +23,7 @@ class Gallery {
 	private $hidden = false;
 	private $secret = false;
 	private $password = false;
+	private $password_verified = false;
 	private $download_image_enabled = NULL;
 	private $download_gallery_enabled = NULL;
 	private $bridge_sort_order = NULL;
@@ -282,8 +283,6 @@ class Gallery {
 
 	function password_provided() {
 
-		// TODO: cache in object
-
 		if( ! $this->is_password_protected() ) return true;
 
 		if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) return false;
@@ -298,11 +297,21 @@ class Gallery {
 
 		if( ! $cache->exists() ) return false;
 
+		if( $this->password_verified ) {
+			return true;
+		}
+
 		$cache_data = $cache->get_data();
 
 		if( ! $cache_data ) return false;
 
-		return password_verify( $this->password, $cache_data );
+		if( ! password_verify( $this->password, $cache_data ) ) {
+			return false;
+		}
+
+		$this->password_verified = true;
+
+		return true;
 	}
 
 
