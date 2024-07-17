@@ -53,6 +53,7 @@ return [
 	// cache lifetimes
 	'cache_lifetime' => 60*60*24*30, // default; 30 days in seconds
 	'zip_cache_lifetime' => 60*60*24*7, // gallery zip files; 7 days in seconds
+	'admin_cache_lifetime' => 60*60*24, // admin login cache; 1 day in seconds
 
 	// search for these extensions while loading gallery images (gif images will lose their animation)
 	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
