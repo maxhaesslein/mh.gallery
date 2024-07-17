@@ -17,7 +17,7 @@ function admin_login( $input_password ) {
 
 		$cache_id = uniqid();
 
-		$cache_data = get_hash(get_config('admin_password'));
+		$cache_data = password_hash( get_config('admin_password'), PASSWORD_DEFAULT );
 
 		$cache = new Cache( 'admin', $cache_id );
 		$cache->add_data( $cache_data );
@@ -43,8 +43,12 @@ function admin_verify() {
 
 	if( ! $cache->exists() ) return false;
 
-	if( $cache->get_data() != get_hash(get_config('admin_password')) ) return false;
-	
+	$cache_data = $cache->get_data();
+
+	if( ! $cache_data ) return false;
+
+	if( ! password_verify( get_config('admin_password'), $cache_data ) ) return false;
+
 	return true;
 }
 
