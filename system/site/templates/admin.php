@@ -62,11 +62,7 @@ snippet( 'header' );
 	<h2>Admin Area</h2>
 
 	<?php
-
-	$auth = $_SESSION['admin-auth'] ?? false;
-
-	if( $auth == get_hash(get_config('admin_password')) ) {
-
+	if( admin_verify() ) {
 		?>
 		<p><a href="<?= url('admin/logout') ?>">Logout</a></p>
 		<?php

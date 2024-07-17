@@ -178,19 +178,14 @@ class Route {
 			$action = $_POST['action'] ?? false;
 
 			if( $action == 'login') {
-				
-				$input_password = $_POST['admin-password'] ?? false;
-				$stored_password = get_config('admin_password');
 
-				if( password_verify($input_password, $stored_password) ) {
-					// NOTE: currently, we only hash the stored password and save it directly in the session; TODO: generate a temporary key in the cache that expires after some time, don't use the password directly.
-					$_SESSION['admin-auth'] = get_hash(get_config('admin_password'));
-					redirect('admin');
-				}
+				$password = $_POST['admin-password'] ?? false;
+				if( admin_login($password) ) redirect('admin');
 
 			} elseif( ! empty($request[0]) && $request[0] == 'logout' ) {
-				unset($_SESSION['admin-auth']);
-				redirect('admin');
+
+				if( admin_logout() ) redirect('admin');
+				
 			}
 
 			if( ! empty($request[0]) && $request[0] == 'create-hash' ) {
