@@ -361,14 +361,10 @@ class Gallery {
 	}
 
 
-	function get_url( $full_url = true, $include_secret_hash = false ) {
+	function get_url( $full_url = true ) {
 		$url = $this->get_slug();
 
 		if( $full_url ) $url = url($url);
-
-		if( $include_secret_hash && $this->is_secret() ) {
-			$url .= '?secret='.$this->get_secret();
-		}
 
 		return $url;
 	}

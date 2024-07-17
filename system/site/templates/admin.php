@@ -52,14 +52,22 @@ function print_sub_galleries( $gallery ) {
 			$classes = ['admin-gallery-list_subgallery'];
 			if( $hidden ) $classes[] = 'is-hidden';
 
+			$secret = $sub_gallery->is_secret();
+
 			?>
 			<li<?= get_class_attribute($classes) ?>>
-				<a href="<?= $sub_gallery->get_url( true, true ) ?>" target="_blank">
+				<a href="<?= $sub_gallery->get_url() ?>" target="_blank">
 					<?php
 					echo $sub_gallery->get_title();
 					?>
 				</a>
 				<?php
+
+				if( $sub_gallery->is_secret() ) {
+					$secret = $sub_gallery->get_secret();
+					echo ' (secret: <a href="'.$sub_gallery->get_url().'?secret='.$secret.'" target="_blank">'.$secret.'</a>)';
+				}
+
 				print_sub_galleries($sub_gallery);
 				?>
 			</li>
