@@ -142,7 +142,7 @@ There is still an additional step, that checks if your server environment suppor
 
 The admin area lists all available galleries, even secret and hidden ones, and even if the website index is disabled.
 
-The admin area is disabled by default. To enable it, add `'admin_area' => 'my super secret password'` to the `custom/config.php`, where `my super secret password` is a string that contains your password. This can either be a plaintext string, or hashed password. Use PHPs `password_hash()` function to create a hash.
+The admin area is disabled by default. To enable it, add `'admin_area' => '{password-hash}'` to the `custom/config.php`, where `{password-hash}` is a hashed password. To create this password hash, open `/admin/create-hash` on your website (for example, `https://www.example.com/admin/create-hash`).
 
 After adding this config option, the admin area is available at the `/admin` path of your website.
 
