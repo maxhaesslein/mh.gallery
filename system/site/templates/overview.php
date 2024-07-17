@@ -56,22 +56,7 @@ $imagecount = $gallery->get_image_count();
 
 	if( $gallery->is_password_protected() && ! $gallery->password_provided() ) {
 
-		?>
-		<form action="<?= $gallery->get_url() ?>" method="POST">
-			<p>this gallery is password protected</p>
-			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required>
-			<input type="hidden" name="action" value="login">
-			<button>login</button>
-
-			<?php
-			if( ! empty($_POST['gallery-password']) ) {
-				echo '<p class="login-error">wrong password</p>';
-			}
-			?>
-
-		</form>
-		<?php
-
+		snippet( 'password-form', [ 'gallery' => $gallery ] );
 
 	} else {
 

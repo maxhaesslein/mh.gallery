@@ -119,10 +119,14 @@ class Route {
 				$input_password = $_POST['gallery-password'];
 
 				if( $gallery->check_password($input_password) ) {
-					header('Location: '.$gallery->get_url());
+					header('Location: '.current_url());
 					exit;
 				}
 
+			}
+
+			if( ! $gallery->password_provided() ) {
+				$template_name = 'password';
 			}
 
 		}

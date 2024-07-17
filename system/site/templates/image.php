@@ -71,6 +71,13 @@ if( ! doing_ajax() ) {
 	<div class="meta meta-top">
 		<ul class="action">
 			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
+			<?php
+			if( $gallery->is_password_protected() && $gallery->password_provided() ) {
+				?>
+				<li><a class="button" href="<?= $gallery->get_url() ?>?lock">lock gallery</a></li>
+				<?php
+			}
+			?>
 		</ul>
 		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
