@@ -43,6 +43,10 @@ function print_sub_galleries( $gallery ) {
 					echo ' [secret: <a href="'.$sub_gallery->get_url().'?secret='.$secret.'" target="_blank">'.$secret.'</a>]';
 				}
 
+				if( $sub_gallery->is_password_protected() ) {
+					echo ' [password protected]';
+				}
+
 				print_sub_galleries($sub_gallery);
 				?>
 			</li>
