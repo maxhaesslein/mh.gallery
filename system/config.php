@@ -90,7 +90,7 @@ return [
 	// the first available algorithm will be used. you probably don't need to change this option
 	'hash_algorithm' => [ 'murmur3f', 'murmur3c', 'tiger128,3', 'sha256' ],
 
-	// set a password as a (hashed or plaintext) string to enable the admin area, under the /admin path or set to false to disable the admin area. see 'admin area' in the README.md
+	// set a hashed password as a string to enable the admin area, under the /admin path or set to false to disable the admin area. use the /admin/create-hash path to create a hashed password. see 'admin area' in the README.md for details
 	'admin_password' => false,
 
 ];
