@@ -347,7 +347,14 @@ class Gallery {
 
 		if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) return;
 
-		if( ! isset ($_SESSION['gallery-session'][$this->get_slug()]) ) return;
+		if( ! isset ($_SESSION['gallery-session'][$this->get_slug()]) ) {
+
+			if( $this->parent_gallery->has_password($this->password) ) {
+				$this->parent_gallery->password_lock();
+			}
+
+			return;
+		}
 
 		$cache_id = $_SESSION['gallery-session'][$this->get_slug()];
 		$cache = new Cache( 'session', $cache_id );
