@@ -220,6 +220,14 @@ class Gallery {
 	}
 
 
+	function has_secret( $secret ) {
+
+		if( $this->secret === $secret ) return true;
+
+		return false;
+	}
+
+
 	function get_secret() {
 		if( ! $this->secret ) return false;
 
@@ -238,18 +246,29 @@ class Gallery {
 		if( ! is_array($secrets) || ! count($secrets) ) return false;
 
 		$hash = get_hash($this->get_slug());
-		if( ! isset($secrets[$hash]) || ! is_array($secrets[$hash]) ) return false;
-
-		foreach( $secrets[$hash] as $secret ) {
-			if( $secret == $this->secret ) return true;
+		if( isset($secrets[$hash]) && is_array($secrets[$hash]) ) {
+			foreach( $secrets[$hash] as $secret ) {
+				if( $secret == $this->secret ) return true;
+			}
 		}
 
-		return false;
+		if( ! $this->parent_gallery->is_secret() ) return false;
+
+		if( ! $this->parent_gallery->has_secret($this->secret) ) return false;
+
+		return $this->parent_gallery->secret_provided();
 	}
 
 
 	function set_password( $password ) {
 		$this->password = $password;
+	}
+
+
+	function has_password( $password ) {
+		if( $this->password === $password ) return true;
+
+		return false;
 	}
 
 
@@ -292,31 +311,35 @@ class Gallery {
 
 		if( ! isset($_SESSION['gallery-session']) || ! is_array($_SESSION['gallery-session']) ) return false;
 
-		if( empty($_SESSION['gallery-session'][$this->get_slug()]) ) return false;
+		if( ! empty($_SESSION['gallery-session'][$this->get_slug()]) ) {
+			
+			$cache = new Cache( 'session', $_SESSION['gallery-session'][$this->get_slug()] );
 
-		$cache_id = $_SESSION['gallery-session'][$this->get_slug()];
-		
-		if( ! $cache_id ) return false;
+			if( $cache->exists() ) {
 
-		$cache = new Cache( 'session', $cache_id );
+				if( $this->password_verified ) {
+					return true;
+				}
 
-		if( ! $cache->exists() ) return false;
+				$cache_data = $cache->get_data();
 
-		if( $this->password_verified ) {
-			return true;
+				if( $cache_data && password_verify( $this->password, $cache_data ) ) {
+						
+					$this->password_verified = true;
+
+					return true;
+
+				}
+
+			}
+
 		}
 
-		$cache_data = $cache->get_data();
+		if( ! $this->parent_gallery->is_password_protected() ) return false;
 
-		if( ! $cache_data ) return false;
+		if( ! $this->parent_gallery->has_password($this->password) ) return false;
 
-		if( ! password_verify( $this->password, $cache_data ) ) {
-			return false;
-		}
-
-		$this->password_verified = true;
-
-		return true;
+		return $this->parent_gallery->password_provided();
 	}
 
 
