@@ -77,11 +77,6 @@ $imagecount = $gallery->get_image_count();
 
 					$url = $sub_gallery->get_url();
 
-					if( $gallery->is_secret() ) {
-						// NOTE: if this gallery has a secret, automatically append it to child galleries
-						$url .= '?secret='.$gallery->get_secret();
-					}
-
 					if( $sub_gallery->is_secret() && ! $sub_gallery->secret_provided() ) {
 						$thumbnail = false;
 					} elseif( $sub_gallery->is_password_protected() && ! $sub_gallery->password_provided() ) {
