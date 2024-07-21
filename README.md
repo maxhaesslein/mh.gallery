@@ -87,16 +87,16 @@ thumbnail: sub-gallery/sub-sub-gallery/image-05.jpg
 
 ### Hidden Galleries
 
-Setting `hidden: true` will hide this gallery from the index page. You can also completely disable the index page with a config option, see 'Customization' below. The gallery can still be accessed via the URL.
+Setting `hidden: true` will hide this gallery from the index page. The gallery can still be accessed via the URL. (You can also completely disable the index page by setting `'allow_overview' => false` in the `custom/config.php`, see 'Customization' below)
 
-## Secret Galleries
+### Secret Galleries
 
 Setting `secret: ` to a string will hide the thumbnail of this gallery from the index and also disables the URL of this gallery. You can access it only if you append the secret string to the URL. After you visited the secret link, the thumbnail will be visible in the overview (or parent gallery).
 The secret string needs to be URI-compatible, so it should only consist of `a-z`, `0-9` and `-_`, for example `secret: abc123`.
 To access the gallery, you need to append `?secret={string}` (for example `?secret=abc123`) to the URL of the gallery. This secret will then be saved in the browser session, and as long as the session is active (until you close the browser window), you can access the URL of this gallery.
 Sub-galleries will automatically inherit this secret (or can have their own secret). Sub-galleries get unlocked automatically with their parent gallery, if they inherit the secret.
 
-## Password Protected Galleries
+### Password Protected Galleries
 
 Setting `password: ` to a hashed password string will hide the thumbnail of this gallery from the index and also add a password login form to the URL of this gallery. You can only view the gallery if you provide the correct password.
 To generate a hashed password string, visit the `/admin/create-hash` endpoint of your installation (for example, `https://www.example.com/admin/create-hash`). There you can enter a password and get the corresponding hashed string, which you can copy into your `gallery.txt` file.
