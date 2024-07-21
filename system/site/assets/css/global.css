@@ -30,6 +30,7 @@ body {
 	font-size: 18px;
 
 	--color-empty: #000;
+	--color-empty-icon: #333;
 	--color-button: #000;
 	--color-button-hover: #333;
 	--color-background: #181818;
@@ -40,6 +41,7 @@ body {
 
 	body.lightmode {
 		--color-empty: #fff;
+		--color-empty-icon: #ccc;
 		--color-button: #ddd;
 		--color-button-hover: #fff;
 		--color-background: #f2f2f2;
@@ -381,7 +383,24 @@ h1 {
 		background: var(--color-empty);
 		width: 100%;
 		display: block;
+		position: relative;
 	}
+
+		.gallery-list .empty-thumbnail.locked:after {
+			content: "";
+			display: block;
+			background: var(--color-empty-icon);
+			width: 36%;
+			height: 36%;
+			position: absolute;
+			transform: translate(-50%, -50%);
+			transition: all 200ms ease-in-out;
+			left: 50%;
+			top: 50%;
+			z-index: 5;
+			mask: url(../img/locked.svg) no-repeat center center / contain;
+		}
+
 	.gallery-list .gallery-link,
 	.gallery-list .image-link {
 		display: block;
