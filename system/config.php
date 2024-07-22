@@ -35,11 +35,10 @@ return [
 	// set to false to disable overview page with index of public galleries
 	'allow_overview' => true,
 
-	// this is the default image quality for jpg images
-	'default_image_quality' => 85,
-
-	// this is the default image quality for modern formats, like webp and avif
-	'default_modern_image_quality' => 75,
+	// the image quality for lossless image types; the lower this number, the lower the filesize and quality
+	'image_quality_jpg' => 85,
+	'image_quality_webp' => 75,
+	'image_quality_avif' => 75,
 
 	// the default image width in the single view
 	'default_image_width' => 2000,

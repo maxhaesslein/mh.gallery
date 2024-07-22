@@ -240,12 +240,14 @@ class Image {
 
 		$this->load_image_meta();
 
+		$quality = get_config( 'image_quality_'.$this->file_extension ) ?? get_config( 'image_quality_jpg' );
+
 		$defaults = [
 			'width' => $this->width,
 			'height' => $this->height,
 			'crop' => false,
 			'type' => $this->file_extension,
-			'quality' => get_config( 'default_image_quality' ),
+			'quality' => $quality,
 		];
 
 		return $defaults;
@@ -299,37 +301,38 @@ class Image {
 
 	private function get_picture_srcset( $width ) {
 
-		$default_image_quality = get_config('default_image_quality');
-		$default_modern_image_quality = get_config('default_modern_image_quality');
+		$image_quality_jpg = get_config('image_quality_jpg');
+		$image_quality_webp = get_config('image_quality_webp') ?? $image_quality_jpg;
+		$image_quality_avif = get_config('image_quality_avif') ?? $image_quality_jpg;
 
 		$picture = [
 
 			'avif' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => $default_modern_image_quality,
+					'quality' => $image_quality_avif,
 				],
 				'640w' => [
 					'width' => 640,
-					'quality' => $default_modern_image_quality,
+					'quality' => $image_quality_avif,
 				],
 			],
 
 			'webp' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => $default_modern_image_quality,
+					'quality' => $image_quality_webp,
 				],
 				'640w' => [
 					'width' => 640,
-					'quality' => $default_modern_image_quality,
+					'quality' => $image_quality_webp,
 				],
 			],
 
 			'jpg' => [
 				'320w' => [
 					'width' => 320,
-					'quality' => $default_image_quality,
+					'quality' => $image_quality_jpg,
 				],
 			],
 
@@ -339,17 +342,17 @@ class Image {
 
 			$picture['jpg']['640w'] = [
 				'width' => 640,
-				'quality' => $default_image_quality,
+				'quality' => $image_quality_jpg,
 			];
 
 			$picture['avif']['800w'] = [
 				'width' => 800,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_avif,
 			];
 
 			$picture['webp']['800w'] = [
 				'width' => 800,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_webp,
 			];
 
 		}
@@ -358,17 +361,17 @@ class Image {
 
 			$picture['jpg']['800w'] = [
 				'width' => 800,
-				'quality' => $default_image_quality,
+				'quality' => $image_quality_jpg,
 			];
 
 			$picture['avif']['1200w'] = [
 				'width' => 1200,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_avif,
 			];
 
 			$picture['webp']['1200w'] = [
 				'width' => 1200,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_webp,
 			];
 
 		}
@@ -377,17 +380,17 @@ class Image {
 
 			$picture['jpg']['1200w'] = [
 				'width' => 1200,
-				'quality' => $default_image_quality,
+				'quality' => $image_quality_jpg,
 			];
 
 			$picture['avif']['2000w'] = [
 				'width' => 2000,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_avif,
 			];
 
 			$picture['webp']['2000w'] = [
 				'width' => 2000,
-				'quality' => $default_modern_image_quality,
+				'quality' => $image_quality_webp,
 			];
 
 		}

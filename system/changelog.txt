@@ -1,5 +1,8 @@
 v.0.7.2
 
+breaking change: renamed some config options. if you use them, you need to update your `custom/config.php` or `gallery.txt` files.
+
+- renamed the config option `default_image_quality` to `image_quality_jpg` and `default_modern_image_quality` to `image_quality_webp` and `image_quality_avif`
 - 'end session' link to lock secret galleries
 
 
