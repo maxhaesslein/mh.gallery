@@ -73,34 +73,45 @@ class Route {
 		}
 
 
-		if( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+		if( $gallery && $gallery->is_secret() ) {
 			
-			if( ! empty($query_parameters['secret']) ) {
+			if( isset($_GET['end-session']) ) {
+				$gallery->secret_lock();
 
-				$hash = get_hash($gallery->get_slug());
-
-				$secret = $query_parameters['secret'];
-
-				if( ! isset($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
-
-				if( ! array_key_exists($hash, $_SESSION['secrets']) ) $_SESSION['secrets'][$hash] = [];
-
-				if( ! in_array($secret, $_SESSION['secrets'][$hash]) ) {
-					$_SESSION['secrets'][$hash][] = $secret;
-				}
-
-				$reload_url = explode_url(get_current_url());
-				
-				unset($reload_url['query']['secret']);
-				
-				$reload_url = implode_url($reload_url);
-
-				// remove the secret query parameter from the URL:
-				header('Location: '.$reload_url);
+				header( 'Location: '.$gallery->get_url());
 				exit;
 			}
 
-			$template_name = '401-secret';
+			if( ! $gallery->secret_provided() ) {
+
+				if( ! empty($query_parameters['secret']) ) {
+
+					$hash = get_hash($gallery->get_slug());
+
+					$secret = $query_parameters['secret'];
+
+					if( ! isset($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
+
+					if( ! array_key_exists($hash, $_SESSION['secrets']) ) $_SESSION['secrets'][$hash] = [];
+
+					if( ! in_array($secret, $_SESSION['secrets'][$hash]) ) {
+						$_SESSION['secrets'][$hash][] = $secret;
+					}
+
+					$reload_url = explode_url(get_current_url());
+					
+					unset($reload_url['query']['secret']);
+					
+					$reload_url = implode_url($reload_url);
+
+					// remove the secret query parameter from the URL:
+					header('Location: '.$reload_url);
+					exit;
+				}
+
+				$template_name = '401-secret';
+
+			}
 
 		}
 

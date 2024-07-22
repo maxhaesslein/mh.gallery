@@ -14,10 +14,6 @@ $gallery = $core->route->get('gallery');
 $image = $core->route->get('image');
 
 $gallery_slug = $gallery->get_slug();
-$image_slug = $image->get_slug();
-
-$overview_link = $gallery->get_url();
-$overview_link .= '#'.$image_slug;
 
 $prev_image = $image->get_adjacent_image('prev');
 $next_image = $image->get_adjacent_image('next');
@@ -69,16 +65,7 @@ if( ! doing_ajax() ) {
 }
 ?>
 	<div class="meta meta-top">
-		<ul class="action">
-			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
-			<?php
-			if( $gallery->is_password_protected() && $gallery->password_provided() ) {
-				?>
-				<li><a class="button" href="<?= $gallery->get_url() ?>?lock">lock gallery</a></li>
-				<?php
-			}
-			?>
-		</ul>
+		<?php snippet( 'gallery-action', ['gallery' => $gallery, 'image' => $image] ); ?>
 		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php

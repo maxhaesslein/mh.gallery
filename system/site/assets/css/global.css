@@ -228,7 +228,7 @@ main {
 	box-sizing: border-box;
 }
 
-	main:has(.button:first-child) {
+	main:has(.meta-top) {
 		padding-top: 0;
 	}
 

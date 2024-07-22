@@ -24,29 +24,16 @@ if( $gallery->is_download_gallery_enabled() ) {
 $title = $gallery->get_title();
 $description = $gallery->get_description();
 
-$overview_link = $gallery->get_parent_url();
-if( $overview_link ) {
-	$overview_link .= '#'.$gallery->get_slug();
-}
-
 $imagecount = $gallery->get_image_count();
 
 ?>
 <main>
 
+	<div class="meta meta-top">
+		<?php snippet( 'gallery-action', ['gallery' => $gallery] ); ?>
+	</div>
+
 	<?php
-
-	if( $overview_link ) {
-		?>
-		<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
-		<?php
-	}
-
-	if( $gallery->is_password_protected() && $gallery->password_provided() ) {
-		?>
-		<a class="button" href="<?= $gallery->get_url() ?>?lock">lock gallery</a>
-		<?php
-	}
 
 	if( $title ) {
 		?>

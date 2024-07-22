@@ -30,7 +30,9 @@ if( $overview_link ) {
 
 	if( $overview_link ) {
 		?>
-		<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
+		<div class="meta meta-top">
+			<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
+		</div>
 		<?php
 	}
 

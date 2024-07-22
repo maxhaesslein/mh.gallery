@@ -260,6 +260,32 @@ class Gallery {
 	}
 
 
+	function secret_lock() {
+
+		if( ! $this->is_secret() ) return;
+
+		if( empty($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) return;
+
+		$secrets = $_SESSION['secrets'];
+
+		$hash = get_hash($this->get_slug());
+		if( isset($secrets[$hash]) && is_array($secrets[$hash]) ) {
+			foreach( $secrets[$hash] as $secret ) {
+				if( $secret == $this->secret ) {
+					unset($_SESSION['secrets'][$hash]);
+					return;
+				}
+			}
+		}
+
+		if( ! $this->parent_gallery->is_secret() ) return;
+
+		if( ! $this->parent_gallery->has_secret($this->secret) ) return;
+
+		return $this->parent_gallery->secret_lock();
+	}
+
+
 	function set_password( $password ) {
 		$this->password = $password;
 	}
