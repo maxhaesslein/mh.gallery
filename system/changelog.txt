@@ -1,6 +1,6 @@
 v.0.7.2
 
-- …
+- 'end session' link to lock secret galleries
 
 
 v.0.7.1

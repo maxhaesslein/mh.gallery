@@ -18,31 +18,21 @@ $gallery = $core->route->get('gallery');
 
 $title = $gallery->get_title();
 
-$overview_link = $gallery->get_parent_url();
-if( $overview_link ) {
-	$overview_link .= '#'.$gallery->get_slug();
-}
-
 ?>
 <main>
 
+	<div class="meta meta-top">
+		<?php snippet( 'gallery-action', ['gallery' => $gallery] ); ?>
+	</div>
+
 	<?php
-
-	if( $overview_link ) {
-		?>
-		<div class="meta meta-top">
-			<a class="button" href="<?= $overview_link ?>">&laquo; overview</a>
-		</div>
-		<?php
-	}
-
 	if( $title ) {
 		?>
 		<h1><?= $title ?></h1>
 		<?php
 	}
-
 	?>
+	
 	<form action="<?= get_current_url() ?>" method="POST">
 		<p>This gallery is password protected.</p>
 
