@@ -31,6 +31,8 @@ class Image {
 
 	private $image_meta_loaded = false;
 
+	private $filesize = NULL;
+
 
 	function __construct( $filename, $gallery ) {
 
@@ -233,6 +235,17 @@ class Image {
 
 	function get_original_filepath(){
 		return $this->path;
+	}
+
+
+	function get_original_filesize(){
+		if( $this->filesize ) return $this->filesize;
+
+		$filesize = filesize($this->path);
+
+		$this->filesize = $filesize;
+
+		return $filesize;
 	}
 
 

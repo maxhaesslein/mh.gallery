@@ -27,6 +27,7 @@ class Gallery {
 	private $download_image = NULL;
 	private $download_gallery = NULL;
 	private $bridge_sort_order = NULL;
+	private $zip_cache_filename = NULL;
 
 	function __construct( $gallery_file, $parent_gallery ) {
 
@@ -863,11 +864,19 @@ class Gallery {
 
 	private function get_zip_cache() {
 
-		// TODO: currently, when getting the cache file, we only check if the gallery slug or the number of images changed. maybe we want to add something to check if individual images changed, like a complete count of filesizes of all images or something like that.
+		if( ! $this->zip_cache_filename ) {
 
-		$cache_filename = $this->get_zip_filename().$this->get_image_count();
+			$filesize = 0;
 
-		$cache = new Cache( 'zip', $cache_filename );
+			foreach( $this->get_images() as $image ) {
+				$filesize += $image->get_original_filesize();
+			}
+
+			$this->zip_cache_filename = $this->get_zip_filename().$this->get_image_count().get_config('download_filetype').$filesize;
+
+		}
+
+		$cache = new Cache( 'zip', $this->zip_cache_filename );
 		
 		return $cache;
 	}
@@ -890,6 +899,7 @@ class Gallery {
 
 		$missing_images = [];
 		foreach( $expected_images as $image ) {
+			// TODO: use get_option('download_filetype') to locate the file
 			if( $zip->locateName($image->get_original_filename()) !== false ) continue;
 
 			$missing_images[] = $image;
@@ -947,6 +957,7 @@ class Gallery {
 		}
 
 		foreach( $missing_images as $image ) {
+			// TODO: use get_config('download_filetype') to convert to a specific filetype, if needed
 			$zip->addFile( $image->get_original_filepath(), $image->get_original_filename() );
 		}
 
