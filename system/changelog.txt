@@ -1,4 +1,4 @@
-v.0.7.2
+v.0.8.0
 
 breaking change: renamed some config options. if you use them, you need to update your `custom/config.php` or `gallery.txt` files.
 
