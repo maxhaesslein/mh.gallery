@@ -23,7 +23,7 @@ body {
 	background: var(--color-background);
 	color: var(--color-text);
 	padding: 10px;
-	min-width: 320px;
+	min-width: 360px;
 	box-sizing: border-box;
 	font-family: Avenir, Montserrat, Corbel, 'URW Gothic', source-sans-pro, sans-serif; 
 	font-weight: normal;
@@ -583,7 +583,7 @@ h1 {
 	}
 
 .template-overview .meta a {
-	margin-left: 5px;
+	margin-left: 3px;
 }
 
 body.template-image {
