@@ -24,8 +24,8 @@ class Gallery {
 	private $secret = false;
 	private $password = false;
 	private $password_verified = false;
-	private $download_image_enabled = NULL;
-	private $download_gallery_enabled = NULL;
+	private $download_image = NULL;
+	private $download_gallery = NULL;
 	private $bridge_sort_order = NULL;
 
 	function __construct( $gallery_file, $parent_gallery ) {
@@ -91,8 +91,8 @@ class Gallery {
 			$this->set_password($settings['password']);
 		}
 
-		$this->download_image_enabled = $this->inherit_setting( 'download_image_enabled' );
-		$this->download_gallery_enabled = $this->inherit_setting( 'download_gallery_enabled' );
+		$this->download_image = $this->inherit_setting( 'download_image' );
+		$this->download_gallery = $this->inherit_setting( 'download_gallery' );
 
 		return $this;
 	}
@@ -392,12 +392,12 @@ class Gallery {
 
 
 	function is_download_image_enabled() {
-		return $this->download_image_enabled;
+		return $this->download_image;
 	}
 
 
 	function is_download_gallery_enabled() {
-		return $this->download_gallery_enabled;
+		return $this->download_gallery;
 	}
 
 

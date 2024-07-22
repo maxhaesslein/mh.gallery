@@ -58,8 +58,8 @@ slug: my-cool-gallery
 description: this was a very nice and sunny day, and I took some pictures.
 hidden: true
 thumbnail: image-01.jpg
-download_image_enabled: true
-download_gallery_enabled: true
+download_image: true
+download_gallery: true
 image_sort_order: filename
 ```
 
@@ -69,7 +69,7 @@ Add `.jpg` (or `.jpeg`, `.png`, `.webp`, `avif` or `gif`) files into the gallery
 
 The `image_sort_order` sets the sort order for images in a gallery and can be set via `custom/config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata if available, or file modification date otherwise), `bridge` (sort by a .BridgeSort file, created by Adobe Bridge) or `random` (sort randomly on every visit). This option gets inherited from the parent gallery.
 
-The `download_image_enabled` option activates (or deactivates) the download-link for individual images. The `download_gallery_enabled` option activates (or deactivates) the download-link for all images as a .zip-file. This option can be set via the `custom/config.php` or on a per-gallery-basis in the `gallery.txt` file. Both options get inherited from the parent gallery.
+The `download_image` option activates (or deactivates) the download-link for individual images. The `download_gallery` option activates (or deactivates) the download-link for all images as a .zip-file. This option can be set via the `custom/config.php` or on a per-gallery-basis in the `gallery.txt` file. Both options get inherited from the parent gallery.
 
 Up to about 1000 images per gallery should work okay without an impact on loading times (depending on your server configuration). The more images, the slower the page loads get, and the more space is needed for cached preview images.
 

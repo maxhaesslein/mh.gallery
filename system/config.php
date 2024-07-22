@@ -59,10 +59,10 @@ return [
 	'image_extensions' => ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif'],
 
 	// set to false to disable download of single images
-	'download_image_enabled' => true,
+	'download_image' => true,
 
 	// set to false to disable download of the whole gallery
-	'download_gallery_enabled' => true,
+	'download_gallery' => true,
 
 	// set to false to use original filetype
 	'download_filetype' => 'jpg',
