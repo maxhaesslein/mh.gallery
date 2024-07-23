@@ -1,6 +1,8 @@
 
 - allow multiple secret hashes per gallery (could be: secret: 12345, 54321, abc)
 
+- maybe also use the image filesize or modification date in the cache filename, so we know when an image changed
+
 - enhance slide navigation
 	- image needs to move, next image needs to be visible
 	- when zooming, we should never, ever load another image
@@ -25,7 +27,7 @@
 
 - 'region of interest' for image cropping
 
-- show some exif information, like camera and less
+- show some exif information, like camera and lens
 
 - support for heic/heif as source images; currently we need an external program to convert images to another format, and then read it with PHP. it may take some time, until this is natively supported in PHP
 - support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research
