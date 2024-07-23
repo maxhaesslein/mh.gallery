@@ -8,7 +8,7 @@ A simple and lightweight PHP gallery, without any dependencies. A demo can be fo
 - this works without JavaScript (but with it enabled, image navigation gets a bit faster)
 - gallery options are stored in .txt files, which makes it easy to port the content to another system
 - images are automatically resized to the best resolution for the current viewport size, and are served in modern formats (webp, avif) if possible; resized images are cached on the server, so they don't need to be regenerated every time
-- galleries can be hidden or only accessible via a secret link
+- galleries can be hidden, password protected, and/or only accessible via a secret link
 - lightmode & darkmode
 - released under the GPL 3 license; see license.md for details
 
