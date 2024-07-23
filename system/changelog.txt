@@ -5,6 +5,7 @@ breaking change: renamed some config options. if you use them, you need to updat
 - renamed the config option `default_image_quality` to `image_quality_jpg` and `default_modern_image_quality` to `image_quality_webp` and `image_quality_avif`
 - renamed config options `download_image_enabled` to `download_image` and `download_gallery_enabled` to `download_gallery`
 - 'end session' link to lock secret galleries
+- zipped gallery downloads now use the `download_filetype` option, if it is set
 - small design enhancements
 
 

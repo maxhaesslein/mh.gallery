@@ -109,7 +109,7 @@ class Image {
 	}
 
 
-	private function type_supported( $type ) {
+	function type_supported( $type ) {
 
 		if( $type == 'jpg' || $type == 'jpeg' ) return true;
 
@@ -133,6 +133,11 @@ class Image {
 
 	function get_key() {
 		return $this->key;
+	}
+
+
+	function get_gallery() {
+		return $this->gallery;
 	}
 
 
@@ -703,6 +708,8 @@ class Image {
 
 
 	function get_image_blob( $args = [] ) {
+
+		$args = array_merge($this->get_default_args(), $args);
 
 		$src_width = $this->width;
 		$src_height = $this->height;

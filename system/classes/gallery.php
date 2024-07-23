@@ -897,10 +897,16 @@ class Gallery {
 		$zip = new ZipArchive;
 		$zip->open( $zip_target );
 
+		$download_filetype = get_config( 'download_filetype' );
 		$missing_images = [];
 		foreach( $expected_images as $image ) {
-			// TODO: use get_option('download_filetype') to locate the file
-			if( $zip->locateName($image->get_original_filename()) !== false ) continue;
+
+			$image_filename = $image->get_original_filename();
+			if( $download_filetype ) {
+				$image_filename = remove_fileextension($image_filename).'.'.$download_filetype;
+			}
+
+			if( $zip->locateName($image_filename) !== false ) continue;
 
 			$missing_images[] = $image;
 		}
@@ -956,9 +962,72 @@ class Gallery {
 			exit;
 		}
 
+		$query = [];
+		$download_filetype = get_config( 'download_filetype' );
+		if( $download_filetype ) {
+			$download_image_quality = get_config( 'image_quality_'.$download_filetype ) ?? get_config( 'image_quality_jpg' );
+		}
 		foreach( $missing_images as $image ) {
-			// TODO: use get_config('download_filetype') to convert to a specific filetype, if needed
-			$zip->addFile( $image->get_original_filepath(), $image->get_original_filename() );
+
+			$image_filename = $image->get_original_filename();
+
+			if( $download_filetype ) {
+
+				$image_filename = remove_fileextension($image_filename).'.'.$download_filetype;
+
+				$args = [
+					'type' => $download_filetype,
+					'quality' => $download_image_quality
+				];
+
+				$image_blob = $image->get_image_blob( $args );
+
+				ob_start();
+
+				if( $download_filetype == 'jpg' ) {
+
+					//header( 'Content-Type: image/jpeg' );
+					imagejpeg( $image_blob, NULL, $download_image_quality );
+
+				} elseif( $download_filetype == 'png' && $image->type_supported('png') ) {
+
+					//header( 'Content-Type: image/png' );
+					imagepng( $image_blob );
+
+				} elseif( $download_filetype == 'webp' && $image->type_supported('webp') ) {
+
+					//header( 'Content-Type: image/webp' );
+					imagewebp( $image_blob, null, $download_image_quality );
+
+				} elseif( $download_filetype == 'avif' && $image->type_supported('avif') ) {
+
+					//header( 'Content-Type: image/avif' );
+					imageavif( $image_blob, null, $download_image_quality );
+
+				} elseif( $download_filetype == 'gif' && $image->type_supported('gif') ) {
+
+					imagetruecolortopalette($image_blob, true, 256);
+
+					//header( 'Content-Type: image/gif' );
+					imagegif( $image_blob, null );
+
+				}
+
+				$image_data = ob_get_contents();
+				ob_end_clean();
+
+				$zip->addFromString( $image_filename, $image_data );
+
+				imagedestroy($image_blob);
+				unset($image_data);
+
+			} else {
+
+				$image_path = $image->get_original_filepath();
+				$zip->addFile( $image_path, $image_filename );
+
+			}
+
 		}
 
 		$zip->close();

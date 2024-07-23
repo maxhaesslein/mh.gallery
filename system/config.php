@@ -64,7 +64,7 @@ return [
 	// set to false to disable download of the whole gallery
 	'download_gallery' => true,
 
-	// set to false to use original filetype
+	// the format for image and gallery downloads; set to false to use original filetype
 	'download_filetype' => 'jpg',
 
 	// add OpenGraph sharing tags to HTML head, for better link previews
