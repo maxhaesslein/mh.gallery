@@ -1,3 +1,8 @@
+v.0.8.1
+
+- …
+
+
 v.0.8.0
 
 breaking change: renamed some config options (see below). if you use them, you need to update your `custom/config.php` or `gallery.txt` files. you can also delete all files inside `cache/zip/`, because all zip files will be re-created with this update
