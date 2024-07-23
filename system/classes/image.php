@@ -445,7 +445,8 @@ class Image {
 			'width' => $width,
 			'height' => $height,
 			'crop' => $crop,
-			'type' => 'jpg'
+			'type' => 'jpg',
+			'quality' => get_config('image_quality_jpg')
 		]);
 
 		$html = '';
@@ -529,70 +530,7 @@ class Image {
 	}
 
 
-	private function read_image() {
-
-		$this->load_image_meta();
-
-		$image = false;
-
-		if( $this->image_type == IMAGETYPE_JPEG && $this->type_supported('jpg') ) {
-
-			$image = imagecreatefromjpeg( $this->path );
-
-		} elseif( $this->image_type == IMAGETYPE_PNG && $this->type_supported('png') ) {
-
-			$image = imagecreatefrompng( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image, false );
-			imagesavealpha( $image, true );
-
-		} elseif( $this->image_type == IMAGETYPE_WEBP && $this->type_supported('webp') ) {
-
-			$image = imagecreatefromwebp( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image, false );
-			imagesavealpha( $image, true );
-
-		} elseif( $this->image_type == IMAGETYPE_AVIF && $this->type_supported('avif') ) {
-
-			$image = imagecreatefromavif( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image, false );
-			imagesavealpha( $image, true );
-
-		} elseif( $this->image_type == IMAGETYPE_GIF && $this->type_supported('gif') ) {
-
-			$image = imagecreatefromgif( $this->path );
-
-			// we need to make sure to convert this to true color, for other formats:
-			imagepalettetotruecolor( $image );
-
-		}
-
-
-		if( ! $image ) {
-			debug( 'could not load image with image-type '.$this->image_type );
-			return false;
-		}
-
-
-		return $image;
-	}
-
-
-	private function fill_with_backgroundcolor( $image, $transparent_color = [255, 255, 255] ) {
-
-		$this->load_image_meta();
-
-		$width = $this->width;
-		$height = $this->height;
-		if( $this->rotated ) {
-			$width = $this->height;
-			$height = $this->width;
-		}
+	private function fill_with_backgroundcolor( $image, $width, $height, $transparent_color = [255, 255, 255] ) {
 
 		$background_image = imagecreatetruecolor( $width, $height );
 		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
@@ -600,11 +538,7 @@ class Image {
 		imagefill( $background_image, 0, 0, $background_color );
 		imagecopy( $background_image, $image, 0, 0, 0, 0, $width, $height );
 
-		$image = $background_image;
-
-		imagedestroy( $background_image );
-
-		return $image;
+		return $background_image;
 	}
 
 
@@ -635,6 +569,42 @@ class Image {
 	}
 
 
+	private function image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop ) {
+
+		$image_blob_resized = imagecreatetruecolor( $width, $height );
+
+		if( $this->image_type == IMAGETYPE_PNG || $this->image_type == IMAGETYPE_WEBP ) {
+			// handle alpha channel
+			imagealphablending( $image_blob_resized, false );
+			imagesavealpha( $image_blob_resized, true );
+		} else {
+			// no alpha channel; fill with background color
+			$image_blob = $this->fill_with_backgroundcolor( $image_blob, $src_width, $src_height );
+		}
+
+		if( $src_width <= $width && $src_height <= $height && ! $crop ) {
+			// no resizing necessary
+			return $image_blob;
+		}
+
+		// NOTE: currently, we just center the image on crop
+		$src_width_cropped = $src_width;
+		$src_height_cropped = (int) round($src_width_cropped * $height/$width);
+		if( $src_height_cropped > $src_height ) {
+			$src_height_cropped = $src_height;
+			$src_width_cropped = (int) round($src_height_cropped * $width/$height);
+		}
+		$src_x = (int) round(($src_width - $src_width_cropped)/2);
+		$src_y = (int) round(($src_height - $src_height_cropped)/2);
+
+		imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
+
+		imagedestroy($image_blob);
+
+		return $image_blob_resized;
+	}
+
+
 	private function get_cache( $args = [] ) {
 
 		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $args );
@@ -656,67 +626,12 @@ class Image {
 
 		$args = array_merge($this->get_default_args(), $args);
 
-		$src_width = $this->width;
-		$src_height = $this->height;
-
-		$crop = false;
-		if( ! empty($args['crop']) ) $crop = $args['crop'];
-
-		$width = $args['width'];
-		$height = $args['height'];
-		if( $this->rotated && ! $crop ) {
-			$width = $args['height'];
-			$height = $args['width'];
-		}
-
-		$type = $args['type'];
 		$quality = $args['quality'];
+		$type = $args['type'];
 
-		$image_blob = $this->read_image();
-		if( ! $image_blob ) {debug('could not load image', $image);
-			exit;
-		}
-
-		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
-
-		if( $src_width > $width || $src_height > $height || $crop ) {
-
-			$image_blob_resized = imagecreatetruecolor( $width, $height );
-
-			if( $type == 'jpg' ) {
-
-				$image_blob = $this->fill_with_backgroundcolor( $image_blob );
-
-			} elseif( ( $this->image_type == IMAGETYPE_PNG ) 
-				|| $this->image_type == IMAGETYPE_WEBP 
-			) {
-				// handle alpha channel
-				imagealphablending( $image_blob_resized, false );
-				imagesavealpha( $image_blob_resized, true );
-			}
-
-			// NOTE: currently, we just center the image on crop
-			$src_width_cropped = $src_width;
-			$src_height_cropped = (int) round($src_width_cropped * $height/$width);
-			if( $src_height_cropped > $src_height ) {
-				$src_height_cropped = $src_height;
-				$src_width_cropped = (int) round($src_height_cropped * $width/$height);
-			}
-			$src_x = (int) round(($src_width - $src_width_cropped)/2);
-			$src_y = (int) round(($src_height - $src_height_cropped)/2);
-
-			imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
-
-			imagedestroy($image_blob);
-
-			$image_blob = $image_blob_resized;
-
-		}
-
+		$image_blob = $this->get_image_blob( $args );
 
 		$cache = $this->get_cache( $args );
-
-
 		// check, if a placeholder file exists. if it does not exist, we are not allowed to create this image! see create_placeholder_file() for more info.
 		if( ! $cache->has_placeholder() ) {
 			return false;
@@ -782,9 +697,75 @@ class Image {
 
 		}
 
-
 		imagedestroy( $image_blob );
 		exit;
+	}
+
+
+	function get_image_blob( $args = [] ) {
+
+		$src_width = $this->width;
+		$src_height = $this->height;
+
+		$type = $args['type'];
+		$crop = $args['crop'] ?? false;
+
+		$width = $args['width'];
+		$height = $args['height'];
+		if( $this->rotated && ! $crop ) {
+			$width = $args['height'];
+			$height = $args['width'];
+		}
+
+		$image_blob = false;
+
+		if( $this->image_type == IMAGETYPE_JPEG && $this->type_supported('jpg') ) {
+
+			$image_blob = imagecreatefromjpeg( $this->path );
+
+		} elseif( $this->image_type == IMAGETYPE_PNG && $this->type_supported('png') ) {
+
+			$image_blob = imagecreatefrompng( $this->path );
+
+			// handle transparency loading:
+			imagealphablending( $image_blob, false );
+			imagesavealpha( $image_blob, true );
+
+		} elseif( $this->image_type == IMAGETYPE_WEBP && $this->type_supported('webp') ) {
+
+			$image_blob = imagecreatefromwebp( $this->path );
+
+			// handle transparency loading:
+			imagealphablending( $image_blob, false );
+			imagesavealpha( $image_blob, true );
+
+		} elseif( $this->image_type == IMAGETYPE_AVIF && $this->type_supported('avif') ) {
+
+			$image_blob = imagecreatefromavif( $this->path );
+
+			// handle transparency loading:
+			imagealphablending( $image_blob, false );
+			imagesavealpha( $image_blob, true );
+
+		} elseif( $this->image_type == IMAGETYPE_GIF && $this->type_supported('gif') ) {
+
+			$image_blob = imagecreatefromgif( $this->path );
+
+			// we need to make sure to convert this to true color, for other formats:
+			imagepalettetotruecolor( $image_blob );
+
+		}
+
+		if( ! $image_blob ) {
+			debug( 'could not load image with image-type '.$this->image_type );
+			return false;
+		}
+
+		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
+
+		$image_blob = $this->image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop );
+
+		return $image_blob;
 	}
 
 
