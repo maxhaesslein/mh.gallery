@@ -25,17 +25,25 @@ if( $image ) {
 
 ?>
 <ul class="action">
-	<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
 	<?php
+
+	if( $overview_link ) {
+		?>
+		<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
+		<?php
+	}
+
 	if( $gallery->is_secret() && $gallery->secret_provided() ) {
 		?>
 		<li><a class="button" href="<?= $gallery->get_url() ?>?end-session" title="end secret session">end session</a></li>
 		<?php
 	}
+
 	if( $gallery->is_password_protected() && $gallery->password_provided() ) {
 		?>
 		<li><a class="button" href="<?= $gallery->get_url() ?>?lock" title="lock gallery">lock</a></li>
 		<?php
 	}
+
 	?>
 </ul>
