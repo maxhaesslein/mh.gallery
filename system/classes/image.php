@@ -72,9 +72,9 @@ class Image {
 		$this->image_type = $image_meta[2];
 
 
-		$exif = @exif_read_data( $filepath );
-		if( $exif && ! empty($exif['Orientation']) ) {
-			$this->orientation = $exif['Orientation'];
+		$exif_orientation = $this->get_exif_data( 'Orientation', 'IFD0' );
+		if( $exif_orientation ) {
+			$this->orientation = $exif_orientation;
 		}
 
 		if( $this->orientation == 6 || $this->orientation == 8 || $this->orientation == 5 || $this->orientation == 7 ) {
@@ -154,7 +154,9 @@ class Image {
 	function get_exif_data( $field_key, $group_key = 'EXIF' ) {
 
 		if( $this->exif_data === NULL ) {
-			$this->exif_data = exif_read_data( $this->path, false, true );
+			$exif_data = @exif_read_data( $this->path, false, true );
+			if( ! $exif_data ) return;
+			$this->exif_data = $exif_data;
 		}
 
 		if( ! array_key_exists($group_key, $this->exif_data) ) {
