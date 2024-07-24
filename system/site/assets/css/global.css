@@ -452,6 +452,7 @@ h1 {
 
 	.meta a,
 	.meta .button-download,
+	.meta .button-information,
 	.button {
 		text-decoration: none;
 		display: inline-block;
@@ -465,6 +466,7 @@ h1 {
 
 		.meta a:hover,
 		.meta li:hover .button-download,
+		.meta li:hover .button-information,
 		.button:hover {
 			background-color: var(--color-button-hover);
 			text-decoration: none;
@@ -477,6 +479,48 @@ h1 {
 	body.cursor-hidden.template-image .meta {
 		opacity: 0;
 	}
+
+	.meta .information-wrapper {
+		display: inline-block;
+		position: relative;
+	}
+	
+		.meta .button-information {
+			display: inline-block;
+			color: transparent;
+			width: 26px;
+			height: 26px;
+			overflow: hidden;
+			vertical-align: middle;
+			cursor: pointer;
+			position: relative;
+		}
+
+			.meta .button-information:after {
+				content: "";
+				display: block;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				left: 0;
+				top: 0;
+				background-color: var(--color-icon);
+				mask: url(../img/information.svg) no-repeat center center / auto 50%;
+			}
+
+			.meta .information-wrapper .information-content {
+				position: absolute;
+				right: -26px;
+				top: 26px;
+				background-color: var(--color-button);
+				padding: 10px;
+				border-radius: 5px;
+				white-space: nowrap;
+			}
+				
+				.meta .information-wrapper .information-content li {
+					display: block;
+				}
 
 	.meta .download-menu-wrapper {
 		position: relative;
@@ -508,7 +552,7 @@ h1 {
 			mask: url(../img/download.svg) no-repeat center center / 80% auto;
 		}
 
-		.meta .download-menu-wrapper:hover .button-download{
+		.meta .download-menu-wrapper:hover .button-download {
 			border-bottom-right-radius: 0;
 			border-bottom-left-radius: 0;
 		}

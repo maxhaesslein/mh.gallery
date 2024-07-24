@@ -171,6 +171,53 @@ class Image {
 	}
 
 
+	function get_camera_information() {
+
+		$information = [];
+
+		$camera_make = $this->get_exif_data( 'Make', 'IFD0' );
+		$camera_model = $this->get_exif_data( 'Model', 'IFD0' );
+		if( $camera_make || $camera_model ) {
+			if( str_starts_with($camera_model, $camera_make) ) $camera_make = false;
+
+			$information['Camera'] = $camera_make;
+			if( $camera_make && $camera_model ) $information['Camera'] .= ' ';
+			$information['Camera'] .= $camera_model;
+		}
+
+		$aperture = $this->get_exif_data( 'ApertureFNumber', 'COMPUTED' );
+		if( $aperture && $aperture != 'f/1.0' ) {
+			$information['Aperture'] = $aperture;
+		}
+
+		$exposure_time = $this->get_exif_data( 'ExposureTime', 'EXIF' );
+		if( $exposure_time ) $information['Exposure Time'] = $exposure_time.'s';
+
+		$iso = $this->get_exif_data( 'ISOSpeedRatings', 'EXIF' );
+		if( $iso ) $information['ISO'] = $iso;
+
+		$focallength = $this->get_exif_data( 'FocalLength', 'EXIF' );
+		if( $focallength ) {
+			if( str_contains($focallength, '/') ) {
+				$focallength_exp = explode('/', $focallength);
+				$focallength = (int) $focallength_exp[0] / (int) $focallength_exp[1];
+			}
+			if( (int) $focallength > 0 ) {
+				$information['Focal Length'] = $focallength.'mm';
+			}
+		}
+
+		$focallength35mm = $this->get_exif_data( 'FocalLengthIn35mmFilm', 'EXIF' );
+		if( $focallength35mm ) {
+			if( (int) $focallength35mm > 0 && (int) $focallength != (int) $focallength35mm ) {
+				$information['Focal Length (35mm)'] = $focallength35mm.'mm';
+			}
+		}
+
+		return $information;
+	}
+
+
 	function get_bridge_position() {
 		// NOTE: images may be sorted in Adobe Bridge; this creates a .BridgeSort file. We can use this file, to determine the position of this image
 

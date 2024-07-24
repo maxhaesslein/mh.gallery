@@ -59,6 +59,11 @@ if( $download_image_url ) {
 if( $download_gallery_url ) {
 	$download_menu[] = '<a href="'.$download_gallery_url.'">download all</a>';
 }
+
+
+$camera_information = false;
+if( get_config('camera_information') ) {
+	$camera_information = $image->get_camera_information();
 }
 
 
@@ -73,6 +78,23 @@ if( ! doing_ajax() ) {
 		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
+
+			if( ! empty($camera_information) ) {
+				?>
+				<li class="information-wrapper">
+					<details>
+						<summary class="button-information">information</summary>
+						<ul class="information-content">
+							<?php
+							foreach( $camera_information as $name => $value ) {
+								echo '<li>'.$name.': '.$value.'</li>';
+							}
+							?>
+						</ul>
+					</details>
+				</li>
+				<?php
+			}
 
 			if( count($download_menu) ) {
 				?>
