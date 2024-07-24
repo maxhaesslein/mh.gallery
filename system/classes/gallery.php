@@ -440,7 +440,10 @@ class Gallery {
 
 		// get option from current gallery
 		if( $this->settings && array_key_exists($option, $this->settings) ) {
-			return $this->settings[$option];
+			$value = $this->settings[$option];
+			if( $value === 'false' || $value === '0' ) $value = false;
+			if( $value === 'true' ) $value = true;
+			return $value;
 		}
 
 		if( $inherit && $this->parent_gallery ) {
