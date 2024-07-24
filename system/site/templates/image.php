@@ -52,12 +52,13 @@ $image_args = [
 snippet( 'header' );
 
 
-$more_menu = [];
+$download_menu = [];
 if( $download_image_url ) {
-	$more_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'">download image</a>';
+	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'">download image</a>';
 }
 if( $download_gallery_url ) {
-	$more_menu[] = '<a href="'.$download_gallery_url.'">download all</a>';
+	$download_menu[] = '<a href="'.$download_gallery_url.'">download all</a>';
+}
 }
 
 
@@ -72,15 +73,16 @@ if( ! doing_ajax() ) {
 		<ul class="action">
 			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
 			<?php
-			if( count($more_menu) ) {
+
+			if( count($download_menu) ) {
 				?>
-				<li class="more-menu-wrapper">
-					<span class="button-more">more …</span>
-					<ul class="more-menu">
+				<li class="download-menu-wrapper">
+					<span class="button-download">download …</span>
+					<ul class="download-menu">
 						<?php
-						foreach( $more_menu as $more_menu_item ) {
+						foreach( $download_menu as $download_menu_item ) {
 							?>
-							<li><?= $more_menu_item ?></li>
+							<li><?= $download_menu_item ?></li>
 							<?php
 						}
 						?>

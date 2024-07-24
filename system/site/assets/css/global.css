@@ -451,7 +451,7 @@ h1 {
 		}
 
 	.meta a,
-	.meta .button-more,
+	.meta .button-download,
 	.button {
 		text-decoration: none;
 		display: inline-block;
@@ -464,7 +464,7 @@ h1 {
 	}
 
 		.meta a:hover,
-		.meta li:hover .button-more,
+		.meta li:hover .button-download,
 		.button:hover {
 			background-color: var(--color-button-hover);
 			text-decoration: none;
@@ -478,14 +478,14 @@ h1 {
 		opacity: 0;
 	}
 
-	.meta .more-menu-wrapper {
+	.meta .download-menu-wrapper {
 		position: relative;
 		width: 26px;
 		height: 30px;
 		display: inline-block;
 	}
 
-	.meta .button-more {
+	.meta .button-download {
 		display: inline-block;
 		color: transparent;
 		width: 26px;
@@ -496,7 +496,7 @@ h1 {
 		position: relative;
 	}
 
-		.meta .button-more:after {
+		.meta .button-download:after {
 			content: "";
 			display: block;
 			width: 100%;
@@ -508,12 +508,12 @@ h1 {
 			mask: url(../img/download.svg) no-repeat center center / 80% auto;
 		}
 
-		.meta .more-menu-wrapper:hover .button-more{
+		.meta .download-menu-wrapper:hover .button-download{
 			border-bottom-right-radius: 0;
 			border-bottom-left-radius: 0;
 		}
 
-		.meta .more-menu {
+		.meta .download-menu {
 			position: absolute;
 			right: 0;
 			top: 26px;
@@ -521,34 +521,34 @@ h1 {
 			display: none;
 		}
 
-			.meta .more-menu-wrapper:hover .more-menu {
+			.meta .download-menu-wrapper:hover .download-menu {
 				display: block;
 			}
 
-			.meta .more-menu li {
+			.meta .download-menu li {
 				display: block;
 				text-align: right;
 			}
 
-				.meta .more-menu li a {
+				.meta .download-menu li a {
 					display: block;
 				}
 
-				.meta .more-menu li a {
+				.meta .download-menu li a {
 					border-radius: 5px 5px 0 0;
 				}
 				
-				.meta .more-menu li + li a {
+				.meta .download-menu li + li a {
 					border-top-left-radius: 0;
 					border-top-right-radius: 0;
 				}
 
-				.meta .more-menu li:last-child a {
+				.meta .download-menu li:last-child a {
 					border-bottom-left-radius: 5px;
 					border-bottom-right-radius: 5px;
 				}
 
-				.meta .more-menu li:first-child a {
+				.meta .download-menu li:first-child a {
 					border-top-right-radius: 0;
 				}
 
