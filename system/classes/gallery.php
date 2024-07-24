@@ -92,27 +92,10 @@ class Gallery {
 			$this->set_password($settings['password']);
 		}
 
-		$this->download_image = $this->inherit_setting( 'download_image' );
-		$this->download_gallery = $this->inherit_setting( 'download_gallery' );
+		$this->download_image = !! $this->get_config( 'download_image', true, true );
+		$this->download_gallery = !! $this->get_config( 'download_gallery', true, true );
 
 		return $this;
-	}
-
-
-	private function inherit_setting( $setting_name ) {
-
-		$value = $this->get_config( $setting_name, true );
-
-		if( is_null($value) ) {
-			// fall back to config.php
-			$value = get_config( $setting_name );
-		}
-
-		if( $value === 'false' || $value === '0' ) $value = false;
-
-		$value = !! $value; // make bool
-
-		return $value;
 	}
 
 
@@ -142,11 +125,8 @@ class Gallery {
 			$used_subgallery_paths[] = $subgallery_path;
 		}
 
-		$gallery_sort_order = $this->get_config( 'gallery_sort_order', true );
-		if( is_null($gallery_sort_order) ) { // fall back to config.php
-			$gallery_sort_order = get_config( 'gallery_sort_order' );
-		}
-
+		$gallery_sort_order = $this->get_config( 'gallery_sort_order', true, true );
+		
 		$sub_galleries = [];
 		$galleries_sort = [];
 
@@ -436,7 +416,7 @@ class Gallery {
 	}
 
 
-	function get_config( $option, $inherit = false ) {
+	function get_config( $option, $inherit_from_parent_gallery = false, $inherit_from_global_config = false ) {
 
 		// get option from current gallery
 		if( $this->settings && array_key_exists($option, $this->settings) ) {
@@ -446,9 +426,13 @@ class Gallery {
 			return $value;
 		}
 
-		if( $inherit && $this->parent_gallery ) {
+		if( $inherit_from_parent_gallery && $this->parent_gallery ) {
 			// try to get option from parent gallery
-			return $this->parent_gallery->get_config( $option, $inherit );
+			return $this->parent_gallery->get_config( $option, $inherit_from_parent_gallery, $inherit_from_global_config );
+		}
+
+		if( $inherit_from_global_config ) {
+			return get_config( $option );
 		}
 
 		// no config found
@@ -750,10 +734,7 @@ class Gallery {
 
 		$files = $folder->get();
 
-		$image_sort_order = $this->get_config( 'image_sort_order', true );
-		if( is_null($image_sort_order) ) { // fall back to config.php
-			$image_sort_order = get_config( 'image_sort_order' );
-		}
+		$image_sort_order = $this->get_config( 'image_sort_order', true, true );
 
 		$images = [];
 		$images_sort = [];
