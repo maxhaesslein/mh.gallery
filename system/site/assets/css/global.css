@@ -505,7 +505,7 @@ h1 {
 			left: 0;
 			top: 0;
 			background-color: var(--color-icon);
-			mask: url(../img/more.svg) no-repeat center center / 70% auto;
+			mask: url(../img/download.svg) no-repeat center center / 80% auto;
 		}
 
 		.meta .more-menu-wrapper:hover .button-more{
