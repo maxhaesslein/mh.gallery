@@ -61,13 +61,7 @@ if( $download_gallery_url ) {
 }
 
 
-$show_camera_information = $gallery->get_config('camera_information', true, true);
-if( $show_camera_information ) {
-	$camera_information = $image->get_camera_information();
-} else {
-	$camera_information = false;
-}
-
+$camera_information = $image->get_camera_information();
 
 
 if( ! doing_ajax() ) {

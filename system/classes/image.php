@@ -177,75 +177,95 @@ class Image {
 
 	function get_camera_information() {
 
+		$config = $this->gallery->get_config('camera_information', true, true);
+
+		if( ! $config ) return false;
+
+		if( ! is_array($config) ) $config = explode(',', $config);
+		$config = array_map('trim', $config);
+		$config = array_map('strtolower', $config);
+
 		$information = [];
 
-		$camera_make = $this->get_exif_data( 'Make', 'IFD0' );
-		$camera_model = $this->get_exif_data( 'Model', 'IFD0' );
-		if( $camera_make || $camera_model ) {
-			if( str_starts_with($camera_model, $camera_make) ) $camera_make = false;
+		if( in_array('camera', $config) ) {
+			$camera_make = $this->get_exif_data( 'Make', 'IFD0' );
+			$camera_model = $this->get_exif_data( 'Model', 'IFD0' );
+			if( $camera_make || $camera_model ) {
+				if( str_starts_with($camera_model, $camera_make) ) $camera_make = false;
 
-			$information['Camera'] = $camera_make;
-			if( $camera_make && $camera_model ) $information['Camera'] .= ' ';
-			$information['Camera'] .= $camera_model;
+				$information['Camera'] = $camera_make;
+				if( $camera_make && $camera_model ) $information['Camera'] .= ' ';
+				$information['Camera'] .= $camera_model;
+			}
 		}
 
-		$lens = $this->get_exif_data( 'UndefinedTag:0xA434', 'EXIF' );
-		if( $lens ) {
-			$information['Lens'] = $lens;
+		if( in_array('lens', $config) ) {
+			$lens = $this->get_exif_data( 'UndefinedTag:0xA434', 'EXIF' );
+			if( $lens ) {
+				$information['Lens'] = $lens;
+			}
 		}
 
-		$focallength = $this->get_exif_data( 'FocalLength', 'EXIF' );
-		$focallength35mm = $this->get_exif_data( 'FocalLengthIn35mmFilm', 'EXIF' );
-		if( $focallength || $focallength35mm ) {
+		if( in_array('focallength', $config) ) {
+			$focallength = $this->get_exif_data( 'FocalLength', 'EXIF' );
+			$focallength35mm = $this->get_exif_data( 'FocalLengthIn35mmFilm', 'EXIF' );
+			if( $focallength || $focallength35mm ) {
 
-			$focallength_string = '';
+				$focallength_string = '';
 
-			if( str_contains($focallength, '/') ) {
-				$focallength_exp = explode('/', $focallength);
-				$focallength = intval($focallength_exp[0]) / intval($focallength_exp[1]);
+				if( str_contains($focallength, '/') ) {
+					$focallength_exp = explode('/', $focallength);
+					$focallength = intval($focallength_exp[0]) / intval($focallength_exp[1]);
 
-				if( is_float($focallength) ) {
-					$focallength = number_format($focallength, 3);
-					$focallength = rtrim($focallength, '0');
+					if( is_float($focallength) ) {
+						$focallength = number_format($focallength, 3);
+						$focallength = rtrim($focallength, '0');
+					}
 				}
-			}
 
-			if( intval($focallength) > 0 ) {
-				$focallength_string = $focallength.' mm';
-			}
+				if( intval($focallength) > 0 ) {
+					$focallength_string = $focallength.' mm';
+				}
 
-			if( $focallength35mm && intval($focallength35mm) > 0 && intval($focallength) != intval($focallength35mm) ) {
+				if( $focallength35mm && intval($focallength35mm) > 0 && intval($focallength) != intval($focallength35mm) ) {
 
-				$closing = false;
+					$closing = false;
+					if( $focallength_string ) {
+						$closing = true;
+						$focallength_string .= ' (≈';
+					}
+
+					$focallength_string .= $focallength35mm.' mm';
+
+					if( $closing ) {
+						$focallength_string .= ')';
+					}
+
+				}
+
 				if( $focallength_string ) {
-					$closing = true;
-					$focallength_string .= ' (≈';
-				}
-
-				$focallength_string .= $focallength35mm.' mm';
-
-				if( $closing ) {
-					$focallength_string .= ')';
+					$information['FocalLength'] = $focallength_string;
 				}
 
 			}
+		}
 
-			if( $focallength_string ) {
-				$information['Focal Length'] = $focallength_string;
+		if( in_array('aperture', $config) ) {
+			$aperture = $this->get_exif_data( 'ApertureFNumber', 'COMPUTED' );
+			if( $aperture && $aperture != 'f/1.0' ) {
+				$information['Aperture'] = $aperture;
 			}
-
 		}
 
-		$aperture = $this->get_exif_data( 'ApertureFNumber', 'COMPUTED' );
-		if( $aperture && $aperture != 'f/1.0' ) {
-			$information['Aperture'] = $aperture;
+		if( in_array('exposuretime', $config) ) {
+			$exposure_time = $this->get_exif_data( 'ExposureTime', 'EXIF' );
+			if( $exposure_time ) $information['ExposureTime'] = $exposure_time.' s';
 		}
 
-		$exposure_time = $this->get_exif_data( 'ExposureTime', 'EXIF' );
-		if( $exposure_time ) $information['Exposure Time'] = $exposure_time.' s';
-
-		$iso = $this->get_exif_data( 'ISOSpeedRatings', 'EXIF' );
-		if( $iso ) $information['ISO'] = 'ISO '.$iso;
+		if( in_array('iso', $config) ) {
+			$iso = $this->get_exif_data( 'ISOSpeedRatings', 'EXIF' );
+			if( $iso ) $information['ISO'] = 'ISO '.$iso;
+		}
 
 		return $information;
 	}
