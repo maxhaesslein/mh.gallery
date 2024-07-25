@@ -155,7 +155,7 @@ class Image {
 
 		if( $this->exif_data === NULL ) {
 			$exif_data = @exif_read_data( $this->path, false, true );
-			if( ! $exif_data ) return;
+			if( ! $exif_data ) return false;
 			$this->exif_data = $exif_data;
 		}
 
@@ -167,7 +167,11 @@ class Image {
 
 		if( ! array_key_exists($field_key, $group) ) return false;
 
-		return $group[$field_key];
+		$value = $group[$field_key];
+
+		$value = string_cleanup($value);
+
+		return $value;
 	}
 
 
@@ -190,34 +194,58 @@ class Image {
 			$information['Lens'] = $lens;
 		}
 
+		$focallength = $this->get_exif_data( 'FocalLength', 'EXIF' );
+		$focallength35mm = $this->get_exif_data( 'FocalLengthIn35mmFilm', 'EXIF' );
+		if( $focallength || $focallength35mm ) {
+
+			$focallength_string = '';
+
+			if( str_contains($focallength, '/') ) {
+				$focallength_exp = explode('/', $focallength);
+				$focallength = intval($focallength_exp[0]) / intval($focallength_exp[1]);
+
+				if( is_float($focallength) ) {
+					$focallength = number_format($focallength, 3);
+					$focallength = rtrim($focallength, '0');
+				}
+			}
+
+			if( intval($focallength) > 0 ) {
+				$focallength_string = $focallength.' mm';
+			}
+
+			if( $focallength35mm && intval($focallength35mm) > 0 && intval($focallength) != intval($focallength35mm) ) {
+
+				$closing = false;
+				if( $focallength_string ) {
+					$closing = true;
+					$focallength_string .= ' (≈';
+				}
+
+				$focallength_string .= $focallength35mm.' mm';
+
+				if( $closing ) {
+					$focallength_string .= ')';
+				}
+
+			}
+
+			if( $focallength_string ) {
+				$information['Focal Length'] = $focallength_string;
+			}
+
+		}
+
 		$aperture = $this->get_exif_data( 'ApertureFNumber', 'COMPUTED' );
 		if( $aperture && $aperture != 'f/1.0' ) {
 			$information['Aperture'] = $aperture;
 		}
 
 		$exposure_time = $this->get_exif_data( 'ExposureTime', 'EXIF' );
-		if( $exposure_time ) $information['Exposure Time'] = $exposure_time.'s';
+		if( $exposure_time ) $information['Exposure Time'] = $exposure_time.' s';
 
 		$iso = $this->get_exif_data( 'ISOSpeedRatings', 'EXIF' );
-		if( $iso ) $information['ISO'] = $iso;
-
-		$focallength = $this->get_exif_data( 'FocalLength', 'EXIF' );
-		if( $focallength ) {
-			if( str_contains($focallength, '/') ) {
-				$focallength_exp = explode('/', $focallength);
-				$focallength = (int) $focallength_exp[0] / (int) $focallength_exp[1];
-			}
-			if( (int) $focallength > 0 ) {
-				$information['Focal Length'] = $focallength.'mm';
-			}
-		}
-
-		$focallength35mm = $this->get_exif_data( 'FocalLengthIn35mmFilm', 'EXIF' );
-		if( $focallength35mm ) {
-			if( (int) $focallength35mm > 0 && (int) $focallength != (int) $focallength35mm ) {
-				$information['Focal Length (35mm)'] = $focallength35mm.'mm';
-			}
-		}
+		if( $iso ) $information['ISO'] = 'ISO '.$iso;
 
 		return $information;
 	}

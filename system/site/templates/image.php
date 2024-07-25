@@ -89,9 +89,18 @@ if( ! doing_ajax() ) {
 						<summary class="button-information">information</summary>
 						<ul class="information-content">
 							<?php
-							foreach( $camera_information as $name => $value ) {
-								echo '<li>'.$name.': '.$value.'</li>';
+							if( ! empty($camera_information['Camera']) ) {
+								echo '<li>'.$camera_information['Camera'].'</li>';
+								unset($camera_information['Camera']);
 							}
+							if( ! empty($camera_information['Lens']) ) {
+								echo '<li>'.$camera_information['Lens'].'</li>';
+								unset($camera_information['Lens']);
+							}
+
+							echo '<li>';
+								echo implode(' | ', $camera_information);
+							echo '</li>';
 							?>
 						</ul>
 					</details>

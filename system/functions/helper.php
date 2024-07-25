@@ -39,3 +39,12 @@ function format_filesize( $raw_size ) {
 
 	return number_format($raw_size / pow(1024, $power), 2, '.', ',' ).$units[$power];
 }
+
+
+function string_cleanup( $string ) {
+
+	$string = trim($string);
+	$string = strip_tags($string);
+
+	return $string;
+}
