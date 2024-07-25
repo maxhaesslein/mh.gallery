@@ -2,6 +2,7 @@ v.0.8.1
 
 - image view: new 'information' icon that shows some information like camera model, aperture, focal length, and other, if exif information is available. disable via config option `'camera_information' => false`
 - small design enhancements
+- bugfix: 'overview' button is hidden, if root gallery is disabled
 
 
 v.0.8.0
