@@ -3,31 +3,30 @@
 
 - maybe also use the image filesize or modification date in the cache filename, so we know when an image changed
 
-- enhance slide navigation
+- re-add mobile slide navigation and enhance keyboard navigation with animations
 	- image needs to move, next image needs to be visible
-	- when zooming, we should never, ever load another image
+	- at the beginning and end of gallery, wiggle the image to show that there are no more images
+	- fadeout and fadein images while loading?
 
-- keyboard navigation: when reaching the end (or on first picture), display feedback that no more images are available (small wiggle animation?)
+- prev/next arrows: add inverted outline to make them more visible on very bright (or dark) images
 
 - theme support
 
-- support for sub-pages (for example an 'about' or 'imprint' page)
-
 - zip creation: call zipping function via ajax and update progress/text via js, if js is enabled
+
+- support for sub-pages (for example an 'about' or 'imprint' page)
 
 - image display
 	- color background (on lazy loading); cache the color either in a .txt file next to the image file (this could also be used for the alt text) or in a cache file
 	- support for image alt tag
 
-- function to pre-cache all image sizes and types?
-	- maybe add ?pre-cache to a gallery link?
-	- stepped, like zip creation
+- enhance admin area
+	- function to pre-cache all image sizes and types - stepped, like zip creation
+	- edit gallery name, slug and other information
 
 - collection.txt, which can combine several galleries by path and can be password protected
 
 - 'region of interest' for image cropping
 
-- show some exif information, like camera and lens
-
-- support for heic/heif as source images; currently we need an external program to convert images to another format, and then read it with PHP. it may take some time, until this is natively supported in PHP
 - support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research
+- support for heic/heif as source images; currently we need an external program to convert images to another format, and then read it with PHP. it may take some time, until this is natively supported in PHP
