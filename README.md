@@ -61,15 +61,18 @@ thumbnail: image-01.jpg
 download_image: true
 download_gallery: true
 image_sort_order: filename
+camera_information: Camera, Lens, FocalLength, Aperture, ExposureTime, ISO
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.
 
 Add `.jpg` (or `.jpeg`, `.png`, `.webp`, `avif` or `gif`) files into the gallery folder, the images get detected automatically. (For supported extensions see the `image_extensions` option in `system/config.php`; GIF files will lose their animation)
 
+The `download_image` option activates (or deactivates) the download-link for individual images. The `download_gallery` option activates (or deactivates) the download-link for all images as a .zip-file. This option can be set via the `custom/config.php` or on a per-gallery-basis in the `gallery.txt` file. Both options get inherited from the parent gallery.
+
 The `image_sort_order` sets the sort order for images in a gallery and can be set via `custom/config.php` or on a per-gallery-basis via the `gallery.txt` file. The available sort orders are `filename`, `filedate` (file modification date), `exifdate` (date recorded in the exif metadata if available, or file modification date otherwise), `bridge` (sort by a .BridgeSort file, created by Adobe Bridge) or `random` (sort randomly on every visit). This option gets inherited from the parent gallery.
 
-The `download_image` option activates (or deactivates) the download-link for individual images. The `download_gallery` option activates (or deactivates) the download-link for all images as a .zip-file. This option can be set via the `custom/config.php` or on a per-gallery-basis in the `gallery.txt` file. Both options get inherited from the parent gallery.
+The `camera_information` config can be set to `false` to hide the camera information popup for this gallery, or can be set to a list of `Camera`, `Lens`, `FocalLength`, `Aperture`, `ExposureTime` or `ISO` to include these informations in the popup. Ommit this option from the `gallery.txt` to use the global setting defined in the `custom/config.php` (or `system/config.php`) file.
 
 Up to about 1000 images per gallery should work okay without an impact on loading times (depending on your server configuration). The more images, the slower the page loads get, and the more space is needed for cached preview images.
 
