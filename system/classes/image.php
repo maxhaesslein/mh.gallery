@@ -185,6 +185,11 @@ class Image {
 			$information['Camera'] .= $camera_model;
 		}
 
+		$lens = $this->get_exif_data( 'UndefinedTag:0xA434', 'EXIF' );
+		if( $lens ) {
+			$information['Lens'] = $lens;
+		}
+
 		$aperture = $this->get_exif_data( 'ApertureFNumber', 'COMPUTED' );
 		if( $aperture && $aperture != 'f/1.0' ) {
 			$information['Aperture'] = $aperture;
