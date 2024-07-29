@@ -10,6 +10,8 @@
 
 - prev/next arrows: add inverted outline to make them more visible on very bright (or dark) images
 
+- lightmode/darkmode toggle should be a dropdown, with 'lightmode', 'darkmode' and 'system preference'
+
 - theme support
 
 - zip creation: call zipping function via ajax and update progress/text via js, if js is enabled
