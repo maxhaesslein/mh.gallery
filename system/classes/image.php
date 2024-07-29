@@ -196,14 +196,16 @@ class Image {
 		}
 
 		if( in_array('date', $config) && $datetime ) {
-			$date = date_format( $datetime, 'Y-m-d' ); // TODO: make format a config option
+			$date_format = get_config('date_format');
+			$date = date_format( $datetime, $date_format );
 			if( $date ) {
 				$information['Date'] = $date;
 			}
 		}
 
 		if( in_array('time', $config) && $datetime ) {
-			$time = date_format( $datetime, 'H:i:s' ); // TODO: make format a config option
+			$time_format = get_config('time_format');
+			$time = date_format( $datetime, $time_format );
 			if( $time ) {
 				$information['Time'] = $time;
 			}

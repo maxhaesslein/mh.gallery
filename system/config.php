@@ -61,6 +61,10 @@ return [
 	// show camera, lens and other information for images, if exif info is available; set to 'false' to disable
 	'camera_information' => [ 'Date', 'Time', 'Camera', 'Lens', 'FocalLength', 'Aperture', 'ExposureTime', 'ISO' ],
 
+	// for format parameters, see https://www.php.net/manual/en/datetimeimmutable.createfromformat.php#datetimeimmutable.createfromformat.parameters
+	'date_format' => 'Y-m-d',
+	'time_format' => 'H:i:s',
+
 	// set to false to disable download of single images
 	'download_image' => true,
 
