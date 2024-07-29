@@ -816,33 +816,41 @@ class Gallery {
 
 		// NOTE: images may be sorted in Adobe Bridge; this creates a .BridgeSort file. We can use this file, to determine the position of the images in this gallery
 
-		if( $this->bridge_sort_order === NULL ) {
+		if( $this->bridge_sort_order !== NULL ) return $this->bridge_sort_order;
 
-			$bridge_file = get_abspath($this->path.'.BridgeSort');
+		$bridge_file = get_abspath($this->path.'.BridgeSort');
 
-			if( ! file_exists($bridge_file) ) return false;
+		if( ! file_exists($bridge_file) ) {
 
-			$bridge = simplexml_load_file($bridge_file);
+			$this->bridge_sort_order = false;
 
-			if( $bridge === false ) return false;
-
-			$bridge_sort_order = [];
-
-			foreach( $bridge->files->item as $item ) {
-				$item_name = (string) $item['key'];
-
-				// names have the modification date (?) appended to them, so we need to remove it;
-				// this changes '01.jpg20230908174751' to '01.jpg'
-				$item_name = substr($item_name, 0, -14);
-
-				$bridge_sort_order[] = $item_name;
-			}
-
-			$this->bridge_sort_order = $bridge_sort_order;
-
+			return false;
 		}
 
-		return $this->bridge_sort_order;
+		$bridge = simplexml_load_file($bridge_file);
+
+		if( $bridge === false ) {
+
+			$this->bridge_sort_order = false;
+
+			return false;
+		}
+
+		$bridge_sort_order = [];
+
+		foreach( $bridge->files->item as $item ) {
+			$item_name = (string) $item['key'];
+
+			// names have the modification date (?) appended to them, so we need to remove it;
+			// this changes '01.jpg20230908174751' to '01.jpg'
+			$item_name = substr($item_name, 0, -14);
+
+			$bridge_sort_order[] = $item_name;
+		}
+
+		$this->bridge_sort_order = $bridge_sort_order;
+
+		return $bridge_sort_order;
 	}
 
 
