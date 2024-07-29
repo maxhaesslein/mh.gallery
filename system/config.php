@@ -59,7 +59,7 @@ return [
 	'image_extensions' => [ 'jpg', 'jpeg', 'png', 'webp', 'avif', 'gif' ],
 
 	// show camera, lens and other information for images, if exif info is available; set to 'false' to disable
-	'camera_information' => [ 'Camera', 'Lens', 'FocalLength', 'Aperture', 'ExposureTime', 'ISO' ],
+	'camera_information' => [ 'Date', 'Time', 'Camera', 'Lens', 'FocalLength', 'Aperture', 'ExposureTime', 'ISO' ],
 
 	// set to false to disable download of single images
 	'download_image' => true,

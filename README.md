@@ -61,7 +61,7 @@ thumbnail: image-01.jpg
 download_image: true
 download_gallery: true
 image_sort_order: filename
-camera_information: Camera, Lens, FocalLength, Aperture, ExposureTime, ISO
+camera_information: Date, Time, Camera, Lens, FocalLength, Aperture, ExposureTime, ISO
 ```
 
 If you ommit the title or slug, it gets automatically generated based on the folder name. The slug should only consist of URL safe charactes; use only `a-z`, `0-9` and `-_` to be safe.

@@ -187,6 +187,28 @@ class Image {
 
 		$information = [];
 
+		$datetime = false;
+		if( in_array('date', $config) || in_array('time', $config) ) {
+			$datetime = $this->get_exif_data( 'DateTimeOriginal', 'EXIF' );
+			if( $datetime ) {
+				$datetime = date_create_from_format( 'Y:m:d H:i:s', $datetime );
+			}
+		}
+
+		if( in_array('date', $config) && $datetime ) {
+			$date = date_format( $datetime, 'Y-m-d' ); // TODO: make format a config option
+			if( $date ) {
+				$information['Date'] = $date;
+			}
+		}
+
+		if( in_array('time', $config) && $datetime ) {
+			$time = date_format( $datetime, 'H:i:s' ); // TODO: make format a config option
+			if( $time ) {
+				$information['Time'] = $time;
+			}
+		}
+
 		if( in_array('camera', $config) ) {
 			$camera_make = $this->get_exif_data( 'Make', 'IFD0' );
 			$camera_model = $this->get_exif_data( 'Model', 'IFD0' );

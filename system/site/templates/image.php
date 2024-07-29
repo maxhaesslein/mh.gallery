@@ -83,6 +83,22 @@ if( ! doing_ajax() ) {
 						<summary class="button-information">information</summary>
 						<ul class="information-content">
 							<?php
+
+							if( ! empty($camera_information['Date']) || ! empty($camera_information['Time']) ) {
+
+								$datetime = [];
+								if( ! empty($camera_information['Date']) ) {
+									$datetime[] = $camera_information['Date'];
+									unset($camera_information['Date']);
+								}
+								if( ! empty($camera_information['Time']) ) {
+									$datetime[] = $camera_information['Time'];
+									unset($camera_information['Time']);
+								}
+
+								echo '<li>'.implode(' ', $datetime).'</li>';
+							}
+
 							if( ! empty($camera_information['Camera']) ) {
 								echo '<li>'.$camera_information['Camera'].'</li>';
 								unset($camera_information['Camera']);
