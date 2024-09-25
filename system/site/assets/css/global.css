@@ -481,7 +481,6 @@ h1 {
 	}
 	
 	.meta .button-information {
-		display: inline-block;
 		color: transparent;
 		width: 26px;
 		height: 26px;
@@ -489,7 +488,12 @@ h1 {
 		vertical-align: middle;
 		cursor: pointer;
 		position: relative;
+		display: inline-block;
 	}
+
+		body.nojs .meta .button-information {
+			display: none;
+		}
 
 		.meta .button-information:after {
 			content: "";
@@ -747,11 +751,37 @@ body.template-image {
 		color: var(--color-text);
 		padding: 20px;
 		box-sizing: border-box;
-		display: inline-block;
 		border-radius: 5px;
-		z-index: 40;
+		z-index: 43;
 		border: none;
+		position: relative;
 	}
+
+		.image-information .image-information-close {
+			position: absolute;
+			right: 0;
+			top: 0;
+			cursor: pointer;
+			width: 30px;
+			height: 30px;
+			color: transparent;
+			overflow: hidden;
+		}
+
+			.image-information .image-information-close:after {
+				content: "×";
+				color: var(--color-icon);
+				position: absolute;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				text-align: center;
+				line-height: 1;
+			}
 
 		.image-information ul {
 			white-space: nowrap;

@@ -15,6 +15,7 @@ function init() {
 	HideCursor.init();
 	KeyboardNavigation.init();
 	FullscreenButton.init();
+	InformationButton.init();
 	Preload.init();
 
 	setTimeout( function(){
@@ -291,6 +292,51 @@ var FullscreenButton = {
 		} else if ( document.exitFullscreen ) {
 			document.exitFullscreen();
 		}
+	}
+
+};
+
+
+var InformationButton = {
+
+	init: function(){
+
+		var button = document.getElementById('action-information');
+
+		if( ! button ) return;
+
+		button.addEventListener( 'click', InformationButton.toggle );
+
+	},
+
+	toggle: function( e ) {
+
+		e.preventDefault();
+
+		var target = document.getElementById('image-information');
+
+		if( target.open ) {
+			InformationButton.close(target);
+		} else {
+			InformationButton.open(target);
+		}
+
+	},
+
+	open: function( target ) {
+
+		target.show();
+
+		target.querySelector('#image-information-close').addEventListener( 'click', function(e){
+			InformationButton.close(this.parentNode);
+		}, false );
+
+	},
+
+	close: function( target ) {
+
+		target.close();
+
 	}
 
 };

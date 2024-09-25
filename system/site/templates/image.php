@@ -120,7 +120,7 @@ if( ! doing_ajax() ) {
 	<?php
 	if( ! empty($camera_information) ) {
 		?>
-		<dialog id="image-information" class="image-information" open>
+		<dialog id="image-information" class="image-information">
 			<ul>
 				<?php
 
@@ -153,6 +153,7 @@ if( ! doing_ajax() ) {
 				echo '</li>';
 				?>
 			</ul>
+			<span id="image-information-close" class="image-information-close" title="close">close</span>
 		</dialog>
 		<?php
 	}
