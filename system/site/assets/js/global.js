@@ -255,6 +255,12 @@ var KeyboardNavigation = {
 			target = document.getElementById('navigate-prev');
 			e.preventDefault();
 		} else if( e.key == 'Escape' ) {
+
+			if( InformationButtonState ) {
+				InformationButton.close();
+				return;
+			}
+
 			target = document.getElementById('navigate-overview');
 			e.preventDefault();
 		}
