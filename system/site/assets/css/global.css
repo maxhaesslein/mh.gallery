@@ -755,8 +755,16 @@ body.template-image {
 		z-index: 43;
 		border: none;
 		position: relative;
-		box-shadow: 0 0 15px rgba(0,0,0,.5);
+		box-shadow: 0 0 15px rgba(0,0,0,.transition: all 150ms ease-in-out !important;);
 	}
+
+		body.transition .image-information {
+			transition: margin 300ms ease-in-out !important;
+		}
+
+			body.cursor-hidden .image-information {
+				margin-top: 10px;
+			}
 
 		.image-information .image-information-close {
 			position: absolute;
