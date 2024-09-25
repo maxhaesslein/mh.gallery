@@ -78,43 +78,7 @@ if( ! doing_ajax() ) {
 
 			if( ! empty($camera_information) ) {
 				?>
-				<li class="information-wrapper">
-					<details>
-						<summary class="button-information">information</summary>
-						<ul class="information-content">
-							<?php
-
-							if( ! empty($camera_information['Date']) || ! empty($camera_information['Time']) ) {
-
-								$datetime = [];
-								if( ! empty($camera_information['Date']) ) {
-									$datetime[] = $camera_information['Date'];
-									unset($camera_information['Date']);
-								}
-								if( ! empty($camera_information['Time']) ) {
-									$datetime[] = $camera_information['Time'];
-									unset($camera_information['Time']);
-								}
-
-								echo '<li>'.implode(' ', $datetime).'</li>';
-							}
-
-							if( ! empty($camera_information['Camera']) ) {
-								echo '<li>'.$camera_information['Camera'].'</li>';
-								unset($camera_information['Camera']);
-							}
-							if( ! empty($camera_information['Lens']) ) {
-								echo '<li>'.$camera_information['Lens'].'</li>';
-								unset($camera_information['Lens']);
-							}
-
-							echo '<li>';
-								echo implode(' | ', $camera_information);
-							echo '</li>';
-							?>
-						</ul>
-					</details>
-				</li>
+				<li class="button-information" id="action-information">information</li>
 				<?php
 			}
 
@@ -151,7 +115,49 @@ if( ! doing_ajax() ) {
 			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
 		</ul>
 	</div>
-<?php
+
+
+	<?php
+	if( ! empty($camera_information) ) {
+		?>
+		<dialog id="image-information" class="image-information" open>
+			<ul>
+				<?php
+
+				if( ! empty($camera_information['Date']) || ! empty($camera_information['Time']) ) {
+
+					$datetime = [];
+					if( ! empty($camera_information['Date']) ) {
+						$datetime[] = $camera_information['Date'];
+						unset($camera_information['Date']);
+					}
+					if( ! empty($camera_information['Time']) ) {
+						$datetime[] = $camera_information['Time'];
+						unset($camera_information['Time']);
+					}
+
+					echo '<li>'.implode(' ', $datetime).'</li>';
+				}
+
+				if( ! empty($camera_information['Camera']) ) {
+					echo '<li>'.$camera_information['Camera'].'</li>';
+					unset($camera_information['Camera']);
+				}
+				if( ! empty($camera_information['Lens']) ) {
+					echo '<li>'.$camera_information['Lens'].'</li>';
+					unset($camera_information['Lens']);
+				}
+
+				echo '<li>';
+					echo implode(' | ', $camera_information);
+				echo '</li>';
+				?>
+			</ul>
+		</dialog>
+		<?php
+	}
+
+
 if( ! doing_ajax() ) {
 	?>
 	</main>

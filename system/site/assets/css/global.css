@@ -479,48 +479,29 @@ h1 {
 	body.cursor-hidden.template-image .meta {
 		opacity: 0;
 	}
-
-	.meta .information-wrapper {
+	
+	.meta .button-information {
 		display: inline-block;
+		color: transparent;
+		width: 26px;
+		height: 26px;
+		overflow: hidden;
+		vertical-align: middle;
+		cursor: pointer;
 		position: relative;
 	}
-	
-		.meta .button-information {
-			display: inline-block;
-			color: transparent;
-			width: 26px;
-			height: 26px;
-			overflow: hidden;
-			vertical-align: middle;
-			cursor: pointer;
-			position: relative;
+
+		.meta .button-information:after {
+			content: "";
+			display: block;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			left: 0;
+			top: 0;
+			background-color: var(--color-icon);
+			mask: url(../img/information.svg) no-repeat center center / auto 50%;
 		}
-
-			.meta .button-information:after {
-				content: "";
-				display: block;
-				width: 100%;
-				height: 100%;
-				position: absolute;
-				left: 0;
-				top: 0;
-				background-color: var(--color-icon);
-				mask: url(../img/information.svg) no-repeat center center / auto 50%;
-			}
-
-			.meta .information-wrapper .information-content {
-				position: absolute;
-				right: -26px;
-				top: 26px;
-				background-color: var(--color-button);
-				padding: 10px;
-				border-radius: 5px;
-				white-space: nowrap;
-			}
-				
-				.meta .information-wrapper .information-content li {
-					display: block;
-				}
 
 	.meta .download-menu-wrapper {
 		position: relative;
@@ -758,6 +739,28 @@ body.template-image {
 					right: 10px;
 				}
 
+			}
+
+	.image-information {
+		margin: 50px 10px 0 auto;
+		background-color: var(--color-button);
+		color: var(--color-text);
+		padding: 20px;
+		box-sizing: border-box;
+		display: inline-block;
+		border-radius: 5px;
+		z-index: 40;
+		border: none;
+	}
+
+		.image-information ul {
+			white-space: nowrap;
+			margin: 0;
+			padding: 0;
+		}
+		
+			.image-information li {
+				display: block;
 			}
 
 .image-wrapper,
