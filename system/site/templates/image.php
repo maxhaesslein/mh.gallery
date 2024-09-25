@@ -54,10 +54,10 @@ snippet( 'header' );
 
 $download_menu = [];
 if( $download_image_url ) {
-	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'">download image</a>';
+	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'" title="download this image in maximum quality">download image</a>';
 }
 if( $download_gallery_url ) {
-	$download_menu[] = '<a href="'.$download_gallery_url.'">download all</a>';
+	$download_menu[] = '<a href="'.$download_gallery_url.'" title="download all images in this gallery in maximum quality as a .zip file">download all</a>';
 }
 
 
@@ -73,12 +73,12 @@ if( ! doing_ajax() ) {
 	<div class="meta meta-top">
 		<?php snippet( 'gallery-action', ['gallery' => $gallery, 'image' => $image] ); ?>
 		<ul class="action">
-			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="">fullscreen</a></li>
+			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="" title="fullscreen">fullscreen</a></li>
 			<?php
 
 			if( ! empty($camera_information) ) {
 				?>
-				<li class="button-information" id="action-information">information</li>
+				<li class="button-information" id="action-information" title="information">information</li>
 				<?php
 			}
 

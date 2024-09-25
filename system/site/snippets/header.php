@@ -34,7 +34,7 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 <body<?= get_class_attribute($classes) ?>>
 <script type="text/javascript">document.body.classList.remove('nojs');</script>
 
-<div id="lightmode-toggle" class="lightmode-toggle"></div>
+<div id="lightmode-toggle" class="lightmode-toggle" title="switch between light- and darkmode"></div>
 <script type="text/javascript">
 (function(){
 
