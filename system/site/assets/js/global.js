@@ -297,7 +297,10 @@ var FullscreenButton = {
 };
 
 
+var InformationButtonState = false;
 var InformationButton = {
+
+	target: false,
 
 	init: function(){
 
@@ -305,7 +308,15 @@ var InformationButton = {
 
 		if( ! button ) return;
 
+		InformationButton.target = document.getElementById('image-information');
+
+		if( ! InformationButton.target ) return;
+
 		button.addEventListener( 'click', InformationButton.toggle );
+
+		if( InformationButtonState ) {
+			InformationButton.open();
+		}
 
 	},
 
@@ -313,29 +324,31 @@ var InformationButton = {
 
 		e.preventDefault();
 
-		var target = document.getElementById('image-information');
-
-		if( target.open ) {
-			InformationButton.close(target);
+		if( InformationButton.target.open ) {
+			InformationButton.close();
 		} else {
-			InformationButton.open(target);
+			InformationButton.open();
 		}
 
 	},
 
-	open: function( target ) {
+	open: function() {
 
-		target.show();
+		InformationButtonState = true;
 
-		target.querySelector('#image-information-close').addEventListener( 'click', function(e){
+		InformationButton.target.show();
+
+		InformationButton.target.querySelector('#image-information-close').addEventListener( 'click', function(e){
 			InformationButton.close(this.parentNode);
 		}, false );
 
 	},
 
-	close: function( target ) {
+	close: function() {
 
-		target.close();
+		InformationButtonState = false;
+
+		InformationButton.target.close();
 
 	}
 
