@@ -466,7 +466,7 @@ h1 {
 
 		.meta a:hover,
 		.meta li:hover .button-download,
-		.meta li:hover .button-information,
+		.meta .button-information:hover,
 		.button:hover {
 			background-color: var(--color-button-hover);
 			text-decoration: none;
