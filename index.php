@@ -1,7 +1,7 @@
 <?php
 
 // mh.gallery - A simple and lightweight PHP gallery, without any dependencies.
-// Copyright (C) 2023-2024 maxhaesslein (https://www.maxhaesslein.de)
+// Copyright (C) 2023-2025 maxhaesslein (https://www.maxhaesslein.de)
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
