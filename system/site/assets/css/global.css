@@ -537,7 +537,8 @@ h1 {
 			mask: url(../img/download.svg) no-repeat center center / 80% auto;
 		}
 
-		.meta .download-menu-wrapper:hover .button-download {
+		.meta .download-menu-wrapper:hover .button-download,
+		.meta .download-menu-wrapper.open .button-download {
 			border-bottom-right-radius: 0;
 			border-bottom-left-radius: 0;
 		}
@@ -550,7 +551,8 @@ h1 {
 			display: none;
 		}
 
-			.meta .download-menu-wrapper:hover .download-menu {
+			.meta .download-menu-wrapper:hover .download-menu,
+			.meta .download-menu-wrapper.open .download-menu {
 				display: block;
 			}
 

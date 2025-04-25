@@ -84,7 +84,7 @@ if( ! doing_ajax() ) {
 
 			if( count($download_menu) ) {
 				?>
-				<li class="download-menu-wrapper">
+				<li class="download-menu-wrapper" id="download-overlay">
 					<span class="button-download">download …</span>
 					<ul class="download-menu">
 						<?php

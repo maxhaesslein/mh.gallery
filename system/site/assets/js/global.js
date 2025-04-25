@@ -16,6 +16,7 @@ function init() {
 	KeyboardNavigation.init();
 	FullscreenButton.init();
 	InformationButton.init();
+	DownloadButton.init();
 	Preload.init();
 
 	setTimeout( function(){
@@ -23,6 +24,11 @@ function init() {
 	}, 50 );
 };
 window.addEventListener( 'load', init );
+
+
+function isTouchDevice(){
+	return 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+}
 
 
 var Lightmode = {
@@ -202,8 +208,7 @@ var HideCursor = {
 
 		if( ! document.body.classList.contains('template-image') ) return;
 
-		var isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-		if( isTouchDevice ) return;
+		if( isTouchDevice() ) return;
 
 		HideCursor.startTimeout();
 
@@ -355,6 +360,37 @@ var InformationButton = {
 		InformationButtonState = false;
 
 		InformationButton.target.close();
+
+	}
+
+};
+
+
+var DownloadButton = {
+
+	init: function(){
+
+		if( ! isTouchDevice() ) return;
+
+		var button = document.getElementById('download-overlay');
+
+		if( ! button ) return;
+
+		button.addEventListener( 'click', DownloadButton.toggle );
+
+	},
+
+	toggle: function( e ) {
+
+		if( ! e.target.classList.contains('button-download') ) return;
+
+		var button = document.getElementById('download-overlay');
+
+		if( ! button ) return;
+
+		e.preventDefault();
+
+		button.classList.toggle('open');
 
 	}
 
