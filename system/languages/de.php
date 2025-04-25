@@ -79,5 +79,6 @@ return [
 
 	// overview.php
 	//'download all' => 'Alle herunterladen',
+	'images' => 'Bilder',
 
 ];

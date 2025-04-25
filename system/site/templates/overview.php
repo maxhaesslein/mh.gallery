@@ -99,7 +99,7 @@ $imagecount = $gallery->get_image_count();
 			?>
 			<div class="meta">
 				<ul class="info">
-					<li><?= $imagecount ?> images</li>
+					<li><?= $imagecount ?> <?= __('images') ?></li>
 					<?php
 					if( $download_gallery_url ) {
 						?>

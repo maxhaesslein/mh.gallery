@@ -76,5 +76,6 @@ return [
 
 	// overview.php
 	//'download all' => 'download all',
+	'images' => 'images',
 
 ];
