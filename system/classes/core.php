@@ -48,6 +48,8 @@ class Core {
 
 		$this->route = new Route();
 
+		$this->language = new Language();
+
 		$this->refresh_cache();
 
 	}

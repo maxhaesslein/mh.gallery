@@ -33,7 +33,7 @@ $title = $gallery->get_title();
 	}
 	?>
 
-	<p style="text-align: center;">You are not allowed to view this gallery.</p>
+	<p style="text-align: center;"><?= __('You are not allowed to view this gallery.') ?></p>
 
 </main>
 <?php

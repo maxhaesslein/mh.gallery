@@ -19,7 +19,7 @@ return [
 	// the page title, displayed in the browser tab
 	'site_title' => 'mh.gallery',
 
-	// the HTML lang tag
+	// language can be 'en' (english) or 'de' (german)
 	'site_lang' => 'en',
 
 	// add links to external content, like this:

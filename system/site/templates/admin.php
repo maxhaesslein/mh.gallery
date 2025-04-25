@@ -35,16 +35,16 @@ function print_sub_galleries( $gallery ) {
 				<?php
 
 				if( $sub_gallery->is_hidden() ) {
-					echo ' [hidden]';
+					echo ' ['.__('hidden').']';
 				}
 
 				if( $sub_gallery->is_secret() ) {
 					$secret = $sub_gallery->get_secret();
-					echo ' [secret: <a href="'.$sub_gallery->get_url().'?secret='.$secret.'" target="_blank">'.$secret.'</a>]';
+					echo ' ['.__('secret').': <a href="'.$sub_gallery->get_url().'?secret='.$secret.'" target="_blank">'.$secret.'</a>]';
 				}
 
 				if( $sub_gallery->is_password_protected() ) {
-					echo ' [password protected]';
+					echo ' ['.__('password protected').']';
 				}
 
 				print_sub_galleries($sub_gallery);
@@ -63,12 +63,12 @@ snippet( 'header' );
 ?>
 <main>
 
-	<h2>Admin Area</h2>
+	<h2><?= __('Admin Area') ?></h2>
 
 	<?php
 	if( admin_verify() ) {
 		?>
-		<p><a href="<?= url('admin/logout') ?>">Logout</a></p>
+		<p><a href="<?= url('admin/logout') ?>"><?= __('Logout') ?></a></p>
 		<?php
 
 		$root_gallery = $core->gallery;
@@ -85,13 +85,13 @@ snippet( 'header' );
 
 		?>
 		<form action="<?= url('admin') ?>" method="POST">
-			<input type="password" name="admin-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required>
+			<input type="password" name="admin-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required>
 			<input type="hidden" name="action" value="login">
-			<button>login</button>
+			<button><?= __('login') ?></button>
 
 			<?php
 			if( ! empty($_POST['admin-password']) ) {
-				echo '<p class="login-error">wrong password</p>';
+				echo '<p class="login-error">'.__('wrong password').'</p>';
 			}
 			?>
 			

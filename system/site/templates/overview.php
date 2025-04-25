@@ -103,7 +103,7 @@ $imagecount = $gallery->get_image_count();
 					<?php
 					if( $download_gallery_url ) {
 						?>
-						<li><a href="<?= $download_gallery_url ?>">download all</a></li>
+						<li><a href="<?= $download_gallery_url ?>"><?= __('download all') ?></a></li>
 						<?php
 					}
 					?>

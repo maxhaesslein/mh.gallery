@@ -15,16 +15,16 @@ snippet( 'header' );
 ?>
 <main>
 
-	<h1>create hash</h1>
+	<h1><?= __('create hash') ?></h1>
 
 	<form action="<?= url('admin/create-hash') ?>" method="POST">
-		<input type="password" name="password" autofocus autocomplete="off" autocapitalize="off" placeholder="string to hash" required>
-		<button>create hash</button>
+		<input type="password" name="password" autofocus autocomplete="off" autocapitalize="off" placeholder="<?= __('string to hash') ?>" required>
+		<button><?= __('create hash') ?></button>
 	</form>
 
 	<?php
 	if( ! empty($_POST['password']) ) {
-		echo '<p style="margin-top: 3em;">the generated hash is:<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.password_hash( $_POST['password'], PASSWORD_DEFAULT ).'" style="width: 100%; max-width: 700px;"></p>';
+		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.password_hash( $_POST['password'], PASSWORD_DEFAULT ).'" style="width: 100%; max-width: 700px;"></p>';
 	}
 	?>
 

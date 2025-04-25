@@ -8,17 +8,23 @@
 // (at your option) any later version.
 // See the file LICENSE.md for more details.
 
-if( ! $core ) exit;
 
-header('HTTP/1.1 404 Not Found');
+function _e($string) {
+	echo __($string);
+}
 
-snippet( 'header' );
+function __( $string, $fallback = null ) {
+	global $core;
 
-?>
-<main>
-	<h1><?= __('Not found.') ?></h1>
-	<p><?= __('This page does not exist.') ?></p>
-</main>
-<?php
+	$text = $core->language->get($string, $fallback);
 
-snippet( 'footer' );
+	return $text;
+}
+
+function get_language_code() {
+	global $core;
+
+	$language_code = $core->language->get_language_code();
+
+	return $language_code;
+}

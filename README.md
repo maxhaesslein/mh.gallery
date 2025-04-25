@@ -114,6 +114,7 @@ Create a `custom/config.php` file, with your custom options:
 <?php
 return [
 	'site_title' => 'My Very Own Site Title',
+	'site_lang' => 'en',
 	'allow_overview' => true,
 	// all config options are listed in 'system/config.php'
 ];

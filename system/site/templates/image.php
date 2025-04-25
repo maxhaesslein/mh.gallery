@@ -54,10 +54,10 @@ snippet( 'header' );
 
 $download_menu = [];
 if( $download_image_url ) {
-	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'" title="download this image in maximum quality">download image</a>';
+	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'" title="'.__('download this image in maximum quality').'">'.__('download image').'</a>';
 }
 if( $download_gallery_url ) {
-	$download_menu[] = '<a href="'.$download_gallery_url.'" title="download all images in this gallery in maximum quality as a .zip file">download all</a>';
+	$download_menu[] = '<a href="'.$download_gallery_url.'" title="'.__('download all images in this gallery in maximum quality as a .zip file').'">'.__('download all').'</a>';
 }
 
 
@@ -73,19 +73,19 @@ if( ! doing_ajax() ) {
 	<div class="meta meta-top">
 		<?php snippet( 'gallery-action', ['gallery' => $gallery, 'image' => $image] ); ?>
 		<ul class="action">
-			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="" title="fullscreen">fullscreen</a></li>
+			<li class="button-fullscreen action-js"><a id="action-fullscreen" href="" title="<?= __('fullscreen') ?>"><?= __('fullscreen') ?></a></li>
 			<?php
 
 			if( ! empty($camera_information) ) {
 				?>
-				<li class="button-information" id="action-information" title="information">information</li>
+				<li class="button-information" id="action-information" title="<?= __('information') ?>"><?= __('information') ?></li>
 				<?php
 			}
 
 			if( count($download_menu) ) {
 				?>
 				<li class="download-menu-wrapper" id="download-overlay">
-					<span class="button-download">download …</span>
+					<span class="button-download"><?= __('download') ?> …</span>
 					<ul class="download-menu">
 						<?php
 						foreach( $download_menu as $download_menu_item ) {
@@ -103,8 +103,8 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">prev</a></li>';
-		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">next</a></li>';
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">'.__('prev').'</a></li>';
+		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">'.__('next').'</a></li>';
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
@@ -153,7 +153,7 @@ if( ! doing_ajax() ) {
 				echo '</li>';
 				?>
 			</ul>
-			<span id="image-information-close" class="image-information-close" title="close">close</span>
+			<span id="image-information-close" class="image-information-close" title="<?= __('close') ?>"><?= __('close') ?></span>
 		</dialog>
 		<?php
 	}

@@ -24,7 +24,7 @@ $classes = [ 'nojs', 'template-'.$template_name ];
  |_|_|_|_||_(_)__, \__,_|_|_\___|_|  \_, |
               |___/                  |__/ 
 -->
-<html lang="<?= get_config( 'site_lang' ) ?>">
+<html lang="<?= get_language_code() ?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -34,7 +34,7 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 <body<?= get_class_attribute($classes) ?>>
 <script type="text/javascript">document.body.classList.remove('nojs');</script>
 
-<div id="lightmode-toggle" class="lightmode-toggle" title="switch between light- and darkmode"></div>
+<div id="lightmode-toggle" class="lightmode-toggle" title="<?= __('switch between light- and darkmode') ?>"></div>
 <script type="text/javascript">
 (function(){
 

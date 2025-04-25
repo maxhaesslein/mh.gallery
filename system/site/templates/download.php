@@ -37,7 +37,7 @@ snippet( 'header' );
 
 	<div class="meta meta-top" style="padding: 0;">
 		<ul class="action">
-			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; overview</a></li>
+			<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; <?= __('overview') ?></a></li>
 		</ul>
 	</div>
 
@@ -47,16 +47,22 @@ snippet( 'header' );
 	if( $missing_image_count > 0 ) {
 		?>
 		<p><progress value="<?= $image_count-$missing_image_count ?>" max="<?= $image_count ?>"></p>
-		<p>generating zip file (<?= $image_count-$missing_image_count ?>/<?= $image_count ?> images), please wait<?php
-		if( $missing_image_count > 40 ) echo ', this may take some time';
+		<p><?= __('generating zip file') ?> (<?= $image_count-$missing_image_count ?>/<?= $image_count ?> images), <?php _e('please wait'); 
+		if( $missing_image_count > 40 ) echo ', '.__('this may take some time');
 		?> …</p>
-		<p>(leave this window open while the zip file is being generated)</p>
-		<p class="refresh-link-wrapper">this page should <a class="button" href="<?= $refresh_url ?>">reload automatically</a> in a few seconds</p>
+		<p>(<?= __('leave this window open while the zip file is being generated') ?>)</p>
+		<p class="refresh-link-wrapper"><?php
+		echo sprintf( __('this page should %sreload automatically%s in a few seconds'), '<a class="button" href="'.$refresh_url.'">', '</a>');
+		?>
+		</p>
 		<?php
+
 	} else {
 		?>
-		<p>The .zip file contains <em><?= $image_count ?></em> images and weights <em><?= $size ?></em>.</p>
-		<p><a class="button" href="<?= $download_url ?>" download="<?= $filename ?>">download .zip (<?= $size ?>)</a></p>
+		<p><?php
+		echo sprintf( __('The .zip file contains %s images and weights %s.'), '<em>'.$image_count.'</em>', '<em>'.$size.'</em>' );
+		?></p>
+		<p><a class="button" href="<?= $download_url ?>" download="<?= $filename ?>"><?= __('download .zip') ?> (<?= $size ?>)</a></p>
 		<?php
 	}
 	?>

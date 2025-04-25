@@ -34,16 +34,16 @@ $title = $gallery->get_title();
 	?>
 	
 	<form action="<?= get_current_url() ?>" method="POST">
-		<p>This gallery is password protected.</p>
+		<p><?= __('This gallery is password protected.') ?></p>
 
 		<p>
-			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="password" required><input type="hidden" name="action" value="login">
-			<button>login</button>
+			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required><input type="hidden" name="action" value="login">
+			<button><?= __('login') ?></button>
 		</p>
 
 		<?php
 		if( ! empty($_POST['gallery-password']) ) {
-			echo '<p class="login-error">wrong password</p>';
+			echo '<p class="login-error">'.__('wrong password').'</p>';
 		}
 		?>
 
