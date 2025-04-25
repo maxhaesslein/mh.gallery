@@ -1,5 +1,7 @@
-v.0.x.x
+v.0.10.0
 
+- added language support
+- added german translation (set the config option `site_lang` to `de`)
 - bugfix for 'download' submenu on touch devices
 
 
