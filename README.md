@@ -152,6 +152,11 @@ WEBP and AVIF support are enabled by default. You can disable them by adding `'w
 
 There is still an additional step, that checks if your server environment supports WEBP or AVIF. For AVIF, you need at least `PHP 8.1`, `GD` compiled with AVIF support and `libavif v.0.8.2` or higher.
 
+### Custom translations
+
+You can customize an existing language file, or add a new language file, by copying it from `system/languages/en.php` into `custom/languages/{language}.php`. `{language}` can be an arbitrary string. Set `site_lange => your-language-string` in the `custom/config.php` to activate your language.
+The language file contains an array of strings. The left side is the original string as it appears in the code (in english), the right side is the translation into your language. Use `system/languages/de.php` as an example.
+
 ## Admin Area
 
 The admin area lists all available galleries, even secret and hidden ones, and even if the website index is disabled.

@@ -18,7 +18,14 @@ class Language {
 
 		$lang = $core->config->get('site_lang');
 
-		$this->load_language_file( get_abspath('system/languages/'.$lang.'.php') );
+		$language_file_path = get_abspath('system/languages/'.$lang.'.php');
+
+		if( file_exists('custom/languages/'.$lang.'.php') ) {
+			// load a custom language file
+			$language_file_path = get_abspath('custom/languages/'.$lang.'.php');
+		}
+
+		$this->load_language_file( $language_file_path );
 
 		if( isset($this->texts['language_code']) ) {
 			$this->language_code = $this->texts['language_code'];

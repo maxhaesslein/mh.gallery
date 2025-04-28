@@ -1,5 +1,6 @@
 v.0.10.1
 
+- allow custom language files in `/custom/languages/{language}.php` (see `README.md` for details)
 - updated some translations
 
 
