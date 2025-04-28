@@ -51,8 +51,7 @@ return [
 
 	// download.php
 	//'overview' => 'overview',
-	'generating zip file' => 'generating zip file',
-	'please wait' => 'please wait',
+	'generating zip file (%d/%d images), please wait' => 'generating zip file (%d/%d images), please wait',
 	'this may take some time' => 'this may take some time',
 	'leave this window open while the zip file is being generated' => 'leave this window open while the zip file is being generated',
 	'this page should %sreload automatically%s in a few seconds' => 'this page should %sreload automatically%s in a few seconds',

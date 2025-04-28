@@ -47,7 +47,8 @@ snippet( 'header' );
 	if( $missing_image_count > 0 ) {
 		?>
 		<p><progress value="<?= $image_count-$missing_image_count ?>" max="<?= $image_count ?>"></p>
-		<p><?= __('generating zip file') ?> (<?= $image_count-$missing_image_count ?>/<?= $image_count ?> images), <?php _e('please wait'); 
+		<p><?php
+		echo sprintf( __('generating zip file (%d/%d images), please wait'), ($image_count-$missing_image_count), $image_count );
 		if( $missing_image_count > 40 ) echo ', '.__('this may take some time');
 		?> …</p>
 		<p>(<?= __('leave this window open while the zip file is being generated') ?>)</p>

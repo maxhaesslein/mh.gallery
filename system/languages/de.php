@@ -51,12 +51,11 @@ return [
 
 	// download.php
 	//'overview' => 'Übersicht',
-	'generating zip file' => 'Generiere ZIP-Datei',
-	'please wait' => 'bitte warten',
+	'generating zip file (%d/%d images), please wait' => 'Generiere ZIP-Datei (%d/%d Bilder), bitte warten',
 	'this may take some time' => 'dies kann eine Weile dauern',
 	'leave this window open while the zip file is being generated' => 'Lasse dieses Fenster offen, während die ZIP-Datei generiert wird',
-	'this page should' => 'Diese Seite sollte sich in ein paar Sekunden',
-	'reload automatically' => 'automatisch aktualisieren',
+	'this page should' => 'Diese Seite sollte sich in ein paar Sekunden automatisch',
+	'reload automatically' => 'selbst aktualisieren',
 	'in a few seconds' => '',
 	'this page should %sreload automatically%s in a few seconds' => 'Diese Seite sollte sich in ein paar Sekunden %sautomatisch aktualisieren%s',
 	'The .zip file contains %s images and weights %s.' => 'Die ZIP-Datei enthält %s Bilder und wiegt %s.',
