@@ -37,8 +37,8 @@ return [
 
 	// the image quality for lossless image types; the lower this number, the lower the filesize and quality
 	'image_quality_jpg' => 85,
-	'image_quality_webp' => 75,
-	'image_quality_avif' => 75,
+	'image_quality_webp' => 85,
+	'image_quality_avif' => 85,
 
 	// the default image width in the single view
 	'default_image_width' => 2000,
