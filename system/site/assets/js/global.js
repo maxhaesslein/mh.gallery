@@ -136,6 +136,8 @@ var Ajax = {
 
 		document.getElementById('fullscreen-target').querySelector('img').style.opacity = 0;
 
+		Ajax.updateTitle( 'loading …' );
+
 		requestUrl = GALLERY.apiUrl+imageSlug+'/';
 
 		var request = new XMLHttpRequest();

@@ -1,5 +1,6 @@
 v.0.10.1
 
+- change HTML title to 'loading …' while waiting for ajax response
 - allow custom language files in `/custom/languages/{language}.php` (see `README.md` for details)
 - updated some translations
 - updated default image quality for webp & avif files to 85 (from 75)
