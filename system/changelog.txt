@@ -4,6 +4,7 @@ v.0.10.1
 - allow custom language files in `/custom/languages/{language}.php` (see `README.md` for details)
 - updated some translations
 - updated default image quality for webp & avif files to 85 (from 75)
+- removed .nojs helper class in favor of @media (scripting: none)
 
 
 v.0.10.0

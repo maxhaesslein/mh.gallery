@@ -256,9 +256,14 @@ picture {
 			background-image: url(../img/loading_black.svg);
 		}
 
-		body.nojs picture:after,
 		body.transition picture:after {
 			opacity: 1;
+		}
+
+		@media (scripting: none) {
+			picture:after {
+				opacity: 1;
+			}
 		}
 
 	picture * {
@@ -472,8 +477,12 @@ h1 {
 			text-decoration: none;
 		}
 
-	body.nojs .meta .action-js {
-		display: none;
+	@media (scripting: none) {
+
+		.meta .action-js {
+			display: none;
+		}
+
 	}
 
 	body.cursor-hidden.template-image .meta {
@@ -491,8 +500,12 @@ h1 {
 		display: inline-block;
 	}
 
-		body.nojs .meta .button-information {
-			display: none;
+		@media (scripting: none) {
+
+			.meta .button-information {
+				display: none;
+			}
+
 		}
 
 		.meta .button-information:after {

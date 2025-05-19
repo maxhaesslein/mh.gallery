@@ -12,10 +12,6 @@ if( ! $core ) exit;
 
 if( doing_ajax() ) return;
 
-$template_name = $core->route->get('template_name');
-
-$classes = [ 'nojs', 'template-'.$template_name ];
-
 ?><!DOCTYPE html>
 <!--
         _                _ _              
@@ -31,8 +27,7 @@ $classes = [ 'nojs', 'template-'.$template_name ];
 <?php head(); ?>
 
 </head>
-<body<?= get_class_attribute($classes) ?>>
-<script type="text/javascript">document.body.classList.remove('nojs');</script>
+<body<?= get_class_attribute(['template-'.$core->route->get('template_name')]) ?>>
 
 <div id="lightmode-toggle" class="lightmode-toggle" title="<?= __('switch between light- and darkmode') ?>"></div>
 <script type="text/javascript">
