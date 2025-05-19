@@ -11,6 +11,9 @@
 return [
 	'language_code' => 'en-US',
 
+	// js
+	'loading' => 'loading …',
+
 	// gallery-action.php
 	'overview' => 'overview',
 	'end secret session' => 'end secret session',

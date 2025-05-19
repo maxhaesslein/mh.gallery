@@ -11,6 +11,9 @@
 return [
 	'language_code' => 'de-DE',
 
+	// js
+	'loading' => 'lade …',
+
 	// gallery-action.php
 	'overview' => 'Übersicht',
 	'end secret session' => 'Geheime Session beenden',

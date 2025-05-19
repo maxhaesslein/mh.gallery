@@ -165,6 +165,9 @@ function head() {
 	<script type="text/javascript">
 		GALLERY = {
 			'apiUrl': '<?= url('api') ?>',
+			'texts': {
+				'loading': '<?= __('loading') ?>'
+			}
 		};
 	</script><?php
 	endif; // if( get_config('system_js') )
