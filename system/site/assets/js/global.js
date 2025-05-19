@@ -146,19 +146,20 @@ var Ajax = {
 		request.onreadystatechange = function(){
 
 			if( request.readyState !== XMLHttpRequest.DONE ) return;
+		
+			var url = el.href;
 
 			if( request.status === 200 ) {
 
 				var response = request.response;
 
-				var url = el.href;
 				if( url ) {
 					history.pushState( {url: url}, false, url );
 				}
 
 				if( ! response ) {
-					// TODO: handle error case
 					console.warn( 'AJAX request failed.', request ); // DEBUG
+					window.location.href = url; // request the complete page
 					return false;
 				}
 
@@ -183,8 +184,8 @@ var Ajax = {
 
 			} else {
 				// something went wrong …
-				// TODO: handle error case
 				console.warn( 'AJAX request failed.', request ); // DEBUG
+				window.location.href = url; // request the complete page
 			}
 
 		}
