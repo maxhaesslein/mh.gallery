@@ -18,8 +18,8 @@ return [
 	'overview' => 'Übersicht',
 	'end secret session' => 'Geheime Session beenden',
 	'end session' => 'Session beenden',
-	'lock gallery' => 'Galerie abschließen',
-	'lock' => 'abschließen',
+	'lock gallery' => 'Galerie sperren',
+	'lock' => 'sperren',
 
 	// header.php
 	'switch between light- and darkmode' => 'zwischen heller und dunkler Ansicht wechseln',
