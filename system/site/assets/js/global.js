@@ -85,9 +85,15 @@ var Lightmode = {
 
 var Ajax = {
 
+	currentImageIndex: false,
+	images: false,
+
 	init: function(){
 
 		if( ! document.body.classList.contains('template-image') ) return;
+
+		Ajax.currentImageIndex = GALLERY_IMAGE_INDEX;
+		Ajax.images = GALLERY_IMAGES;
 
 		var next = document.getElementById('navigate-next');
 		if( next ) {
@@ -125,16 +131,19 @@ var Ajax = {
 
 		Preload.cancel();
 
+
 		var imageSlug = false;
 		if( el.id == 'navigate-next' ) {
 			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.nextImageSlug;
+			Ajax.currentImageIndex++;
 		} else if( el.id == 'navigate-prev' ) {
 			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.prevImageSlug;
+			Ajax.currentImageIndex--;
 		} else {
 			return false;
 		}
 
-		document.getElementById('fullscreen-target').querySelector('img').style.opacity = 0;
+		document.getElementById('fullscreen-target').querySelector('img').src = Ajax.images[Ajax.currentImageIndex]['preview_src'];
 
 		Ajax.updateTitle( GALLERY.texts.loading );
 

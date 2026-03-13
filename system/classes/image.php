@@ -141,6 +141,20 @@ class Image {
 	}
 
 
+	function get_width() {
+		$this->load_image_meta();
+
+		return $this->width;
+	}
+
+
+	function get_height() {
+		$this->load_image_meta();
+
+		return $this->height;
+	}
+
+
 	function get_filedate() {
 
 		if( $this->file_mod_time === NULL ) {
@@ -316,7 +330,7 @@ class Image {
 	}
 
 
-	private function get_index() {
+	function get_index() {
 
 		if( ! $this->gallery ) return false;
 

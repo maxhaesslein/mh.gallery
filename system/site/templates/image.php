@@ -155,14 +155,19 @@ if( ! doing_ajax() ) {
 			</ul>
 			<span id="image-information-close" class="image-information-close" title="<?= __('close') ?>"><?= __('close') ?></span>
 		</dialog>
-		<?php
+<?php
 	}
 
 
 if( ! doing_ajax() ) {
 	?>
-	</main>
-	<?php
+</main>
+
+<script type="text/javascript">
+const GALLERY_IMAGE_INDEX = '<?= $image->get_index() ?>';
+const GALLERY_IMAGES = <?= json_encode($gallery->get_preview_images()) ?>;
+</script><?php
+
 }
 
 snippet( 'footer' );

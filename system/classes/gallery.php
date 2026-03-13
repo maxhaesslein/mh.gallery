@@ -566,6 +566,28 @@ class Gallery {
 	}
 
 
+	function get_preview_images() {
+		$images = $this->get_images();
+
+		$preview_images = [];
+
+		$args = [
+			'width' => 100,
+			'quality' => 20
+		];
+
+		foreach( $images as $image ) {
+			$preview_images[] = [
+				'width' => $image->get_width(),
+				'height' => $image->get_height(),
+				'preview_src' => $image->get_image_url($args)
+			];
+		}
+
+		return $preview_images;
+	}
+
+
 	function get_image( $slug ) {
 
 		$images = $this->get_images();
