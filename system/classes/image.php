@@ -390,6 +390,7 @@ class Image {
 			'width' => $this->width,
 			'height' => $this->height,
 			'crop' => false,
+			'fit' => 'cover',
 			'type' => $this->file_extension,
 			'quality' => $quality,
 		];
@@ -403,7 +404,9 @@ class Image {
 		$args = array_merge($this->get_default_args(), $args);
 
 		$filename = $this->slug.'_'.$args['width'].'x'.$args['height'];
-		if( $args['crop'] ) $filename .= '-crop';
+		if( ! empty($args['crop']) ) {
+			$filename .= '-crop-'.$args['fit'];
+		}
 		$filename .= '-'.$args['quality'].'.'.$args['type'];
 
 		return $filename;
@@ -564,6 +567,8 @@ class Image {
 		$crop = false;
 		if( ! empty($args['crop']) ) $crop = $args['crop'];
 
+		$fit = $args['fit'] ?? 'cover';
+
 		if( $this->rotated && ! $crop ) {
 			$tmp_height = $height;
 			$height = $width;
@@ -576,6 +581,7 @@ class Image {
 			'width' => $width,
 			'height' => $height,
 			'crop' => $crop,
+			'fit' => $fit,
 			'type' => 'jpg'
 		]);
 
@@ -599,12 +605,14 @@ class Image {
 					if( $crop ) {
 						$image_url_args['height'] = round($image_url_args['width']*$height/$width);
 						$image_url_args['crop'] = true;
+						$image_url_args['fit'] = $fit;
 					} else {
 						$image_url_args['height'] = round($image_url_args['width']*$this->height/$this->width);
 						$image_url_args['crop'] = false;
 					}
 
 					$image_url = $this->get_image_url($image_url_args);
+
 					$srcset[] = $image_url.' '.$size;
 				}
 
@@ -699,7 +707,7 @@ class Image {
 	}
 
 
-	private function image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop ) {
+	private function image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop, $fit = 'cover' ) {
 
 		$image_blob_resized = imagecreatetruecolor( $width, $height );
 
@@ -717,17 +725,35 @@ class Image {
 			return $image_blob;
 		}
 
-		// NOTE: currently, we just center the image on crop
-		$src_width_cropped = $src_width;
-		$src_height_cropped = (int) round($src_width_cropped * $height/$width);
-		if( $src_height_cropped > $src_height ) {
-			$src_height_cropped = $src_height;
-			$src_width_cropped = (int) round($src_height_cropped * $width/$height);
-		}
-		$src_x = (int) round(($src_width - $src_width_cropped)/2);
-		$src_y = (int) round(($src_height - $src_height_cropped)/2);
+		// NOTE: currently, we just center the image on crop; later we may implement a focus area.
 
-		imagecopyresampled( $image_blob_resized, $image_blob, 0, 0, $src_x, $src_y, $width, $height, $src_width_cropped, $src_height_cropped );
+		if( $fit === 'contain' ) {
+			$scale  = min( $width / $src_width, $height / $src_height );
+			$dst_w  = (int) round( $src_width  * $scale );
+			$dst_h  = (int) round( $src_height * $scale );
+			$dst_x  = (int) round( ( $width  - $dst_w ) / 2 );
+			$dst_y  = (int) round( ( $height - $dst_h ) / 2 );
+			$src_x  = 0;
+			$src_y  = 0;
+			$copy_src_w = $src_width;
+			$copy_src_h = $src_height;
+		} else { // cover
+			$dst_w  = $width;
+			$dst_h  = $height;
+			$dst_x  = 0;
+			$dst_y  = 0;
+
+			$copy_src_w = $src_width;
+			$copy_src_h = (int) round( $copy_src_w * $height / $width );
+			if( $copy_src_h > $src_height ) {
+				$copy_src_h = $src_height;
+				$copy_src_w = (int) round( $copy_src_h * $width / $height );
+			}
+			$src_x = (int) round( ( $src_width  - $copy_src_w ) / 2 );
+			$src_y = (int) round( ( $src_height - $copy_src_h ) / 2 );
+		}
+
+		imagecopyresampled( $image_blob_resized, $image_blob, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $copy_src_w, $copy_src_h );
 
 		imagedestroy($image_blob);
 
@@ -849,6 +875,11 @@ class Image {
 			$height = $args['width'];
 		}
 
+		$fit = false;
+		if( $crop ) {
+			$fit = $args['fit'] ?? 'cover';
+		}
+
 		$image_blob = false;
 
 		if( $this->image_type == IMAGETYPE_JPEG && $this->type_supported('jpg') ) {
@@ -895,7 +926,7 @@ class Image {
 
 		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
 
-		$image_blob = $this->image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop );
+		$image_blob = $this->image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop, $fit );
 
 		return $image_blob;
 	}

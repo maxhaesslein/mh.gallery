@@ -169,7 +169,9 @@ class Route {
 					$height = (int) $size[1];
 
 					$crop = array_shift($image_args);
+					$fit = false;
 					if( $crop == 'crop' ) {
+						$fit = array_shift($image_args);
 						$quality = array_pop($image_args);
 						$crop = true;
 					} else {
@@ -184,6 +186,7 @@ class Route {
 						'width' => $width,
 						'height' => $height,
 						'crop' => $crop,
+						'fit' => $fit,
 						'quality' => $quality,
 						'type' => $type,
 					];

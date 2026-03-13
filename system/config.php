@@ -47,6 +47,9 @@ return [
 	// the aspect ratio of thumbnails; width/height
 	'thumbnail_aspect_ratio' => 3/2,
 
+	// how to handle thumbnails with other aspect ratios; can be 'cover' or 'contain'
+	'thumbnail_fit' => 'cover',
+
 	// you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_disabled' => false,
 
