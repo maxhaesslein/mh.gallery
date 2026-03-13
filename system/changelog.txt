@@ -1,3 +1,8 @@
+v.0.??
+
+- updated german translation
+
+
 v.0.10.1
 
 - change HTML title to 'loading …' while waiting for ajax response
