@@ -13,6 +13,6 @@ if( ! $core ) exit;
 $image = $core->route->get('image');
 $args = $core->route->get('args');
 
-if( ! $image->output($args) ) { // output the image and check, if this fails; if it does, show error:
+if( ! $image->output($args) ) { // output the image; if this fails, show an error:
 	_e('could not load image');
 }
