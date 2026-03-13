@@ -729,10 +729,10 @@ class Image {
 
 		if( $fit === 'contain' ) {
 			$scale  = min( $width / $src_width, $height / $src_height );
-			$dst_w  = (int) round( $src_width  * $scale );
-			$dst_h  = (int) round( $src_height * $scale );
-			$dst_x  = (int) round( ( $width  - $dst_w ) / 2 );
-			$dst_y  = (int) round( ( $height - $dst_h ) / 2 );
+			$dst_w  = (int) ceil( $src_width  * $scale );
+			$dst_h  = (int) ceil( $src_height * $scale );
+			$dst_x  = (int) floor( ( $width  - $dst_w ) / 2 );
+			$dst_y  = (int) floor( ( $height - $dst_h ) / 2 );
 			$src_x  = 0;
 			$src_y  = 0;
 			$copy_src_w = $src_width;
@@ -744,13 +744,13 @@ class Image {
 			$dst_y  = 0;
 
 			$copy_src_w = $src_width;
-			$copy_src_h = (int) round( $copy_src_w * $height / $width );
+			$copy_src_h = (int) ceil( $copy_src_w * $height / $width );
 			if( $copy_src_h > $src_height ) {
 				$copy_src_h = $src_height;
-				$copy_src_w = (int) round( $copy_src_h * $width / $height );
+				$copy_src_w = (int) ceil( $copy_src_h * $width / $height );
 			}
-			$src_x = (int) round( ( $src_width  - $copy_src_w ) / 2 );
-			$src_y = (int) round( ( $src_height - $copy_src_h ) / 2 );
+			$src_x = (int) floor( ( $src_width  - $copy_src_w ) / 2 );
+			$src_y = (int) floor( ( $src_height - $copy_src_h ) / 2 );
 		}
 
 		imagecopyresampled( $image_blob_resized, $image_blob, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $copy_src_w, $copy_src_h );
