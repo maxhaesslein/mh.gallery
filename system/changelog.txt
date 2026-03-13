@@ -1,4 +1,4 @@
-v.0.??
+v.0.10.2
 
 - added `thumbnail_fit` option; this defaults to `cover`, but can also be set to `contain`
 - updated german translation
