@@ -576,8 +576,7 @@ class Image {
 			'width' => $width,
 			'height' => $height,
 			'crop' => $crop,
-			'type' => 'jpg',
-			'quality' => get_config('image_quality_jpg')
+			'type' => 'jpg'
 		]);
 
 		$html = '';
