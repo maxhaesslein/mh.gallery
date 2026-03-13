@@ -17,7 +17,6 @@ function init() {
 	FullscreenButton.init();
 	InformationButton.init();
 	DownloadButton.init();
-	Preload.init();
 
 	setTimeout( function(){
 		document.body.classList.add('transition');
@@ -128,9 +127,6 @@ var Ajax = {
 	},
 
 	navigate: function( el ) {
-
-		Preload.cancel();
-
 
 		var imageSlug = false;
 		if( el.id == 'navigate-next' ) {
@@ -405,86 +401,6 @@ var DownloadButton = {
 		button.classList.toggle('open');
 
 	}
-
-};
-
-
-var Preload = {
-
-	preloaded: [],
-	timeouts: [],
-	requests: [],
-
-	init: function(){
-
-		if( ! document.body.classList.contains('template-image') ) return;
-
-		var next = document.getElementById('navigate-next');
-		if( next ) {
-			Preload.timeouts.push(setTimeout(function(){
-				var imageSlug = next.dataset.gallerySlug+'/'+next.dataset.nextImageSlug
-				Preload.load(imageSlug);
-			}, 50));
-		}
-
-		var prev = document.getElementById('navigate-prev');
-		if( prev ) {
-			Preload.timeouts.push(setTimeout(function(){
-				imageSlug = prev.dataset.gallerySlug+'/'+prev.dataset.prevImageSlug;
-				Preload.load(imageSlug);
-			}, 50));
-		}
-
-	},
-
-	cancel: function(){
-
-		for( var timeout of Preload.timeouts ) {
-			clearTimeout(timeout);
-		}
-		Preload.timeouts = [];
-		
-		for( var request of Preload.requests ) {
-			request.abort();
-		}
-		Preload.requests = [];
-
-	},
-
-	load: function(imageSlug) {
-
-		if( Preload.preloaded.includes(imageSlug) ) return;
-
-		Preload.preloaded.push(imageSlug);
-
-		requestUrl = GALLERY.apiUrl+imageSlug+'/?imageonly=true';
-
-		var request = new XMLHttpRequest();
-		request.open( 'GET', requestUrl );
-
-		request.onreadystatechange = function(){
-
-			if( request.readyState !== XMLHttpRequest.DONE ) return;
-
-			if( request.status !== 200 ) return;
-
-			var response = request.response;
-
-			if( ! response ) return;
-
-			response = JSON.parse(response);
-
-			var wrapper = document.createElement('div');
-			wrapper.classList.add('preload-wrapper');
-			wrapper.innerHTML = response.content;
-			document.body.querySelector('main').appendChild(wrapper);
-
-		}
-		request.send();
-
-		Preload.requests.push(request);
-
-	},
 
 };
 
