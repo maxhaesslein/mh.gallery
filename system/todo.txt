@@ -1,4 +1,6 @@
 
+- better accessibility (landmarks, skip link, better :active styling, ..)
+
 - also allow the use of ImageMagick for image manipulation in addition to GD
 
 - automatic file rename based on preset (for example, mh_{date}_{title}_{count#000}.ext)
@@ -32,5 +34,5 @@
 
 - 'region of interest' for image cropping
 
-- support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research
+- support for HDR image formats; heic, hdr avif, hdr jpg. maybe needs a bit more time until browser support is there, needs some research; currently, only imagick supports jpg-hdr gain maps, and only if compiled with a special flag. this needs some more time before we can use it (see https://github.com/ImageMagick/ImageMagick/issues/6377 and https://github.com/libgd/libgd/issues/898 )
 - support for heic/heif as source images; currently we need an external program to convert images to another format, and then read it with PHP. it may take some time, until this is natively supported in PHP
