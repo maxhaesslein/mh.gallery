@@ -1,6 +1,9 @@
 
 - better accessibility (landmarks, skip link, better :active styling, ..)
 
+- very small jpg placeholder images while loading the large version or making the ajax request; placeholder urls and image aspect ratio could be added via json in the body. this should speed up (perceived) loading times
+	- we could also add the images in batches of 9 or 12 into imagemaps for better compression and faster loading
+
 - also allow the use of ImageMagick for image manipulation in addition to GD
 
 - automatic file rename based on preset (for example, mh_{date}_{title}_{count#000}.ext)
