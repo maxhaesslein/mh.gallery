@@ -74,8 +74,7 @@ $imagecount = $gallery->get_image_count();
 
 					$title = $sub_gallery->get_title();
 					?>
-					<li>
-						<a class="thumbnail-anchor anchor" name="<?= $sub_gallery->get_slug() ?>"></a>
+					<li <?= $sub_gallery->get_slug() ?>>
 						<a class="gallery-link" href="<?= $url ?>">
 							<?php
 							if( $thumbnail ) {
@@ -115,8 +114,7 @@ $imagecount = $gallery->get_image_count();
 				foreach( $images as $image ) {
 					$url = $image->get_link();
 					?>
-					<li>
-						<a class="thumbnail-anchor anchor" name="<?= $image->get_slug() ?>"></a>
+					<li id="<?= $image->get_slug() ?>">
 						<a class="image-link" href="<?= $url ?>">
 							<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
 						</a>
