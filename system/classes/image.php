@@ -426,6 +426,14 @@ class Image {
 
 	function get_image_url( $args = [] ) {
 
+		if( ! empty($args['width']) && empty($args['height']) ) {
+			$this->load_image_meta();
+			$args['height'] = round($args['width'] * $this->height/$this->width);
+		} elseif( ! empty($args['height']) && empty($args['width']) ) {
+			$this->load_image_meta();
+			$args['width'] = round($args['height'] * $this->width/$this->height);
+		}
+
 		$this->create_placeholder_file($args);
 
 		$url = get_baseurl($this->get_image_path($args));
