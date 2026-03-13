@@ -44,11 +44,18 @@ return [
 	// the default image width in the single view
 	'default_image_width' => 2000,
 
+	// use a small preview image to speed up perceived loading times
+	'preview_image' => true,
+
 	// the aspect ratio of thumbnails; width/height
 	'thumbnail_aspect_ratio' => 3/2,
 
 	// how to handle thumbnails with other aspect ratios; can be 'cover' or 'contain'
 	'thumbnail_fit' => 'cover',
+
+	// background color of thumbnails with fit 'contain'
+	// you need to clear the image cache after changing this value
+	'thumbnail_background_color' => '#000',
 
 	// you should not disable the cache, because then every image needs to be re-generated on every load
 	'cache_disabled' => false,

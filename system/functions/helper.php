@@ -48,3 +48,17 @@ function string_cleanup( $string ) {
 
 	return $string;
 }
+
+
+function hex_to_rgb($hex) {
+	$hex = ltrim($hex, '#');
+
+	if (strlen($hex) === 3) {
+		$hex = $hex[0].$hex[0].$hex[1].$hex[1].$hex[2].$hex[2];
+	}
+
+	[$r, $g, $b] = sscanf($hex, '%02x%02x%02x');
+
+	return [$r, $g, $b];
+}
+

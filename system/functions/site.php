@@ -198,6 +198,17 @@ function head() {
 	$js_custom_path = 'custom/assets/js/';
 	head_load_files( $js_custom_path, $js_filter, $js_tag );
 
+
+	?>
+
+	<style>
+		:root {
+			--preview-sizing: <?= get_config('thumbnail_fit') ?>;
+			--thumbnail-background-color: <?= get_config('thumbnail_background_color') ?>;
+		}
+	</style>
+	<?php
+
 }
 
 

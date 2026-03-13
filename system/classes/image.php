@@ -456,6 +456,17 @@ class Image {
 	}
 
 
+	function get_preview_url() {
+
+		$args = [
+			'width' => 100,
+			'quality' => 20
+		];
+
+		return $this->get_image_url($args);
+	}
+
+
 	private function create_placeholder_file( $args ) {
 
 		// NOTE: this checks, if the cached version of this image file exists. if it does not exist, it creates an empty placeholder file, so that when we generate the file, we know that we are approved to create this image file. this is a safety measure, so that the server can't be killed by accessing a lot of different versions of a file.
@@ -607,9 +618,16 @@ class Image {
 			'type' => 'jpg'
 		]);
 
+		$preview_src = $this->get_preview_url();
+
+		$style = 'aspect-ratio: '.$width.'/'.$height.';';
+		if( $preview_src && get_config('preview_image') ) {
+			$style .= ' background-image: url('.$preview_src.');';
+		}
+
 		$html = '';
 
-		$html .= '<div class="image-container" style="aspect-ratio: '.$width.'/'.$height.';">';
+		$html .= '<div class="image-container" style="'.$style.'">';
 			$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">';
 
 			foreach( $picture as $type => $sources ) {
@@ -733,13 +751,15 @@ class Image {
 
 		$image_blob_resized = imagecreatetruecolor( $width, $height );
 
+		$background_color = hex_to_rgb(get_config('thumbnail_background_color'));
+
 		if( $this->image_type == IMAGETYPE_PNG || $this->image_type == IMAGETYPE_WEBP ) {
 			// handle alpha channel
 			imagealphablending( $image_blob_resized, false );
 			imagesavealpha( $image_blob_resized, true );
 		} else {
 			// no alpha channel; fill with background color
-			$image_blob = $this->fill_with_backgroundcolor( $image_blob, $src_width, $src_height );
+			$image_blob = $this->fill_with_backgroundcolor( $image_blob, $src_width, $src_height, $background_color );
 		}
 
 		if( $src_width <= $width && $src_height <= $height && ! $crop ) {
@@ -759,6 +779,10 @@ class Image {
 			$src_y  = 0;
 			$copy_src_w = $src_width;
 			$copy_src_h = $src_height;
+
+			$fill_color = imagecolorallocate( $image_blob_resized, $background_color[0], $background_color[1], $background_color[2] );
+			imagefill( $image_blob_resized, 0, 0, $fill_color );
+
 		} else { // cover
 			$dst_w  = $width;
 			$dst_h  = $height;

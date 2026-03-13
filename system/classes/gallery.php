@@ -571,16 +571,11 @@ class Gallery {
 
 		$preview_images = [];
 
-		$args = [
-			'width' => 100,
-			'quality' => 20
-		];
-
 		foreach( $images as $image ) {
 			$preview_images[] = [
 				'width' => $image->get_width(),
 				'height' => $image->get_height(),
-				'preview_src' => $image->get_image_url($args)
+				'preview_src' => $image->get_preview_url()
 			];
 		}
 
