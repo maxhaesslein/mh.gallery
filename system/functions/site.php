@@ -48,22 +48,20 @@ function get_site_title() {
 	$request_object = $core->gallery;
 	foreach( $core->route->get('request') as $request_part ) {
 		$new_request_object = $request_object->get($request_part);
-		if( $new_request_object ) {
-			$request_object = $new_request_object;
+		if( ! $new_request_object ) continue;
+			
+		$request_object = $new_request_object;
 
-			if( $request_object->is('gallery') ) {
-				$gallery = $request_object;
-				$title[] = $gallery->get_title();
-			} elseif( $request_object->is('image') ) {
-				$image = $request_object;
-				if( $gallery ) {
-					$title[] = $image->get_number().'/'.$gallery->get_image_count();
-				}
+		if( $request_object->is('gallery') ) {
+			$gallery = $request_object;
+			$title[] = $gallery->get_title();
+		} elseif( $request_object->is('image') ) {
+			$image = $request_object;
+			if( $gallery ) {
+				$title[] = $image->get_number().'/'.$gallery->get_image_count();
 			}
-
-		} else {
-			$template_name = '404';
 		}
+		
 	}
 
 	$title = array_reverse( $title );
