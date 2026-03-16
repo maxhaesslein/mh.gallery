@@ -158,10 +158,6 @@ const Ajax = {
 
 				let response = request.response;
 
-				if( url ) {
-					history.pushState( {url: url}, false, url );
-				}
-
 				if( ! response ) {
 					console.warn( 'AJAX request failed.', request ); // DEBUG
 					window.location.href = url; // request the complete page
@@ -171,6 +167,10 @@ const Ajax = {
 				response = JSON.parse(response);
 				if( response.content ) {
 					document.getElementById('fullscreen-target').innerHTML = response.content;
+				}
+
+				if( response.url ) {
+					history.pushState( {url: response.url}, false, response.url );
 				}
 
 				if( response.title ) {

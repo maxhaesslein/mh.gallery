@@ -45,6 +45,7 @@ ob_end_clean();
 $json = [
 	'content' => $content,
 	'title' => get_site_title(),
+	'url' => $image->get_link()
 ];
 
 header("Content-type: application/json");
