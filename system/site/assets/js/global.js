@@ -30,11 +30,11 @@ function isTouchDevice(){
 }
 
 
-var Lightmode = {
+const Lightmode = {
 
 	init: function(){
 
-		var toggle = document.getElementById('lightmode-toggle');
+		const toggle = document.getElementById('lightmode-toggle');
 
 		if( ! toggle ) return;
 
@@ -82,7 +82,7 @@ var Lightmode = {
 };
 
 
-var Ajax = {
+const Ajax = {
 
 	currentImageIndex: false,
 	images: false,
@@ -94,14 +94,14 @@ var Ajax = {
 		Ajax.currentImageIndex = GALLERY_IMAGE_INDEX;
 		Ajax.images = GALLERY_IMAGES;
 
-		var next = document.getElementById('navigate-next');
+		const next = document.getElementById('navigate-next');
 		if( next ) {
 			next.addEventListener('click', function(e){
 				if( Ajax.navigate(this) ) e.preventDefault();
 			});
 		}
 
-		var prev = document.getElementById('navigate-prev');
+		const prev = document.getElementById('navigate-prev');
 		if( prev ) {
 			prev.addEventListener('click', function(e){
 				if( Ajax.navigate(this) ) e.preventDefault();
@@ -114,11 +114,11 @@ var Ajax = {
 
 	urlNavigation: function( e ) {
 
-		var state = e.state;
+		const state = e.state;
 
 		if( ! state ) return;
 
-		var url = state.url;
+		const url = state.url;
 
 		if( ! url ) return;
 
@@ -128,7 +128,7 @@ var Ajax = {
 
 	navigate: function( el ) {
 
-		var imageSlug = false;
+		let imageSlug = false;
 		if( el.id == 'navigate-next' ) {
 			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.nextImageSlug;
 			Ajax.currentImageIndex++;
@@ -145,18 +145,18 @@ var Ajax = {
 
 		requestUrl = GALLERY.apiUrl+imageSlug+'/';
 
-		var request = new XMLHttpRequest();
+		const request = new XMLHttpRequest();
 		request.open( 'GET', requestUrl );
 
 		request.onreadystatechange = function(){
 
 			if( request.readyState !== XMLHttpRequest.DONE ) return;
 		
-			var url = el.href;
+			const url = el.href;
 
 			if( request.status === 200 ) {
 
-				var response = request.response;
+				let response = request.response;
 
 				if( url ) {
 					history.pushState( {url: url}, false, url );
@@ -206,7 +206,7 @@ var Ajax = {
 };
 
 
-var HideCursor = {
+const HideCursor = {
 
 	eventHandlersAdded: false,
 	delay: 2000,
@@ -242,7 +242,7 @@ var HideCursor = {
 };
 
 
-var KeyboardNavigation = {
+const KeyboardNavigation = {
 
 	eventHandlersAdded: false,
 
@@ -259,7 +259,7 @@ var KeyboardNavigation = {
 
 	navigate: function(e){
 
-		var target = false;
+		let target = false;
 
 		if( e.key == 'ArrowDown' || e.key == 'ArrowRight' ) {
 			target = document.getElementById('navigate-next');
@@ -287,10 +287,10 @@ var KeyboardNavigation = {
 };
 
 
-var FullscreenButton = {
+const FullscreenButton = {
 
 	init: function(){
-		var button = document.getElementById('action-fullscreen');
+		const button = document.getElementById('action-fullscreen');
 
 		if( ! button ) return;
 
@@ -302,7 +302,7 @@ var FullscreenButton = {
 
 		e.preventDefault();
 
-		var target = document.getElementById('fullscreen-target');
+		const target = document.getElementById('fullscreen-target');
 
 		if( ! target ) return;
 
@@ -316,14 +316,14 @@ var FullscreenButton = {
 };
 
 
-var InformationButtonState = false;
-var InformationButton = {
+let InformationButtonState = false;
+const InformationButton = {
 
 	target: false,
 
 	init: function(){
 
-		var button = document.getElementById('action-information');
+		const button = document.getElementById('action-information');
 
 		if( ! button ) return;
 
@@ -374,13 +374,13 @@ var InformationButton = {
 };
 
 
-var DownloadButton = {
+const DownloadButton = {
 
 	init: function(){
 
 		if( ! isTouchDevice() ) return;
 
-		var button = document.getElementById('download-overlay');
+		const button = document.getElementById('download-overlay');
 
 		if( ! button ) return;
 
@@ -392,7 +392,7 @@ var DownloadButton = {
 
 		if( ! e.target.classList.contains('button-download') ) return;
 
-		var button = document.getElementById('download-overlay');
+		const button = document.getElementById('download-overlay');
 
 		if( ! button ) return;
 
