@@ -172,32 +172,9 @@ function head() {
 	</script><?php
 	endif; // if( get_config('system_js') )
 
-
-	// prerender/prefetch previous and next image
-	$image = $core->route->get('image');
-	if( $image ) :
-
-		$prev_image = $image->get_adjacent_image('prev');
-		$next_image = $image->get_adjacent_image('next');
-
-		$next_link = '';
-		if( $next_image ) $next_link = $next_image->get_link();
-		?>
-	
-	<link id="next-image-preload" rel="prefetch next" href="<?= $next_link ?>"><?php
-
-		$prev_link = '';
-		if( $prev_image ) $prev_link = $prev_image->get_link();
-		?>
-
-	<link id="prev-image-preload" rel="prefetch prev" href="<?= $prev_link ?>"><?php
-
-	endif; // if( $image )
-
 	
 	$js_custom_path = 'custom/assets/js/';
 	head_load_files( $js_custom_path, $js_filter, $js_tag );
-
 
 	?>
 
