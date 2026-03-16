@@ -1,3 +1,9 @@
+v.0.11.0-dev
+
+- very small preview image, that gets generated and loaded first; this will be shown in the overview, and while loading the full size image in the detail view
+- reworked js navigation in the detail view, this should now be much faster, especially if fullsize images are not generated yet
+
+
 v.0.10.2
 
 - added `thumbnail_fit` option; this defaults to `cover`, but can also be set to `contain`
