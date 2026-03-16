@@ -85,14 +85,19 @@ const Lightmode = {
 const Ajax = {
 
 	currentImageIndex: false,
+	currentImageIndexMax: false,
 	images: false,
+	request: false,
 
 	init: function(){
 
 		if( ! document.body.classList.contains('template-image') ) return;
 
-		Ajax.currentImageIndex = GALLERY_IMAGE_INDEX;
-		Ajax.images = GALLERY_IMAGES;
+		if( Ajax.currentImageIndex === false ) {
+			Ajax.currentImageIndex = parseInt(GALLERY_IMAGE_INDEX, 10);
+			Ajax.images = GALLERY_IMAGES;
+			Ajax.currentImageIndexMax = Ajax.images.length;
+		}
 
 		const next = document.getElementById('navigate-next');
 		if( next ) {
@@ -128,38 +133,72 @@ const Ajax = {
 
 	navigate: function( el ) {
 
-		let imageSlug = false;
+		if( Ajax.request ) {
+			Ajax.request.abort();
+			Ajax.request = false;
+		}
+
 		if( el.id == 'navigate-next' ) {
-			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.nextImageSlug;
 			Ajax.currentImageIndex++;
 		} else if( el.id == 'navigate-prev' ) {
-			imageSlug = el.dataset.gallerySlug+'/'+el.dataset.prevImageSlug;
 			Ajax.currentImageIndex--;
 		} else {
 			return false;
 		}
 
-		document.getElementById('fullscreen-target').querySelector('img').src = Ajax.images[Ajax.currentImageIndex]['preview_src'];
+		HideCursor.showCursor();
+
+		if( Ajax.currentImageIndex < 0 ) {
+			Ajax.currentImageIndex = 0;
+		} else if( Ajax.currentImageIndex >= Ajax.currentImageIndexMax ) {
+			Ajax.currentImageIndex = Ajax.currentImageIndexMax-1;
+		}
+
+		const loadingImage = Ajax.images[Ajax.currentImageIndex];
+		if( ! loadingImage ) {
+			console.warn('could not find image!', Ajax.currentImageIndex); // DEBUG
+			return;
+		}
 
 		Ajax.updateTitle( GALLERY.texts.loading );
 
-		requestUrl = GALLERY.apiUrl+imageSlug+'/';
+		const previewImageSrc = loadingImage.preview_src;
+		const container = document.getElementById('fullscreen-target').querySelector('.image-container');
+		container.innerHTML = '';
 
-		const request = new XMLHttpRequest();
-		request.open( 'GET', requestUrl );
+		container.style.background = 'var(--thumbnail-background-color)';
+		container.classList.add('loading');
 
-		request.onreadystatechange = function(){
+		container.style.aspectRatio = parseInt(loadingImage.width, 10)+'/'+parseInt(loadingImage.height, 10);
 
-			if( request.readyState !== XMLHttpRequest.DONE ) return;
+		const preloadImg = document.createElement('img');
+		preloadImg.src = previewImageSrc;
+		preloadImg.width = loadingImage.width;
+		preloadImg.height = loadingImage.height;
+		preloadImg.loading = 'eager';
+		container.appendChild(preloadImg);
+
+		document.getElementById('fullscreen-target').querySelector('.meta-bottom .info li:first-child').innerText = loadingImage.number;
+
+
+		const imagePath = loadingImage.path;
+		history.pushState( {url: loadingImage.url}, false, loadingImage.url );
+
+		Ajax.request = new XMLHttpRequest();
+		Ajax.request.open( 'GET', GALLERY.apiUrl+imagePath+'/' );
+
+		Ajax.request.onreadystatechange = function(){
+
+			if( Ajax.request.readyState !== XMLHttpRequest.DONE ) return;
 		
 			const url = el.href;
 
-			if( request.status === 200 ) {
+			if( Ajax.request.status === 200 ) {
 
-				let response = request.response;
+				let response = Ajax.request.response;
 
 				if( ! response ) {
-					console.warn( 'AJAX request failed.', request ); // DEBUG
+					console.warn( 'AJAX request failed - no response', Ajax.request ); // DEBUG
 					window.location.href = url; // request the complete page
 					return false;
 				}
@@ -169,10 +208,6 @@ const Ajax = {
 					document.getElementById('fullscreen-target').innerHTML = response.content;
 				}
 
-				if( response.url ) {
-					history.pushState( {url: response.url}, false, response.url );
-				}
-
 				if( response.title ) {
 					title = response.title;
 					Ajax.updateTitle( title );
@@ -180,14 +215,17 @@ const Ajax = {
 
 				init(); // re-init all event listeners
 
+			} else if( Ajax.request.status === 0 ) {
+				// request was aborted
+				return true;
 			} else {
 				// something went wrong …
-				console.warn( 'AJAX request failed.', request ); // DEBUG
+				console.warn( 'AJAX request failed - wrong status code', Ajax.request.status, Ajax.request ); // DEBUG
 				window.location.href = url; // request the complete page
 			}
 
 		}
-		request.send();
+		Ajax.request.send();
 
 		return true;
 	},

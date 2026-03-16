@@ -575,7 +575,10 @@ class Gallery {
 			$preview_images[] = [
 				'width' => $image->get_width(),
 				'height' => $image->get_height(),
-				'preview_src' => $image->get_preview_url()
+				'preview_src' => $image->get_preview_url(),
+				'url' => $image->get_link(),
+				'path' => $this->get_slug().'/'.$image->get_slug(),
+				'number' => $image->get_number().'/'.$this->get_image_count()
 			];
 		}
 
