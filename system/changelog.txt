@@ -1,4 +1,4 @@
-v.0.11.0-dev
+v.0.11.0
 
 - very small preview image, that gets generated and loaded first; this will be shown in the overview, and while loading the full size image in the detail view
 - reworked js navigation in the detail view, this should now be much faster, especially if fullsize images are not generated yet
