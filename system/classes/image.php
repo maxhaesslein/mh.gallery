@@ -459,8 +459,8 @@ class Image {
 	function get_preview_url() {
 
 		$args = [
-			'width' => 100,
-			'quality' => 20
+			'width' => 150,
+			'quality' => 50
 		];
 
 		return $this->get_image_url($args);
