@@ -75,7 +75,7 @@ class Route {
 
 		if( $gallery && $gallery->is_password_protected() ) {
 
-			if( isset($_GET['lock']) ) {
+			if( isset($_GET['lock']) && ( $_GET['lock'] === '' || $_GET['lock'] === '1' || $_GET['lock'] === true ) ) {
 				$gallery->password_lock();
 
 				header( 'Location: '.$gallery->get_url());
@@ -101,7 +101,7 @@ class Route {
 
 		if( $gallery && $gallery->is_secret() ) {
 			
-			if( isset($_GET['end-session']) ) {
+			if( isset($_GET['end-session']) && ( $_GET['end-session'] === '' || $_GET['end-session'] === '1' || $_GET['end-session'] === true ) ) {
 				$gallery->secret_lock();
 
 				header( 'Location: '.$gallery->get_url());

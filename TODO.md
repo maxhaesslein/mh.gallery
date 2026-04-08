@@ -4,10 +4,10 @@
 
 ### Input Sanitization
 - Sanitize all `$_GET` parameters before use to prevent injection attacks
-- Specifically review usage in:
-  - `system/site/templates/download.php`: `$_GET['create']` 
-  - `system/classes/route.php`: `$_GET` assignment to `$query_parameters`
-  - `system/classes/route.php`: `$_GET['lock']` and `$_GET['end-session']` checks
+- Completed:
+  - `system/site/templates/download.php`: Added validation for `$_GET['create']` 
+  - `system/classes/route.php`: Added validation for `$_GET['lock']` and `$_GET['end-session']` checks
+  - `system/classes/route.php`: Reviewed `$_GET` assignment to `$query_parameters` (line 28) - determined it's used internally for secret validation and is properly handled
 
 ### Directory Traversal Protection
 - Validate and sanitize any user input used in file paths
