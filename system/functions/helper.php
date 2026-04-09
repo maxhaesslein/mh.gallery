@@ -106,18 +106,3 @@ function sanitize_request( $key, $default = null, $filter = FILTER_DEFAULT ) {
 	
 	return filter_var( $value, $filter, ['options' => ['default' => $default]] );
 }
-
-function sanitize_cookie( $key, $default = null, $filter = FILTER_DEFAULT ) {
-	if( ! isset($_COOKIE[$key]) ) {
-		return $default;
-	}
-	
-	$value = $_COOKIE[$key];
-	
-	if( $filter === FILTER_VALIDATE_INT || $filter === FILTER_VALIDATE_FLOAT || $filter === FILTER_VALIDATE_BOOLEAN ) {
-		$result = filter_var( $value, $filter );
-		return $result === false ? $default : $result;
-	}
-	
-	return filter_var( $value, $filter, ['options' => ['default' => $default]] );
-}
