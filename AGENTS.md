@@ -103,17 +103,6 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Only use comments when necessary to understand the code
 - Comments always in english!
 - Comment complex logic blocks
-- Document function parameters and return values
-- Use PHPDoc style for public functions:
-  ```php
-  /**
-   * Description of what the function does
-   *
-   * @param string $parameter Description of parameter
-   * @return mixed Description of return value
-   */
-  function function_name(string $parameter): mixed
-  ```
 - Keep comments up-to-date when code changes
 
 ### Specific to This Project
