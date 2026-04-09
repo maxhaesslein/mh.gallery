@@ -25,20 +25,27 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		$query_parameters = [
-			'lock' => sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN),
-			'end-session' => sanitize_get('end-session', '', FILTER_VALIDATE_BOOLEAN),
-			'create' => sanitize_get('create', '', FILTER_VALIDATE_BOOLEAN),
-			'secret' => sanitize_get('secret', ''),
-			'imageonly' => sanitize_get('imageonly', '', FILTER_VALIDATE_BOOLEAN)
-		];
-		
-		// Copy all other GET parameters for backward compatibility
-		foreach($_GET as $key => $value) {
-			if(!array_key_exists($key, $query_parameters)) {
-				$query_parameters[$key] = $value;
-			}
+
+		$query_parameters = [];
+		if( isset($_GET['lock']) ) {
+			$query_parameters['lock'] = sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN);
 		}
+		if( isset($_GET['end-session']) ) {
+			$query_parameters['end-session'] = sanitize_get('end-session', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['create']) ) {
+			$query_parameters['create'] = sanitize_get('create', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['lock']) ) {
+			$query_parameters['lock'] = sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['imageonly']) ) {
+			$query_parameters['imageonly'] = sanitize_get('imageonly', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['secret']) ) {
+			$query_parameters['secret'] = sanitize_get('secret', '');
+		}
+
 
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'admin' ]) ) {
