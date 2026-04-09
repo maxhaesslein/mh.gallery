@@ -2,15 +2,14 @@
 
 ## Höchste Priorität
 - [ ] CSRF-Schutz implementieren für alle Formulare
-  - Login-Formulare (Admin, Galerie-Passwort)
-  - Aktionen im Admin-Bereich
-  - Andere state-changing Operationen
-
-## Hohe Priorität
-- [x] Eingabe-Validierung für Superglobals verbessern
-  - Überprüfung und Validierung von $_GET, $_POST, $_REQUEST, $_COOKIE
-  - Zentrale Validierungsfunktionen implementieren
-  - abgeschlossen
+  - [ ] CSRF-Token-Generierung und -Validierung-Funktionen erstellen (neue Datei: functions/csrf.php)
+  - [ ] CSRF-Token zum Admin-Login-Formular hinzufügen
+  - [ ] CSRF-Token zum Hash-Erstellungs-Formular hinzufügen
+  - [ ] CSRF-Token zum Galerie-Passwort-Formular hinzufügen
+  - [ ] CSRF-Validierung zum Admin-Login-Processing hinzufügen
+  - [ ] CSRF-Validierung zum Hash-Erstellungs-Processing hinzufügen
+  - [ ] CSRF-Validierung zum Galerie-Passwort-Processing hinzufügen
+  - [ ] CSRF-Schutz-Implementierung testen
 
 ## Mittlere Priorität
 - [ ] Rate Limiting für Authentifizierungsversuche implementieren

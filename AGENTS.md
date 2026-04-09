@@ -119,6 +119,8 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Don't commit cache/ directory contents
 - Content/ directory is user-managed, be careful with commits
 - Custom/ directory is for user overrides, document changes
+- Don't push, only commit!
+- always append the name of your tool and LLM model to the commit message (for example, "Implemented by {OpenCode} with {LLM}")
 
 ## Additional Notes
 This project prioritizes simplicity and compatibility over modern PHP frameworks.
