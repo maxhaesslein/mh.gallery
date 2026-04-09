@@ -23,7 +23,7 @@ snippet( 'header' );
 	</form>
 
 	<?php
-	if( ! empty($_POST['password']) ) {
+	if( ! empty(sanitize_post('password')) ) {
 		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.escape_html(password_hash( $_POST['password'], PASSWORD_DEFAULT )).'" style="width: 100%; max-width: 700px;"></p>';
 	}
 	?>

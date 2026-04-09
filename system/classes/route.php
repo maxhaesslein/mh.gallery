@@ -25,7 +25,20 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		$query_parameters = $_GET;
+		$query_parameters = [
+			'lock' => sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN),
+			'end-session' => sanitize_get('end-session', '', FILTER_VALIDATE_BOOLEAN),
+			'create' => sanitize_get('create', '', FILTER_VALIDATE_BOOLEAN),
+			'secret' => sanitize_get('secret', ''),
+			'imageonly' => sanitize_get('imageonly', '', FILTER_VALIDATE_BOOLEAN)
+		];
+		
+		// Copy all other GET parameters for backward compatibility
+		foreach($_GET as $key => $value) {
+			if(!array_key_exists($key, $query_parameters)) {
+				$query_parameters[$key] = $value;
+			}
+		}
 
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'admin' ]) ) {
@@ -75,23 +88,23 @@ class Route {
 
 		if( $gallery && $gallery->is_password_protected() ) {
 
-			if( isset($_GET['lock']) && ( $_GET['lock'] === '' || $_GET['lock'] === '1' || $_GET['lock'] === true ) ) {
+			if( isset($query_parameters['lock']) && ( $query_parameters['lock'] === '' || $query_parameters['lock'] === '1' || $query_parameters['lock'] === true ) ) {
 				$gallery->password_lock();
 
 				header( 'Location: '.$gallery->get_url());
 				exit;
 			}
 
-			if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
+		if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
 
-				$input_password = $_POST['gallery-password'];
+			$input_password = sanitize_post('gallery-password');
 
-				if( $gallery->check_password($input_password) ) {
-					header('Location: '.get_current_url());
-					exit;
-				}
-
+			if( $gallery->check_password($input_password) ) {
+				header('Location: '.get_current_url());
+				exit;
 			}
+
+		}
 
 			if( ! $gallery->password_provided() ) {
 				$template_name = '401-password';
@@ -101,7 +114,7 @@ class Route {
 
 		if( $gallery && $gallery->is_secret() ) {
 			
-			if( isset($_GET['end-session']) && ( $_GET['end-session'] === '' || $_GET['end-session'] === '1' || $_GET['end-session'] === true ) ) {
+			if( isset($query_parameters['end-session']) && ( $query_parameters['end-session'] === '' || $query_parameters['end-session'] === '1' || $query_parameters['end-session'] === true ) ) {
 				$gallery->secret_lock();
 
 				header( 'Location: '.$gallery->get_url());
@@ -214,11 +227,11 @@ class Route {
 
 		} elseif( $mode == 'admin' ) {
 
-			$action = $_POST['action'] ?? false;
+			$action = sanitize_post('action');
 
 			if( $action == 'login') {
 
-				$password = $_POST['admin-password'] ?? false;
+				$password = sanitize_post('admin-password');
 				if( admin_login($password) ) redirect('admin');
 
 			} elseif( ! empty($request[0]) && $request[0] == 'logout' ) {
@@ -248,7 +261,7 @@ class Route {
 			'template_name' => $template_name,
 			'template_include' => $include_path,
 			'request' => $request,
-			'query' => $_REQUEST,
+			'query' => $query_parameters,
 			'gallery' => $gallery,
 			'image' => $image,
 			'args' => $args,
