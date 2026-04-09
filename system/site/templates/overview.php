@@ -74,7 +74,7 @@ $imagecount = $gallery->get_image_count();
 
 					$title = $sub_gallery->get_title();
 					?>
-					<li <?= $sub_gallery->get_slug() ?>>
+					<li <?= escape_html($sub_gallery->get_slug()) ?>>
 						<a class="gallery-link" href="<?= $url ?>">
 							<?php
 							if( $thumbnail ) {

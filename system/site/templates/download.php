@@ -41,7 +41,7 @@ snippet( 'header' );
 		</ul>
 	</div>
 
-	<h1><?= $gallery->get_title() ?></h1>
+	<h1><?= escape_html($gallery->get_title()) ?></h1>
 
 	<?php
 	if( $missing_image_count > 0 ) {

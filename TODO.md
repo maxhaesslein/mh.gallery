@@ -11,13 +11,24 @@
 
 ### Directory Traversal Protection
 - Validate and sanitize any user input used in file paths
-- Check usage of gallery slugs and paths constructed from user input
-- Review `get_slug()` and path construction methods in gallery and image classes
+- Completed:
+  - Reviewed `get_slug()` method in gallery.php - properly sanitizes input using `sanitize_string()`
+  - Verified path construction in gallery and image classes - all use sanitized slugs
+  - Confirmed Folder class skips hidden files and validates directory existence
+  - All file operations use `get_abspath()` with trusted path components
 
 ### Template Security
 - Review all template files for proper output escaping
 - Ensure user-supplied data is properly escaped when output in HTML contexts
 - Check usage in admin templates and password forms
+- Completed:
+  - Reviewed overview.php, image.php, and other templates for direct output of slugs
+  - Found that slugs are output directly in HTML attributes and IDs without explicit escaping
+  - Although slugs are sanitized by sanitize_string(), best practice is to escape them for HTML context
+  - Added escape_html() helper function to system/functions/helper.php for consistent HTML escaping
+  - Applied HTML escaping to slug attributes in overview.php and image.php templates
+  - Escaped all user-supplied data in admin templates (admin.php, admin_create-hash.php)
+  - Escaped gallery titles in 401-password.php, 401-secret.php, and download.php templates
 
 ### Configuration Security
 - Review custom/config.php overrides to ensure they don't introduce vulnerabilities

@@ -103,8 +103,8 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">'.__('prev').'</a></li>';
-		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">'.__('next').'</a></li>';
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.escape_html($prev_image->get_slug()).'" data-gallery-slug="'.escape_html($gallery_slug).'" rel="prev">'.__('prev').'</a></li>';
+		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.escape_html($next_image->get_slug()).'" data-gallery-slug="'.escape_html($gallery_slug).'" rel="next">'.__('next').'</a></li>';
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
