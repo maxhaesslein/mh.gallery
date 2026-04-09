@@ -120,7 +120,10 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Content/ directory is user-managed, be careful with commits
 - Custom/ directory is for user overrides, document changes
 - Don't push, only commit!
-- always append the name of your tool and LLM model to the commit message (for example, "Implemented by {OpenCode} with {LLM}")
+- Append the name of your tool and LLM model to the commit message in the format: "Implemented by [TOOL_NAME] with [LLM_MODEL]"
+- Replace [TOOL_NAME] with the actual name of the tool you are using (e.g., opencode)
+- Replace [LLM_MODEL] with the actual name of the LLM model you are using (e.g., nemotron-3-super-free)
+- Example: "Implemented by opencode with nemotron-3-super-free"
 
 ## Additional Notes
 This project prioritizes simplicity and compatibility over modern PHP frameworks.
