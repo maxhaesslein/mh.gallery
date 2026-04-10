@@ -114,16 +114,18 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Language files should be easy to customize/extend
 
 ### Git Practices
-- Commit messages should be descriptive
+- Commit messages should be descriptive and in English
 - Separate commits for functional changes vs formatting
 - Don't commit cache/ directory contents
 - Content/ directory is user-managed, be careful with commits
 - Custom/ directory is for user overrides, document changes
 - Don't push, only commit!
+- Always use `--no-gpg-sign` flag (no PGP signing)
 - Append the name of your tool and LLM model to the commit message in the format: "Implemented by [TOOL_NAME] with [LLM_MODEL]"
 - Replace [TOOL_NAME] with the actual name of the tool you are using (e.g., opencode)
-- Replace [LLM_MODEL] with the actual name of the LLM model you are using (e.g., nemotron-3-super-free)
-- Example: "Implemented by opencode with nemotron-3-super-free"
+- Replace [LLM_MODEL] with the actual name of the LLM model you are using (e.g., minimax-m2.5-free)
+- Example: "Implemented by opencode with minimax-m2.5-free"
+- Author attribution: Keep commits under the user's name/email; add tool and LLM info only in the commit message to indicate AI assistance
 
 ## Additional Notes
 This project prioritizes simplicity and compatibility over modern PHP frameworks.
