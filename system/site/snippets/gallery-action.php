@@ -29,19 +29,19 @@ if( $image ) {
 
 	if( $overview_link ) {
 		?>
-		<li><a id="navigate-overview" href="<?= $overview_link ?>">&laquo; <?= __('overview') ?></a></li>
+		<li><a id="navigate-overview" href="<?= escape_html($overview_link) ?>">&laquo; <?= __('overview') ?></a></li>
 		<?php
 	}
 
 	if( $gallery->is_secret() && $gallery->secret_provided() ) {
 		?>
-		<li><a class="button" href="<?= $gallery->get_url() ?>?end-session" title="<?= __('end secret session') ?>"><?= __('end session') ?></a></li>
+		<li><a class="button" href="<?= escape_html($gallery->get_url()) ?>?end-session" title="<?= __('end secret session') ?>"><?= __('end session') ?></a></li>
 		<?php
 	}
 
 	if( $gallery->is_password_protected() && $gallery->password_provided() ) {
 		?>
-		<li><a class="button" href="<?= $gallery->get_url() ?>?lock" title="<?= __('lock gallery') ?>"><?= __('lock') ?></a></li>
+		<li><a class="button" href="<?= escape_html($gallery->get_url()) ?>?lock" title="<?= __('lock gallery') ?>"><?= __('lock') ?></a></li>
 		<?php
 	}
 

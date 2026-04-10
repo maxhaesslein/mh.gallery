@@ -1,3 +1,8 @@
+v.0.12.0-dev
+
+- escape dynamic content in HTML output
+
+
 v.0.11.0
 
 - very small preview image, that gets generated and loaded first; this will be shown in the overview, and while loading the full size image in the detail view

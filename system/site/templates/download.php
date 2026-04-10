@@ -41,19 +41,19 @@ snippet( 'header' );
 		</ul>
 	</div>
 
-	<h1><?= $gallery->get_title() ?></h1>
+	<h1><?= escape_html($gallery->get_title()) ?></h1>
 
 	<?php
 	if( $missing_image_count > 0 ) {
 		?>
-		<p><progress value="<?= $image_count-$missing_image_count ?>" max="<?= $image_count ?>"></p>
+		<p><progress value="<?= escape_html($image_count-$missing_image_count) ?>" max="<?= escape_html($image_count) ?>"></p>
 		<p><?php
-		echo sprintf( __('generating zip file (%d/%d images), please wait'), ($image_count-$missing_image_count), $image_count );
+		echo sprintf( __('generating zip file (%d/%d images), please wait'), escape_html($image_count-$missing_image_count), escape_html($image_count) );
 		if( $missing_image_count > 40 ) echo ', '.__('this may take some time');
 		?> …</p>
 		<p>(<?= __('leave this window open while the zip file is being generated') ?>)</p>
 		<p class="refresh-link-wrapper"><?php
-		echo sprintf( __('this page should %sreload automatically%s in a few seconds'), '<a class="button" href="'.$refresh_url.'">', '</a>');
+		echo sprintf( __('this page should %sreload automatically%s in a few seconds'), '<a class="button" href="'.escape_html($refresh_url).'">', '</a>');
 		?>
 		</p>
 		<?php
@@ -61,9 +61,9 @@ snippet( 'header' );
 	} else {
 		?>
 		<p><?php
-		echo sprintf( __('The .zip file contains %s images and weights %s.'), '<em>'.$image_count.'</em>', '<em>'.$size.'</em>' );
+		echo sprintf( __('The .zip file contains %s images and weights %s.'), '<em>'.escape_html($image_count).'</em>', '<em>'.escape_html($size).'</em>' );
 		?></p>
-		<p><a class="button" href="<?= $download_url ?>" download="<?= $filename ?>"><?= __('download .zip') ?> (<?= $size ?>)</a></p>
+		<p><a class="button" href="<?= escape_html($download_url) ?>" download="<?= escape_html($filename) ?>"><?= __('download .zip') ?> (<?= escape_html($size) ?>)</a></p>
 		<?php
 	}
 	?>

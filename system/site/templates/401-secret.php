@@ -28,7 +28,7 @@ $title = $gallery->get_title();
 	<?php
 	if( $title ) {
 		?>
-		<h1><?= $title ?></h1>
+		<h1><?= escape_html($title) ?></h1>
 		<?php
 	}
 	?>

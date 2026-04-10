@@ -54,10 +54,10 @@ snippet( 'header' );
 
 $download_menu = [];
 if( $download_image_url ) {
-	$download_menu[] = '<a href="'.$download_image_url.'" download="'.$download_image_filename.'" title="'.__('download this image in maximum quality').'">'.__('download image').'</a>';
+	$download_menu[] = '<a href="'.escape_html($download_image_url).'" download="'.escape_html($download_image_filename).'" title="'.__('download this image in maximum quality').'">'.__('download image').'</a>';
 }
 if( $download_gallery_url ) {
-	$download_menu[] = '<a href="'.$download_gallery_url.'" title="'.__('download all images in this gallery in maximum quality as a .zip file').'">'.__('download all').'</a>';
+	$download_menu[] = '<a href="'.escape_html($download_gallery_url).'" title="'.__('download all images in this gallery in maximum quality as a .zip file').'">'.__('download all').'</a>';
 }
 
 
@@ -103,8 +103,8 @@ if( ! doing_ajax() ) {
 	</div>
 	<ul class="navigation">
 		<?php
-		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.$prev_link.'" data-prev-image-slug="'.$prev_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="prev">'.__('prev').'</a></li>';
-		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.$next_link.'" data-next-image-slug="'.$next_image->get_slug().'" data-gallery-slug="'.$gallery_slug.'" rel="next">'.__('next').'</a></li>';
+		if( $prev_link ) echo '<li><a id="navigate-prev" class="navigate-prev" href="'.escape_html($prev_link).'" data-prev-image-slug="'.escape_html($prev_image->get_slug()).'" data-gallery-slug="'.escape_html($gallery_slug).'" rel="prev">'.escape_html(__('prev')).'</a></li>';
+		if( $next_link ) echo '<li><a id="navigate-next" class="navigate-next" href="'.escape_html($next_link).'" data-next-image-slug="'.escape_html($next_image->get_slug()).'" data-gallery-slug="'.escape_html($gallery_slug).'" rel="next">'.__('next').'</a></li>';
 		?>
 	</ul>
 	<div id="image-wrapper" class="image-wrapper">
@@ -112,7 +112,7 @@ if( ! doing_ajax() ) {
 	</div>
 	<div class="meta meta-bottom">
 		<ul class="info">
-			<li><?= $image->get_number() ?>/<?= $gallery->get_image_count() ?></li>
+			<li><?= escape_html($image->get_number()) ?>/<?= escape_html($gallery->get_image_count()) ?></li>
 		</ul>
 	</div>
 
@@ -136,20 +136,20 @@ if( ! doing_ajax() ) {
 						unset($camera_information['Time']);
 					}
 
-					echo '<li>'.implode(' ', $datetime).'</li>';
+					echo '<li>'.escape_html(implode(' ', $datetime)).'</li>';
 				}
 
 				if( ! empty($camera_information['Camera']) ) {
-					echo '<li>'.$camera_information['Camera'].'</li>';
+					echo '<li>'.escape_html($camera_information['Camera']).'</li>';
 					unset($camera_information['Camera']);
 				}
 				if( ! empty($camera_information['Lens']) ) {
-					echo '<li>'.$camera_information['Lens'].'</li>';
+					echo '<li>'.escape_html($camera_information['Lens']).'</li>';
 					unset($camera_information['Lens']);
 				}
 
 				echo '<li>';
-					echo implode(' | ', $camera_information);
+					echo escape_html(implode(' | ', $camera_information));
 				echo '</li>';
 				?>
 			</ul>
@@ -164,7 +164,7 @@ if( ! doing_ajax() ) {
 </main>
 
 <script type="text/javascript">
-const GALLERY_IMAGE_INDEX = '<?= $image->get_index() ?>';
+const GALLERY_IMAGE_INDEX = '<?= json_encode($image->get_index()) ?>';
 const GALLERY_IMAGES = <?= json_encode($gallery->get_preview_images()) ?>;
 </script><?php
 

@@ -31,7 +31,7 @@ function print_sub_galleries( $gallery ) {
 
 			?>
 			<li<?= get_class_attribute($classes) ?>>
-				<a href="<?= $sub_gallery->get_url() ?>" target="_blank"><?= $sub_gallery->get_title() ?></a>
+				<a href="<?= escape_html($sub_gallery->get_url()) ?>" target="_blank"><?= escape_html($sub_gallery->get_title()) ?></a>
 				<?php
 
 				if( $sub_gallery->is_hidden() ) {
@@ -40,7 +40,7 @@ function print_sub_galleries( $gallery ) {
 
 				if( $sub_gallery->is_secret() ) {
 					$secret = $sub_gallery->get_secret();
-					echo ' ['.__('secret').': <a href="'.$sub_gallery->get_url().'?secret='.$secret.'" target="_blank">'.$secret.'</a>]';
+					echo ' ['.__('secret').': <a href="'.$sub_gallery->get_url().'?secret='.escape_html($secret).'" target="_blank">'.escape_html($secret).'</a>]';
 				}
 
 				if( $sub_gallery->is_password_protected() ) {
@@ -91,7 +91,9 @@ snippet( 'header' );
 
 			<?php
 			if( ! empty($_POST['admin-password']) ) {
-				echo '<p class="login-error">'.__('wrong password').'</p>';
+				?>
+				<p class="login-error"><?= __('wrong password') ?></p>
+				<?php
 			}
 			?>
 			

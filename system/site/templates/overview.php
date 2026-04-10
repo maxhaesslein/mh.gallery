@@ -37,7 +37,7 @@ $imagecount = $gallery->get_image_count();
 
 	if( $title ) {
 		?>
-		<h1><?= $title ?></h1>
+		<h1><?= escape_html($title) ?></h1>
 		<?php
 	}
 
@@ -49,7 +49,7 @@ $imagecount = $gallery->get_image_count();
 
 		if( $description ) {
 			?>
-			<p class="description"><?= $description ?></p>
+			<p class="description"><?= escape_html($description) ?></p>
 			<?php
 		}
 
@@ -74,16 +74,16 @@ $imagecount = $gallery->get_image_count();
 
 					$title = $sub_gallery->get_title();
 					?>
-					<li <?= $sub_gallery->get_slug() ?>>
-						<a class="gallery-link" href="<?= $url ?>">
+					<li>
+						<a class="gallery-link" href="<?= escape_html($url) ?>">
 							<?php
 							if( $thumbnail ) {
 								snippet( 'thumbnail', [ 'image' => $thumbnail ] );
 							} else {
-								echo '<span class="empty-thumbnail locked image-container" style="padding-top: calc('.(1/get_config('thumbnail_aspect_ratio')).' * 100%);"></span>';
+								echo '<span class="empty-thumbnail locked image-container" style="padding-top: calc('.escape_html(1/get_config('thumbnail_aspect_ratio')).' * 100%);"></span>';
 							}
 							?>
-							<span class="title"><?= $title ?></span>
+							<span class="title"><?= escape_html($title) ?></span>
 						</a>
 					</li>
 					<?php
@@ -98,11 +98,11 @@ $imagecount = $gallery->get_image_count();
 			?>
 			<div class="meta">
 				<ul class="info">
-					<li><?= $imagecount ?> <?= __('images') ?></li>
+					<li><?= escape_html($imagecount) ?> <?= __('images') ?></li>
 					<?php
 					if( $download_gallery_url ) {
 						?>
-						<li><a href="<?= $download_gallery_url ?>"><?= __('download all') ?></a></li>
+						<li><a href="<?= escape_html($download_gallery_url) ?>"><?= __('download all') ?></a></li>
 						<?php
 					}
 					?>
@@ -114,8 +114,8 @@ $imagecount = $gallery->get_image_count();
 				foreach( $images as $image ) {
 					$url = $image->get_link();
 					?>
-					<li id="<?= $image->get_slug() ?>">
-						<a class="image-link" href="<?= $url ?>">
+					<li id="<?= escape_html($image->get_slug()) ?>">
+						<a class="image-link" href="<?= escape_html($url) ?>">
 							<?php snippet( 'thumbnail', [ 'image' => $image ] ); ?>
 						</a>
 					</li>

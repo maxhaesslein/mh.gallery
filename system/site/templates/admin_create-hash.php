@@ -24,7 +24,7 @@ snippet( 'header' );
 
 	<?php
 	if( ! empty($_POST['password']) ) {
-		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.password_hash( $_POST['password'], PASSWORD_DEFAULT ).'" style="width: 100%; max-width: 700px;"></p>';
+		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.escape_html(password_hash( $_POST['password'], PASSWORD_DEFAULT )).'" style="width: 100%; max-width: 700px;"></p>';
 	}
 	?>
 

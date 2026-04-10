@@ -228,12 +228,12 @@ function menu( $type ) {
 			<?php
 
 			if( ! empty($item['url']) ) {
-				echo '<a href="'.$item['url'].'"';
-				if( ! empty($item['target']) ) echo ' target="'.$item['target'].'"';
+				echo '<a href="'.escape_html($item['url']).'"';
+				if( ! empty($item['target']) ) echo ' target="'.escape_html($item['target']).'"';
 				echo ' rel="noopener">';
 			}
 
-			echo $item['title'];
+			echo escape_html($item['title']);
 
 			if( ! empty($item['url']) ) {
 				echo '</a>';

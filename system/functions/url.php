@@ -11,13 +11,15 @@
 
 function url( $path = '', $trailing_slash = true ) {
 	
-	$path = get_baseurl($path);
+	$url = get_baseurl($path);
 
 	if( $trailing_slash ) {
-		$path = trailing_slash_it($path);
+		$url = trailing_slash_it($url);
 	}
+
+	$url = escape_html($url);
 	
-	return $path;
+	return $url;
 }
 
 

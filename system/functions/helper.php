@@ -17,7 +17,7 @@ function get_class_attribute( $classes ) {
 
 	if( ! count($classes) ) return '';
 
-	return ' class="'.implode( ' ', $classes ).'"';
+	return ' class="'.escape_html(implode( ' ', $classes )).'"';
 }
 
 function get_hash( $input ) {
@@ -62,3 +62,7 @@ function hex_to_rgb($hex) {
 	return [$r, $g, $b];
 }
 
+
+function escape_html( $string ) {
+	return htmlspecialchars( (string) $string, ENT_QUOTES, 'UTF-8' );
+}

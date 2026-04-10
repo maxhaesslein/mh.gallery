@@ -18,6 +18,8 @@ function __( $string, $fallback = null ) {
 
 	$text = $core->language->get($string, $fallback);
 
+	$text = escape_html($text);
+
 	return $text;
 }
 
@@ -25,6 +27,8 @@ function get_language_code() {
 	global $core;
 
 	$language_code = $core->language->get_language_code();
+
+	$language_code = escape_html($language_code);
 
 	return $language_code;
 }

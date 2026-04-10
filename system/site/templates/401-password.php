@@ -28,12 +28,12 @@ $title = $gallery->get_title();
 	<?php
 	if( $title ) {
 		?>
-		<h1><?= $title ?></h1>
+		<h1><?= escape_html($title) ?></h1>
 		<?php
 	}
 	?>
 	
-	<form action="<?= get_current_url() ?>" method="POST">
+	<form action="<?= escape_html(get_current_url()) ?>" method="POST">
 		<p><?= __('This gallery is password protected.') ?></p>
 
 		<p>
@@ -43,7 +43,9 @@ $title = $gallery->get_title();
 
 		<?php
 		if( ! empty($_POST['gallery-password']) ) {
-			echo '<p class="login-error">'.__('wrong password').'</p>';
+			?>
+			<p class="login-error"><?= __('wrong password') ?></p>
+			<?php
 		}
 		?>
 
