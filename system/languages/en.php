@@ -29,6 +29,7 @@ return [
 	'login' => 'login',
 	'wrong password' => 'wrong password',
 	'password' => 'password',
+	//'rate limit exceeded' => 'rate limit exceeded',
 
 	// 401-secret.php
 	'You are not allowed to view this gallery.' => 'You are not allowed to view this gallery.',

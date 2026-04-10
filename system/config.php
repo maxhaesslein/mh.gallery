@@ -66,6 +66,9 @@ return [
 	'admin_cache_lifetime' => 60*60*24, // admin login cache; 1 day in seconds
 	'session_cache_lifetime' => 60*60*24, // gallery password session cache; 1 day in seconds
 
+	'rate-limit_cache_lifetime' => 60*15, // rate limit cache; 15 minutes in seconds
+	'rate-limit_max_attempts' => 5, // max login attempts, before this ip address gets blocked
+
 	// search for these extensions while loading gallery images (gif images will lose their animation)
 	'image_extensions' => [ 'jpg', 'jpeg', 'png', 'webp', 'avif', 'gif' ],
 

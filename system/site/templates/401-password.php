@@ -36,15 +36,23 @@ $title = $gallery->get_title();
 	<form action="<?= escape_html(get_current_url()) ?>" method="POST">
 		<p><?= __('This gallery is password protected.') ?></p>
 
+		<?php
+		$rate_limit_exceeded = $core->route->get_gallery_rate_limit_exceeded();
+		$rate_limit_exceeded = $rate_limit_exceeded && $rate_limit_exceeded === $gallery->get_slug();
+		?>
 		<p>
-			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required>
+			<input type="password" name="gallery-password" <?= $rate_limit_exceeded ? 'disabled' : 'autofocus' ?> autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" <?= $rate_limit_exceeded ? '' : 'required' ?>>
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-			<button><?= __('login') ?></button>
+			<button <?= $rate_limit_exceeded ? 'disabled' : '' ?>><?= __('login') ?></button>
 		</p>
 
 		<?php
-		if( ! empty(sanitize_post('gallery-password')) ) {
+		if( $rate_limit_exceeded ) {
+			?>
+			<p class="login-error"><?= __('rate limit exceeded') ?></p>
+			<?php
+		} elseif( ! empty(sanitize_post('gallery-password')) ) {
 			?>
 			<p class="login-error"><?= __('wrong password') ?></p>
 			<?php

@@ -3,6 +3,7 @@ v.0.12.0-dev
 - escape dynamic content in HTML output
 - sanitize superglobals
 - CSRF protection for forms
+- rate limiting for forms
 
 
 v.0.11.0

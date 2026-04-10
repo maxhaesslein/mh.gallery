@@ -79,7 +79,35 @@ class Cache {
 		
 		if( ! file_exists(get_abspath($this->cache_file)) ) return false;
 
+		if( $this->is_expired() ) {
+			return false;
+		}
+
 		return true;
+	}
+
+
+	public function is_expired(): bool {
+
+		if( ! file_exists(get_abspath($this->cache_file)) ) return false;
+
+		$type = $this->type;
+		$lifetime = get_config( $type.'_cache_lifetime' );
+		if( ! $lifetime ) {
+			$lifetime = get_config( 'cache_lifetime' );
+		}
+
+		if( ! $lifetime ) return false;
+
+		$timestamp = filemtime( get_abspath($this->cache_file) );
+		$timestamp_limit = time() - $lifetime;
+
+		if( $timestamp < $timestamp_limit ) {
+			$this->remove( true );
+			return true;
+		}
+
+		return false;
 	}
 
 
@@ -124,8 +152,9 @@ class Cache {
 	}
 
 
-	function remove() {
-		if( ! $this->exists() ) return;
+	function remove( $skip_exists = false ) {
+
+		if( ! $skip_exists && ! $this->exists() ) return;
 
 		$this->remove_placeholder_file(); // delete placeholder file, if it exists
 		unlink(get_abspath($this->cache_file));

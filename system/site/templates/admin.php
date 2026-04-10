@@ -83,15 +83,21 @@ snippet( 'header' );
 
 	} else {
 
+		$rate_limit_exceeded = $core->route->is_rate_limit_exceeded();
+
 		?>
 		<form action="<?= url('admin') ?>" method="POST">
-			<input type="password" name="admin-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required>
+			<input type="password" name="admin-password" <?= $rate_limit_exceeded ? 'disabled' : 'autofocus' ?> autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" <?= $rate_limit_exceeded ? '' : 'required' ?>>
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-			<button><?= __('login') ?></button>
+			<button <?= $rate_limit_exceeded ? 'disabled' : '' ?>><?= __('login') ?></button>
 
 			<?php
-			if( ! empty(sanitize_post('admin-password')) ) {
+			if( $core->route->is_rate_limit_exceeded() ) {
+				?>
+				<p class="login-error"><?= __('rate limit exceeded') ?></p>
+				<?php
+			} elseif( ! empty(sanitize_post('admin-password')) ) {
 				?>
 				<p class="login-error"><?= __('wrong password') ?></p>
 				<?php

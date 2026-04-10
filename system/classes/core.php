@@ -18,6 +18,9 @@ class Core {
 	public $gallery;
 	public $route;
 
+	public $rate_limit_exceeded = false;
+	public $gallery_rate_limit_exceeded = false;
+
 	function __construct( $abspath ){
 
 		global $core;

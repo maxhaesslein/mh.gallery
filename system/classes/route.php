@@ -108,11 +108,20 @@ class Route {
 					redirect( $gallery->get_url() );
 				}
 
-				$input_password = sanitize_post('gallery-password');
+				$rate_limit_key = 'gallery-password-'.$gallery->get_slug();
 
-				if( $gallery->check_password($input_password) ) {
-					header('Location: '.get_current_url());
-					exit;
+				if( ! check_rate_limit($rate_limit_key) ) {
+					$core->gallery_rate_limit_exceeded = $gallery->get_slug();
+				} else {
+					$input_password = sanitize_post('gallery-password');
+
+					if( $gallery->check_password($input_password) ) {
+						reset_rate_limit($rate_limit_key);
+						header('Location: '.get_current_url());
+						exit;
+					} else {
+						record_failed_attempt($rate_limit_key);
+					}
 				}
 
 			}
@@ -246,8 +255,18 @@ class Route {
 					redirect('admin');
 				}
 
-				$password = sanitize_post('admin-password');
-				if( admin_login($password) ) redirect('admin');
+				if( ! check_rate_limit('admin-login') ) {
+					$core->rate_limit_exceeded = true;
+					$template_name = 'admin';
+				} else {
+					$password = sanitize_post('admin-password');
+					if( admin_login($password) ) {
+						reset_rate_limit('admin-login');
+						redirect('admin');
+					} else {
+						record_failed_attempt('admin-login');
+					}
+				}
 
 			} elseif( ! empty($request[0]) && $request[0] == 'logout' ) {
 
@@ -312,5 +331,18 @@ class Route {
 
 		return $this->route;
 	}
+
+
+	function is_rate_limit_exceeded(): bool {
+		global $core;
+		return $core->rate_limit_exceeded;
+	}
+
+
+	function get_gallery_rate_limit_exceeded(): bool|string {
+		global $core;
+		return $core->gallery_rate_limit_exceeded;
+	}
+
 
 }
