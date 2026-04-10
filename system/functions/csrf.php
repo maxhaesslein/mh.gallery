@@ -9,9 +9,6 @@
 // See the file LICENSE.md for more details.
 
 function csrf_token(): string {
-    if( session_status() === PHP_SESSION_NONE ) {
-        session_start();
-    }
 
     if( empty($_SESSION['csrf_token']) ) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -22,9 +19,6 @@ function csrf_token(): string {
 
 
 function csrf_validate( ?string $token = null ): bool {
-    if( session_status() === PHP_SESSION_NONE ) {
-        session_start();
-    }
 
     if( $token === null ) {
         $token = sanitize_post('csrf_token');
