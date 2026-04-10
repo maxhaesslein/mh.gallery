@@ -1,5 +1,7 @@
 v.0.12.0-dev
 
+security improvements. this update is recommended for all users.
+
 - escape dynamic content in HTML output
 - sanitize superglobals
 - CSRF protection for forms
