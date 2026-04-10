@@ -33,7 +33,7 @@ $title = $gallery->get_title();
 	}
 	?>
 	
-	<form action="<?= get_current_url() ?>" method="POST">
+	<form action="<?= escape_html(get_current_url()) ?>" method="POST">
 		<p><?= __('This gallery is password protected.') ?></p>
 
 		<?php
@@ -49,9 +49,13 @@ $title = $gallery->get_title();
 
 		<?php
 		if( $rate_limit_exceeded ) {
-			echo '<p class="login-error">'.__('rate limit exceeded').'</p>';
+			?>
+			<p class="login-error"><?= __('rate limit exceeded') ?></p>
+			<?php
 		} elseif( ! empty(sanitize_post('gallery-password')) ) {
-			echo '<p class="login-error">'.__('wrong password').'</p>';
+			?>
+			<p class="login-error"><?= __('wrong password') ?></p>
+			<?php
 		}
 		?>
 

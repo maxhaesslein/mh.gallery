@@ -15,7 +15,7 @@ define( 'DOING_AJAX', true );
 $image = $core->route->get('image');
 
 $imageonly = sanitize_request('imageonly', '', FILTER_VALIDATE_BOOLEAN);
-if( ! empty($imageonly) && $imageonly == true ) {
+if( $imageonly === true ) {
 
 	$image_args = [
 		'width' => get_config('default_image_width'),
@@ -32,6 +32,7 @@ if( ! empty($imageonly) && $imageonly == true ) {
 }
 
 $template_path = 'templates/image.php';
+
 $include_path = false;
 
 $custom_path = 'custom/'.$template_path;

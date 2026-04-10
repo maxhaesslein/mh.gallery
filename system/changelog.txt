@@ -1,12 +1,13 @@
 v.0.12.0-dev
 
-security improvements; this update is recommended for all users
+security improvements. this update is recommended for all users.
 
-- input validation and sanitization
-- template output escaping
-- CSRF protection and rate limiting for forms
-- session security improvements
-- directory traversal protection
+- escape dynamic content in HTML output
+- sanitize superglobals
+- CSRF protection for forms
+- rate limiting for forms
+- made PHP Sessions more secure
+- improve directory traversal protection
 
 
 v.0.11.0

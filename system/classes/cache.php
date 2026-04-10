@@ -156,9 +156,8 @@ class Cache {
 
 		if( ! $skip_exists && ! $this->exists() ) return;
 
-		$this->remove_placeholder_file();
-		@unlink(get_abspath($this->cache_file));
-
+		$this->remove_placeholder_file(); // delete placeholder file, if it exists
+		unlink(get_abspath($this->cache_file));
 	}
 
 

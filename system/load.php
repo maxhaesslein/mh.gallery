@@ -11,7 +11,7 @@
 
 $is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
 	(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
-
+// we use the session for secret links and the admin area
 session_start([
 	'cookie_secure' => $is_https,
 	'cookie_httponly' => true,

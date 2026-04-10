@@ -17,15 +17,15 @@ snippet( 'header' );
 
 	<h1><?= __('create hash') ?></h1>
 
-	<form action="<?= escape_html(url('admin/create-hash')) ?>" method="POST">
-		<input type="password" name="password" autofocus autocomplete="off" autocapitalize="off" placeholder="<?= escape_html(__('string to hash')) ?>" required>
+	<form action="<?= url('admin/create-hash') ?>" method="POST">
+		<input type="password" name="password" autofocus autocomplete="off" autocapitalize="off" placeholder="<?= __('string to hash') ?>" required>
 		<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-		<button><?= escape_html(__('create hash')) ?></button>
+		<button><?= __('create hash') ?></button>
 	</form>
 
 	<?php
 	if( csrf_validate() && ! empty(sanitize_post('password')) ) {
-		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.escape_html(password_hash( $_POST['password'], PASSWORD_DEFAULT )).'" style="width: 100%; max-width: 700px;"></p>';
+		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.escape_html(password_hash( sanitize_post('password'), PASSWORD_DEFAULT )).'" style="width: 100%; max-width: 700px;"></p>';
 	}
 	?>
 

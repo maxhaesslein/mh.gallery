@@ -95,36 +95,36 @@ class Route {
 
 		if( $gallery && $gallery->is_password_protected() ) {
 
-			if( isset($query_parameters['lock']) && ( $query_parameters['lock'] === '' || $query_parameters['lock'] === '1' || $query_parameters['lock'] === true ) ) {
+			if( isset($query_parameters['lock']) ) {
 				$gallery->password_lock();
 
 				header( 'Location: '.$gallery->get_url());
 				exit;
 			}
 
-		if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
+			if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
 
-			if( ! csrf_validate() ) {
-				redirect( $gallery->get_url() );
-			}
-
-			$rate_limit_key = 'gallery-password-'.$gallery->get_slug();
-
-			if( ! check_rate_limit($rate_limit_key) ) {
-				$core->gallery_rate_limit_exceeded = $gallery->get_slug();
-			} else {
-				$input_password = sanitize_post('gallery-password');
-
-				if( $gallery->check_password($input_password) ) {
-					reset_rate_limit($rate_limit_key);
-					header('Location: '.get_current_url());
-					exit;
-				} else {
-					record_failed_attempt($rate_limit_key);
+				if( ! csrf_validate() ) {
+					redirect( $gallery->get_url() );
 				}
-			}
 
-		}
+				$rate_limit_key = 'gallery-password-'.$gallery->get_slug();
+
+				if( ! check_rate_limit($rate_limit_key) ) {
+					$core->gallery_rate_limit_exceeded = $gallery->get_slug();
+				} else {
+					$input_password = sanitize_post('gallery-password');
+
+					if( $gallery->check_password($input_password) ) {
+						reset_rate_limit($rate_limit_key);
+						header('Location: '.get_current_url());
+						exit;
+					} else {
+						record_failed_attempt($rate_limit_key);
+					}
+				}
+
+			}
 
 			if( ! $gallery->password_provided() ) {
 				$template_name = '401-password';
@@ -134,7 +134,7 @@ class Route {
 
 		if( $gallery && $gallery->is_secret() ) {
 			
-			if( isset($query_parameters['end-session']) && ( $query_parameters['end-session'] === '' || $query_parameters['end-session'] === '1' || $query_parameters['end-session'] === true ) ) {
+			if( isset($query_parameters['end-session']) ) {
 				$gallery->secret_lock();
 
 				header( 'Location: '.$gallery->get_url());
@@ -307,22 +307,20 @@ class Route {
 	private function get_include_path( $template_name ) {
 
 		$template_path = 'templates/'.$template_name.'.php';
-
-		$include_path = false;
-
+		
 		$custom_path = 'custom/'.$template_path;
 		$validated_custom = validate_include_path( $custom_path );
 		if( $validated_custom ) {
-			$include_path = $validated_custom;
+			return $validated_custom;
 		} else {
 			$system_path = 'system/site/'.$template_path;
 			$validated_system = validate_include_path( $system_path );
 			if( $validated_system ) {
-				$include_path = $validated_system;
+				return $validated_system;
 			}
 		}
 
-		return $include_path;
+		return false;
 	}
 
 
@@ -349,5 +347,6 @@ class Route {
 		global $core;
 		return $core->gallery_rate_limit_exceeded;
 	}
+
 
 }

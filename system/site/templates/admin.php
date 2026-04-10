@@ -40,7 +40,7 @@ function print_sub_galleries( $gallery ) {
 
 				if( $sub_gallery->is_secret() ) {
 					$secret = $sub_gallery->get_secret();
-					echo ' ['.__('secret').': <a href="'.escape_html($sub_gallery->get_url()).'?secret='.escape_html($secret).'" target="_blank">'.escape_html($secret).'</a>]';
+					echo ' ['.__('secret').': <a href="'.$sub_gallery->get_url().'?secret='.escape_html($secret).'" target="_blank">'.escape_html($secret).'</a>]';
 				}
 
 				if( $sub_gallery->is_password_protected() ) {
@@ -83,22 +83,25 @@ snippet( 'header' );
 
 	} else {
 
+		$rate_limit_exceeded = $core->route->is_rate_limit_exceeded();
+
 		?>
 		<form action="<?= url('admin') ?>" method="POST">
-			<?php
-			$rate_limit_exceeded = $core->route->is_rate_limit_exceeded();
-			?>
 			<input type="password" name="admin-password" <?= $rate_limit_exceeded ? 'disabled' : 'autofocus' ?> autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" <?= $rate_limit_exceeded ? '' : 'required' ?>>
 			<input type="hidden" name="action" value="login">
 			<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-			<button><?= __('login') ?></button>
+			<button <?= $rate_limit_exceeded ? 'disabled' : '' ?>><?= __('login') ?></button>
 
 			<?php
-		if( $core->route->is_rate_limit_exceeded() ) {
-			echo '<p class="login-error">'.__('rate limit exceeded').'</p>';
-		} elseif( ! empty(sanitize_post('admin-password')) ) {
-			echo '<p class="login-error">'.__('wrong password').'</p>';
-		}
+			if( $core->route->is_rate_limit_exceeded() ) {
+				?>
+				<p class="login-error"><?= __('rate limit exceeded') ?></p>
+				<?php
+			} elseif( ! empty(sanitize_post('admin-password')) ) {
+				?>
+				<p class="login-error"><?= __('wrong password') ?></p>
+				<?php
+			}
 			?>
 			
 		</form>

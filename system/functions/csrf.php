@@ -8,27 +8,28 @@
 // (at your option) any later version.
 // See the file LICENSE.md for more details.
 
+
 function csrf_token(): string {
 
-    if( empty($_SESSION['csrf_token']) ) {
-        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
-    }
+	if( empty($_SESSION['csrf_token']) ) {
+		$_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+	}
 
-    return $_SESSION['csrf_token'];
+	return $_SESSION['csrf_token'];
 }
 
 
 function csrf_validate( ?string $token = null ): bool {
 
-    if( $token === null ) {
-        $token = sanitize_post('csrf_token');
-    }
+	if( $token === null ) {
+		$token = sanitize_post('csrf_token');
+	}
 
-    if( ! $token ) {
-        return false;
-    }
+	if( ! $token ) {
+		return false;
+	}
 
-    $stored_token = $_SESSION['csrf_token'] ?? '';
+	$stored_token = $_SESSION['csrf_token'] ?? '';
 
-    return hash_equals($stored_token, $token);
+	return hash_equals($stored_token, $token);
 }
