@@ -18,6 +18,9 @@ class Core {
 	public $gallery;
 	public $route;
 
+	public $rate_limit_exceeded = false;
+	public $gallery_rate_limit_exceeded = false;
+
 	function __construct( $abspath ){
 
 		global $core;
@@ -176,12 +179,13 @@ class Core {
 
 		$current_time = time();
 
+
 		foreach( $files as $file ) {
 
 			if( is_dir($file) ) continue;
-		
+
 			$file_exp = explode( '/', $file );
-			$type = $file_exp[1]; // type is deduced from the filepath: cache/{type}/...
+			$type = $file_exp[1];
 
 			$lifetime = get_config( $type.'_cache_lifetime' );
 			if( ! $lifetime ) {
@@ -192,8 +196,8 @@ class Core {
 
 			$timestamp = filemtime( get_abspath($file) );
 
-			if( $timestamp > $timestamp_limit ) { // cachefile too old
-				@unlink(get_abspath($file)); // delete old cache file; fail silently
+			if( $timestamp > $timestamp_limit ) {
+				@unlink(get_abspath($file));
 			}
 
 		}
