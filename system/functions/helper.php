@@ -66,3 +66,46 @@ function hex_to_rgb($hex) {
 function escape_html( $string ) {
 	return htmlspecialchars( (string) $string, ENT_QUOTES, 'UTF-8' );
 }
+
+
+function validate_include_path( string $relative_path ): string|false {
+	
+	$allowed_dirs = [
+		'custom/templates',
+		'custom/snippets', 
+		'system/site/templates',
+		'system/site/snippets'
+	];
+
+	$relative_path = trim($relative_path);
+	if( $relative_path === '' ) return false;
+
+	$is_allowed = false;
+	foreach( $allowed_dirs as $allowed ) {
+		if( str_starts_with( $relative_path, $allowed . '/' ) ) {
+			$is_allowed = true;
+			break;
+		}
+	}
+	if( ! $is_allowed ) return false;
+
+	$abspath = dirname( __DIR__, 2 );
+	$full_path = $abspath . '/' . $relative_path;
+
+	$real_path = realpath( $full_path );
+	if( $real_path === false ) return false;
+
+	$real_abspath = realpath( $abspath );
+	$is_allowed = false;
+	foreach( $allowed_dirs as $dir ) {
+		$allowed_path = realpath( $abspath . '/' . $dir );
+		if( $allowed_path && strpos( $real_path, $allowed_path ) === 0 ) {
+			$is_allowed = true;
+			break;
+		}
+	}
+
+	if( ! $is_allowed ) return false;
+
+	return $full_path;
+}

@@ -5,6 +5,7 @@ v.0.12.0-dev
 - CSRF protection for forms
 - rate limiting for forms
 - made PHP Sessions more secure
+- improve directory traversal protection
 
 
 v.0.11.0

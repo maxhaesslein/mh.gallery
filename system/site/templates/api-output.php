@@ -32,10 +32,25 @@ if( $imageonly === true ) {
 }
 
 $template_path = 'templates/image.php';
-if( file_exists(get_abspath('custom/'.$template_path)) ) {
-	$include_path = get_abspath('custom/'.$template_path);
+
+$include_path = false;
+
+$custom_path = 'custom/'.$template_path;
+$validated_custom = validate_include_path( $custom_path );
+if( $validated_custom ) {
+	$include_path = $validated_custom;
 } else {
-	$include_path = get_abspath('system/site/'.$template_path);
+	$system_path = 'system/site/'.$template_path;
+	$validated_system = validate_include_path( $system_path );
+	if( $validated_system ) {
+		$include_path = $validated_system;
+	}
+}
+
+if( ! $include_path || ! file_exists($include_path) ) {
+	http_response_code(404);
+	echo json_encode(['error' => 'Template not found']);
+	exit;
 }
 
 ob_start();
