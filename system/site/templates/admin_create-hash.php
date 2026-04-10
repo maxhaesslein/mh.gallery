@@ -19,11 +19,12 @@ snippet( 'header' );
 
 	<form action="<?= url('admin/create-hash') ?>" method="POST">
 		<input type="password" name="password" autofocus autocomplete="off" autocapitalize="off" placeholder="<?= __('string to hash') ?>" required>
+		<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
 		<button><?= __('create hash') ?></button>
 	</form>
 
 	<?php
-	if( ! empty(sanitize_post('password')) ) {
+	if( csrf_validate() && ! empty(sanitize_post('password')) ) {
 		echo '<p style="margin-top: 3em;">'.__('the generated hash is:').'<br><input type="text" onclick="javascript:this.focus();this.select();" value="'.escape_html(password_hash( sanitize_post('password'), PASSWORD_DEFAULT )).'" style="width: 100%; max-width: 700px;"></p>';
 	}
 	?>

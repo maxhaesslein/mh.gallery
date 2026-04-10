@@ -37,7 +37,9 @@ $title = $gallery->get_title();
 		<p><?= __('This gallery is password protected.') ?></p>
 
 		<p>
-			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required><input type="hidden" name="action" value="login">
+			<input type="password" name="gallery-password" autofocus autocomplete="current-password" autocapitalize="off" placeholder="<?= __('password') ?>" required>
+			<input type="hidden" name="action" value="login">
+			<input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
 			<button><?= __('login') ?></button>
 		</p>
 

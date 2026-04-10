@@ -104,6 +104,10 @@ class Route {
 
 			if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
 
+				if( ! csrf_validate() ) {
+					redirect( $gallery->get_url() );
+				}
+
 				$input_password = sanitize_post('gallery-password');
 
 				if( $gallery->check_password($input_password) ) {
@@ -237,6 +241,10 @@ class Route {
 			$action = sanitize_post('action');
 
 			if( $action == 'login') {
+
+				if( ! csrf_validate() ) {
+					redirect('admin');
+				}
 
 				$password = sanitize_post('admin-password');
 				if( admin_login($password) ) redirect('admin');
