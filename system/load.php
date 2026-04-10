@@ -9,7 +9,14 @@
 // See the file LICENSE.md for more details.
 
 
-session_start(); // we use this for secret links and the admin area
+$is_https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+	(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+// we use the session for secret links and the admin area
+session_start([
+	'cookie_secure' => $is_https,
+	'cookie_httponly' => true,
+	'cookie_samesite' => 'Strict',
+]);
 
 $global_script_execution_start_time = hrtime(true); // this is used in the measure_execution_time() function to render the execution time
 
