@@ -307,16 +307,22 @@ class Route {
 	private function get_include_path( $template_name ) {
 
 		$template_path = 'templates/'.$template_name.'.php';
-		
-		if( file_exists(get_abspath('custom/'.$template_path)) ) {
-			return get_abspath('custom/'.$template_path);
+
+		$include_path = false;
+
+		$custom_path = 'custom/'.$template_path;
+		$validated_custom = validate_include_path( $custom_path );
+		if( $validated_custom ) {
+			$include_path = $validated_custom;
+		} else {
+			$system_path = 'system/site/'.$template_path;
+			$validated_system = validate_include_path( $system_path );
+			if( $validated_system ) {
+				$include_path = $validated_system;
+			}
 		}
 
-		if( file_exists(get_abspath('system/site/'.$template_path))) {
-			return get_abspath('system/site/'.$template_path);
-		}
-		
-		return false;
+		return $include_path;
 	}
 
 

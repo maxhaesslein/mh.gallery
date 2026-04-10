@@ -13,13 +13,21 @@ function snippet( $path, $args = [], $return = false ) {
 	
 	$snippet_path = 'snippets/'.$path.'.php';
 
-	if( file_exists(get_abspath('custom/'.$snippet_path)) ) {
-		$include_path = get_abspath('custom/'.$snippet_path);
+	$include_path = false;
+
+	$custom_path = 'custom/'.$snippet_path;
+	$validated_custom = validate_include_path( $custom_path );
+	if( $validated_custom && file_exists($validated_custom) ) {
+		$include_path = $validated_custom;
 	} else {
-		$include_path = get_abspath('system/site/'.$snippet_path);
+		$system_path = 'system/site/'.$snippet_path;
+		$validated_system = validate_include_path( $system_path );
+		if( $validated_system && file_exists($validated_system) ) {
+			$include_path = $validated_system;
+		}
 	}
 
-	if( ! file_exists($include_path) ) {
+	if( ! $include_path ) {
 		return;
 	}
 
