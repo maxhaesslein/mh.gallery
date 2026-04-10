@@ -1,6 +1,7 @@
 v.0.12.0-dev
 
 - escape dynamic content in HTML output
+- sanitize superglobals
 
 
 v.0.11.0

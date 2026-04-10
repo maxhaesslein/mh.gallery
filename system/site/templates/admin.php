@@ -90,7 +90,7 @@ snippet( 'header' );
 			<button><?= __('login') ?></button>
 
 			<?php
-			if( ! empty($_POST['admin-password']) ) {
+			if( ! empty(sanitize_post('admin-password')) ) {
 				?>
 				<p class="login-error"><?= __('wrong password') ?></p>
 				<?php

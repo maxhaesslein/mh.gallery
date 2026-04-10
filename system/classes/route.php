@@ -25,7 +25,27 @@ class Route {
 		$request = explode( '/', $request );
 		$request = array_filter($request); // remove empty elements
 
-		$query_parameters = $_GET;
+
+		$query_parameters = [];
+		if( isset($_GET['lock']) ) {
+			$query_parameters['lock'] = sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['end-session']) ) {
+			$query_parameters['end-session'] = sanitize_get('end-session', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['create']) ) {
+			$query_parameters['create'] = sanitize_get('create', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['lock']) ) {
+			$query_parameters['lock'] = sanitize_get('lock', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['imageonly']) ) {
+			$query_parameters['imageonly'] = sanitize_get('imageonly', '', FILTER_VALIDATE_BOOLEAN);
+		}
+		if( isset($_GET['secret']) ) {
+			$query_parameters['secret'] = sanitize_get('secret', '');
+		}
+
 
 		$mode = false;
 		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'admin' ]) ) {
@@ -75,7 +95,7 @@ class Route {
 
 		if( $gallery && $gallery->is_password_protected() ) {
 
-			if( isset($_GET['lock']) ) {
+			if( isset($query_parameters['lock']) ) {
 				$gallery->password_lock();
 
 				header( 'Location: '.$gallery->get_url());
@@ -84,7 +104,7 @@ class Route {
 
 			if( ! $gallery->password_provided() && ! empty($_POST['gallery-password']) ) {
 
-				$input_password = $_POST['gallery-password'];
+				$input_password = sanitize_post('gallery-password');
 
 				if( $gallery->check_password($input_password) ) {
 					header('Location: '.get_current_url());
@@ -101,7 +121,7 @@ class Route {
 
 		if( $gallery && $gallery->is_secret() ) {
 			
-			if( isset($_GET['end-session']) ) {
+			if( isset($query_parameters['end-session']) ) {
 				$gallery->secret_lock();
 
 				header( 'Location: '.$gallery->get_url());
@@ -214,11 +234,11 @@ class Route {
 
 		} elseif( $mode == 'admin' ) {
 
-			$action = $_POST['action'] ?? false;
+			$action = sanitize_post('action');
 
 			if( $action == 'login') {
 
-				$password = $_POST['admin-password'] ?? false;
+				$password = sanitize_post('admin-password');
 				if( admin_login($password) ) redirect('admin');
 
 			} elseif( ! empty($request[0]) && $request[0] == 'logout' ) {
@@ -248,7 +268,7 @@ class Route {
 			'template_name' => $template_name,
 			'template_include' => $include_path,
 			'request' => $request,
-			'query' => $_REQUEST,
+			'query' => $query_parameters,
 			'gallery' => $gallery,
 			'image' => $image,
 			'args' => $args,

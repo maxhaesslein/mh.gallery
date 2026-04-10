@@ -14,7 +14,8 @@ define( 'DOING_AJAX', true );
 
 $image = $core->route->get('image');
 
-if( ! empty($_REQUEST['imageonly']) && $_REQUEST['imageonly'] == 'true' ) {
+$imageonly = sanitize_request('imageonly', '', FILTER_VALIDATE_BOOLEAN);
+if( $imageonly === true ) {
 
 	$image_args = [
 		'width' => get_config('default_image_width'),

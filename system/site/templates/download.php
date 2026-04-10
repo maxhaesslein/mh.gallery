@@ -19,7 +19,7 @@ $refresh_url = $gallery->get_zip_download_url( true );
 $image_count = count($gallery->get_images());
 $missing_image_count = $gallery->get_missing_image_count();
 
-if( ! $gallery->is_zipfile_ready() && isset($_GET['create']) ) {
+if( ! $gallery->is_zipfile_ready() && isset($query_parameters['create']) ) {
 	$missing_image_count = $gallery->add_batch_to_zip();
 }
 

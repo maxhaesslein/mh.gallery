@@ -42,7 +42,7 @@ $title = $gallery->get_title();
 		</p>
 
 		<?php
-		if( ! empty($_POST['gallery-password']) ) {
+		if( ! empty(sanitize_post('gallery-password')) ) {
 			?>
 			<p class="login-error"><?= __('wrong password') ?></p>
 			<?php
