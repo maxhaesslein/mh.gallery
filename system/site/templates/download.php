@@ -13,6 +13,7 @@ if( ! $core ) exit;
 // NOTE: there is also the download_refresh() function inside sysetm/functions/site.php which is responsible for auto-reloading this page (without JavaScript)
 
 $gallery = $core->route->get('gallery');
+$query_parameters = $core->route->get('query');
 
 $overview_link = $gallery->get_url();
 $refresh_url = $gallery->get_zip_download_url( true );
