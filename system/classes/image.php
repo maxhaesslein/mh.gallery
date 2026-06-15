@@ -33,6 +33,8 @@ class Image {
 
 	private $filesize = NULL;
 
+	private static $max_image_dimension = 5000;
+
 
 	function __construct( $filename, $gallery ) {
 
@@ -448,6 +450,9 @@ class Image {
 			$args['width'] = round($args['height'] * $this->width/$this->height);
 		}
 
+		$args['width'] = min($args['width'] ?? $this->width, self::$max_image_dimension);
+		$args['height'] = min($args['height'] ?? $this->height, self::$max_image_dimension);
+
 		$this->create_placeholder_file($args);
 
 		$url = get_baseurl($this->get_image_path($args));
@@ -828,6 +833,9 @@ class Image {
 
 		$args = array_merge($this->get_default_args(), $args);
 
+		$args['width'] = min($args['width'], self::$max_image_dimension);
+		$args['height'] = min($args['height'], self::$max_image_dimension);
+
 		$quality = $args['quality'];
 		$type = $args['type'];
 
@@ -907,6 +915,9 @@ class Image {
 	function get_image_blob( $args = [] ) {
 
 		$args = array_merge($this->get_default_args(), $args);
+
+		$args['width'] = min($args['width'], self::$max_image_dimension);
+		$args['height'] = min($args['height'], self::$max_image_dimension);
 
 		$src_width = $this->width;
 		$src_height = $this->height;

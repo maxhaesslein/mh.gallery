@@ -76,11 +76,13 @@ function reset_rate_limit( string $type ): bool {
 
 function get_client_ip(): string|false {
 
-	if( ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
+	$ip_source = get_config('client_ip_source');
+
+	if( $ip_source === 'HTTP_CF_CONNECTING_IP' && ! empty( $_SERVER['HTTP_CF_CONNECTING_IP'] ) ) {
 		$ip = $_SERVER['HTTP_CF_CONNECTING_IP'];
-	} elseif( ! empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
+	} elseif( $ip_source === 'HTTP_X_REAL_IP' && ! empty( $_SERVER['HTTP_X_REAL_IP'] ) ) {
 		$ip = $_SERVER['HTTP_X_REAL_IP'];
-	} elseif( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
+	} elseif( $ip_source === 'HTTP_X_FORWARDED_FOR' && ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
 		$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 		$ip = explode( ',', $ip );
 		$ip = trim( $ip[0] );
