@@ -14,7 +14,7 @@ define( 'DOING_AJAX', true );
 
 $image = $core->route->get('image');
 
-$imageonly = sanitize_request('imageonly', '', FILTER_VALIDATE_BOOLEAN);
+$imageonly = sanitize_get('imageonly', '', FILTER_VALIDATE_BOOLEAN);
 if( $imageonly === true ) {
 
 	$image_args = [

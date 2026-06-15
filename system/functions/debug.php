@@ -17,7 +17,7 @@ function debug( ...$messages ) {
 	foreach( $messages as $message ) {
 		if( is_array($message) || is_object($message) ) $message = var_export($message, true);
 		if( ! $first ) echo '<br>';
-		echo $message;
+		echo escape_html($message);
 		$first = false;
 	}
 	echo '</pre></div>';
