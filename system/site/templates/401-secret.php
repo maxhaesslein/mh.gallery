@@ -18,6 +18,9 @@ $gallery = $core->route->get('gallery');
 
 $title = $gallery->get_title();
 
+$rate_limit_exceeded = $core->route->get_gallery_rate_limit_exceeded();
+$rate_limit_exceeded = $rate_limit_exceeded && $rate_limit_exceeded === $gallery->get_slug();
+
 ?>
 <main>
 
@@ -33,7 +36,17 @@ $title = $gallery->get_title();
 	}
 	?>
 
-	<p style="text-align: center;"><?= __('You are not allowed to view this gallery.') ?></p>
+	<?php
+	if( $rate_limit_exceeded ) {
+		?>
+		<p class="login-error"><?= __('rate limit exceeded') ?></p>
+		<?php
+	} else {
+		?>
+		<p style="text-align: center;"><?= __('You are not allowed to view this gallery.') ?></p>
+		<?php
+	}
+	?>
 
 </main>
 <?php

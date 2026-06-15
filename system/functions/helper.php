@@ -109,3 +109,15 @@ function validate_include_path( string $relative_path ): string|false {
 
 	return $full_path;
 }
+
+
+function is_same_site_referer(): bool {
+
+	$referer = $_SERVER['HTTP_REFERER'] ?? '';
+	if( empty($referer) ) return true;
+
+	$referer_host = parse_url($referer, PHP_URL_HOST);
+	$site_host = $_SERVER['HTTP_HOST'] ?? '';
+
+	return $referer_host === $site_host;
+}
