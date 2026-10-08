@@ -113,18 +113,27 @@ class Image {
 
 	function type_supported( $type ) {
 
-		if( $type == 'jpg' || $type == 'jpeg' ) return true;
+		return Image_Driver::supports_type( $this->get_image_driver_name(), $type );
+	}
 
-		// config can have 'webp_enabled', 'avif_enabled' and so on ..
-		if( ! get_config($type.'_enabled') ) return false;
 
-		if( ! defined('IMAGETYPE_'.strtoupper($type)) ) return false;
+	private function get_gallery_config( $option ) {
 
-		if( ! function_exists('imagecreatefrom'.$type) ) return false;
+		if( ! $this->gallery ) return get_config($option);
 
-		if( ! function_exists('image'.$type) ) return false;
+		return $this->gallery->get_config( $option, true, true );
+	}
 
-		return true;
+
+	private function get_image_driver_name() {
+
+		return Image_Driver::sanitize_driver_name( get_config('image_driver') );
+	}
+
+
+	private function get_image_driver() {
+
+		return Image_Driver::create( $this->get_image_driver_name() );
 	}
 
 
@@ -713,105 +722,6 @@ class Image {
 	}
 
 
-	private function fill_with_backgroundcolor( $image, $width, $height, $transparent_color = [255, 255, 255] ) {
-
-		$background_image = imagecreatetruecolor( $width, $height );
-		$background_color = imagecolorallocate( $background_image, $transparent_color[0], $transparent_color[1], $transparent_color[2] );
-
-		imagefill( $background_image, 0, 0, $background_color );
-		imagecopy( $background_image, $image, 0, 0, 0, 0, $width, $height );
-
-		return $background_image;
-	}
-
-
-	private function image_rotate( $image, $src_width, $src_height ) {
-
-		$this->load_image_meta();
-
-		$width = $src_width;
-		$height = $src_height;
-
-		$degrees = false;
-		// NOTE: we ignore mirrored images (4, 5, 7) for now, and just rotate them like they would be non-mirrored (3, 6, 8)
-		if( $this->orientation == 3 || $this->orientation == 4 ) {
-			$degrees = 180;
-		} elseif( $this->orientation == 6 || $this->orientation == 5 ) {
-			$degrees = 270;
-			$width = $src_height;
-			$height = $src_width;
-		} elseif( $this->orientation == 8 || $this->orientation == 7 ) {
-			$degrees = 90;
-			$width = $src_height;
-			$height = $src_width;
-		}
-
-		if( $degrees ) $image = imagerotate( $image, $degrees, 0 );
-
-		return [ $image, $width, $height ];
-	}
-
-
-	private function image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop, $fit = 'cover' ) {
-
-		$image_blob_resized = imagecreatetruecolor( $width, $height );
-
-		$background_color = hex_to_rgb(get_config('thumbnail_background_color'));
-
-		if( $this->image_type == IMAGETYPE_PNG || $this->image_type == IMAGETYPE_WEBP ) {
-			// handle alpha channel
-			imagealphablending( $image_blob_resized, false );
-			imagesavealpha( $image_blob_resized, true );
-		} else {
-			// no alpha channel; fill with background color
-			$image_blob = $this->fill_with_backgroundcolor( $image_blob, $src_width, $src_height, $background_color );
-		}
-
-		if( $src_width <= $width && $src_height <= $height && ! $crop ) {
-			// no resizing necessary
-			return $image_blob;
-		}
-
-		// NOTE: currently, we just center the image on crop; later we may implement a focus area.
-
-		if( $fit === 'contain' ) {
-			$scale  = min( $width / $src_width, $height / $src_height );
-			$dst_w  = (int) ceil( $src_width  * $scale );
-			$dst_h  = (int) ceil( $src_height * $scale );
-			$dst_x  = (int) floor( ( $width  - $dst_w ) / 2 );
-			$dst_y  = (int) floor( ( $height - $dst_h ) / 2 );
-			$src_x  = 0;
-			$src_y  = 0;
-			$copy_src_w = $src_width;
-			$copy_src_h = $src_height;
-
-			$fill_color = imagecolorallocate( $image_blob_resized, $background_color[0], $background_color[1], $background_color[2] );
-			imagefill( $image_blob_resized, 0, 0, $fill_color );
-
-		} else { // cover
-			$dst_w  = $width;
-			$dst_h  = $height;
-			$dst_x  = 0;
-			$dst_y  = 0;
-
-			$copy_src_w = $src_width;
-			$copy_src_h = (int) ceil( $copy_src_w * $height / $width );
-			if( $copy_src_h > $src_height ) {
-				$copy_src_h = $src_height;
-				$copy_src_w = (int) ceil( $copy_src_h * $width / $height );
-			}
-			$src_x = (int) floor( ( $src_width  - $copy_src_w ) / 2 );
-			$src_y = (int) floor( ( $src_height - $copy_src_h ) / 2 );
-		}
-
-		imagecopyresampled( $image_blob_resized, $image_blob, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $copy_src_w, $copy_src_h );
-
-		imagedestroy($image_blob);
-
-		return $image_blob_resized;
-	}
-
-
 	private function get_cache( $args = [] ) {
 
 		$cache_filename = trailing_slash_it($this->gallery->get_url(false)).$this->get_filename( $args );
@@ -836,10 +746,7 @@ class Image {
 		$args['width'] = min($args['width'], self::$max_image_dimension);
 		$args['height'] = min($args['height'], self::$max_image_dimension);
 
-		$quality = $args['quality'];
 		$type = $args['type'];
-
-		$image_blob = $this->get_image_blob( $args );
 
 		$cache = $this->get_cache( $args );
 		// check, if a placeholder file exists. if it does not exist, we are not allowed to create this image! see create_placeholder_file() for more info.
@@ -847,80 +754,41 @@ class Image {
 			return false;
 		}
 
-		if( $type == 'jpg' ) {
-
-			ob_start();
-			imagejpeg( $image_blob, NULL, $quality );
-			$data = ob_get_contents();
-			ob_end_clean();
-			$cache->add_data( $data );
-
-			header( 'Content-Type: image/jpeg' );
-			echo $data;
-
-		} elseif( $type == 'png' && $this->type_supported('png') ) {
-
-			ob_start();
-			imagepng( $image_blob );
-			$data = ob_get_contents();
-			ob_end_clean();
-			$cache->add_data( $data );
-
-			header( 'Content-Type: image/png' );
-			echo $data;
-
-		} elseif( $type == 'webp' && $this->type_supported('webp') ) {
-
-			ob_start();
-			imagewebp( $image_blob, null, $quality );
-			$data = ob_get_contents();
-			ob_end_clean();
-			$cache->add_data( $data );
-
-			header( 'Content-Type: image/webp' );
-			echo $data;
-
-		} elseif( $type == 'avif' && $this->type_supported('avif') ) {
-
-			ob_start();
-			imageavif( $image_blob, null, $quality );
-			$data = ob_get_contents();
-			ob_end_clean();
-			$cache->add_data( $data );
-
-			header( 'Content-Type: image/avif' );
-			echo $data;
-
-		} elseif( $type == 'gif' && $this->type_supported('gif') ) {
-
-			ob_start();
-
-			imagetruecolortopalette($image_blob, true, 256);
-
-			imagegif( $image_blob, null );
-			$data = ob_get_contents();
-			ob_end_clean();
-			$cache->add_data( $data );
-
-			header( 'Content-Type: image/gif' );
-			echo $data;
-
+		if( ! $this->type_supported($type) ) {
+			return false;
 		}
 
-		imagedestroy( $image_blob );
+		$data = $this->get_image_data( $args );
+
+		if( $data === false ) {
+			return false;
+		}
+
+		$cache->add_data( $data );
+
+		if( $type == 'png' ) {
+			header( 'Content-Type: image/png' );
+		} elseif( $type == 'webp' ) {
+			header( 'Content-Type: image/webp' );
+		} elseif( $type == 'avif' ) {
+			header( 'Content-Type: image/avif' );
+		} elseif( $type == 'gif' ) {
+			header( 'Content-Type: image/gif' );
+		} else {
+			header( 'Content-Type: image/jpeg' );
+		}
+
+		echo $data;
 		exit;
 	}
 
 
-	function get_image_blob( $args = [] ) {
+	function get_image_data( $args = [] ) {
 
 		$args = array_merge($this->get_default_args(), $args);
 
 		$args['width'] = min($args['width'], self::$max_image_dimension);
 		$args['height'] = min($args['height'], self::$max_image_dimension);
-
-		$src_width = $this->width;
-		$src_height = $this->height;
 
 		$type = $args['type'];
 		$crop = $args['crop'] ?? false;
@@ -932,60 +800,58 @@ class Image {
 			$height = $args['width'];
 		}
 
-		$fit = false;
+		$fit = 'cover';
 		if( $crop ) {
 			$fit = $args['fit'] ?? 'cover';
 		}
 
-		$image_blob = false;
+		$driver = $this->get_image_driver();
 
-		if( $this->image_type == IMAGETYPE_JPEG && $this->type_supported('jpg') ) {
-
-			$image_blob = imagecreatefromjpeg( $this->path );
-
-		} elseif( $this->image_type == IMAGETYPE_PNG && $this->type_supported('png') ) {
-
-			$image_blob = imagecreatefrompng( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image_blob, false );
-			imagesavealpha( $image_blob, true );
-
-		} elseif( $this->image_type == IMAGETYPE_WEBP && $this->type_supported('webp') ) {
-
-			$image_blob = imagecreatefromwebp( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image_blob, false );
-			imagesavealpha( $image_blob, true );
-
-		} elseif( $this->image_type == IMAGETYPE_AVIF && $this->type_supported('avif') ) {
-
-			$image_blob = imagecreatefromavif( $this->path );
-
-			// handle transparency loading:
-			imagealphablending( $image_blob, false );
-			imagesavealpha( $image_blob, true );
-
-		} elseif( $this->image_type == IMAGETYPE_GIF && $this->type_supported('gif') ) {
-
-			$image_blob = imagecreatefromgif( $this->path );
-
-			// we need to make sure to convert this to true color, for other formats:
-			imagepalettetotruecolor( $image_blob );
-
-		}
-
-		if( ! $image_blob ) {
-			debug( 'could not load image with image-type '.$this->image_type );
+		if( ! $driver->load($this->path, $this->image_type) ) {
 			return false;
 		}
 
-		list( $image_blob, $src_width, $src_height ) = $this->image_rotate( $image_blob, $src_width, $src_height );
+		$degrees = $this->get_rotation_degrees();
+		if( $degrees ) {
+			if( ! $driver->rotate($degrees) ) {
+				$driver->destroy();
+				return false;
+			}
+		}
 
-		$image_blob = $this->image_resize( $image_blob, $width, $height, $src_width, $src_height, $type, $crop, $fit );
+		$background_color = hex_to_rgb(get_config('thumbnail_background_color'));
 
-		return $image_blob;
+		if( ! $driver->resize($width, $height, $crop, $fit, $background_color) ) {
+			$driver->destroy();
+			return false;
+		}
+
+		if( ! $driver->apply_metadata_policy( (bool) $this->get_gallery_config('keep_exif'), (bool) $this->get_gallery_config('keep_colorprofile') ) ) {
+			$driver->destroy();
+			return false;
+		}
+
+		$data = $driver->encode( $type, $args['quality'] );
+
+		$driver->destroy();
+
+		return $data;
+	}
+
+
+	private function get_rotation_degrees() {
+
+		// NOTE: we ignore mirrored images (4, 5, 7) for now, and just rotate them like they would be non-mirrored (3, 6, 8)
+
+		if( $this->orientation == 3 || $this->orientation == 4 ) {
+			return 180;
+		} elseif( $this->orientation == 5 || $this->orientation == 6 ) {
+			return 270;
+		} elseif( $this->orientation == 7 || $this->orientation == 8 ) {
+			return 90;
+		}
+
+		return false;
 	}
 
 

@@ -150,7 +150,17 @@ All thumbnails and images will be resized on view. The resized images will be au
 
 WEBP and AVIF support are enabled by default. You can disable them by adding `'webp_enabled' => false` and `'avif_enabled' => false` to the `custom/config.php`.
 
-There is still an additional step, that checks if your server environment supports WEBP or AVIF. For AVIF, you need at least `PHP 8.1`, `GD` compiled with AVIF support and `libavif v.0.8.2` or higher.
+There is still an additional step, that checks if your server environment supports WEBP or AVIF. For AVIF, you need at least `PHP 8.1`, `GD` compiled with AVIF support and `libavif v.0.8.2` or higher (or the `imagick` image driver with AVIF support).
+
+### Image Driver (GD/Imagick)
+
+By default, images are processed with the `GD` extension (config option `'image_driver' => 'gd'`). If you want to keep the `ICC` color profile (or the exif data) of your images in the generated files, you can use the `imagick` image driver instead: add `'image_driver' => 'imagick'` to the `custom/config.php`. This requires the `imagick` PHP extension to be installed; if it is not available, the gallery automatically falls back to `gd`.
+
+With the `imagick` driver, the `ICC` color profile is kept by default (`'keep_colorprofile' => true`), so wide gamut images (like Adobe RGB or Display P3) are displayed with the correct colors. Exif data is removed by default; set `'keep_exif' => true` if you want to keep it in the generated images.
+
+The `keep_colorprofile` and `keep_exif` options can also be set per gallery in the `gallery.txt` file (and are inherited by sub-galleries). The `image_driver` option is global and can only be set in the `custom/config.php`. Note that `GD` cannot write exif data or color profiles, so the two `keep_*` options only have an effect with the `imagick` driver.
+
+You need to clear the image cache after changing any of these options, because otherwise already generated images will continue to be served from the cache.
 
 ### Custom translations
 

@@ -1,7 +1,7 @@
 
 - better accessibility (landmarks, skip link, better :active styling, ..)
 
-- also allow the use of ImageMagick for image manipulation in addition to GD
+- imagick driver: when `keep_colorprofile` is false, check if we should convert the image to sRGB before removing the color profile
 
 - automatic file rename based on preset (for example, mh_{date}_{title}_{count#000}.ext)
 

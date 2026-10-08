@@ -41,6 +41,19 @@ return [
 	'image_quality_webp' => 85,
 	'image_quality_avif' => 85,
 
+	// the image processing library used to generate resized images; can be 'gd' (default) or 'imagick'
+	// only the 'imagick' driver can keep the ICC color profile and exif data (see below); if the imagick extension is not available, we fall back to 'gd'
+	// you need to clear the image cache after changing this value
+	'image_driver' => 'gd',
+
+	// keep exif data (like camera information) in generated images; only supported by the 'imagick' driver; can be overwritten via gallery.txt
+	// you need to clear the image cache after changing this value
+	'keep_exif' => false,
+
+	// keep the ICC color profile in generated images; only supported by the 'imagick' driver; can be overwritten via gallery.txt
+	// you need to clear the image cache after changing this value
+	'keep_colorprofile' => true,
+
 	// the default image width in the single view
 	'default_image_width' => 2000,
 

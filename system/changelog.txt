@@ -1,6 +1,6 @@
 v.0.13.0-dev
 
-- ..
+- new optional `imagick` image driver (config option `image_driver`); with this driver, the ICC color profile is kept by default (`keep_colorprofile`), and exif data can optionally be kept (`keep_exif`); the two `keep_*` options can also be set per gallery via `gallery.txt`; you need to clear the image cache after changing these options
 
 
 v.0.12.0

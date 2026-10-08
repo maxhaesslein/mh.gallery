@@ -992,45 +992,12 @@ class Gallery {
 					'quality' => $download_image_quality
 				];
 
-				$image_blob = $image->get_image_blob( $args );
+				$image_data = $image->get_image_data( $args );
 
-				ob_start();
-
-				if( $download_filetype == 'jpg' ) {
-
-					//header( 'Content-Type: image/jpeg' );
-					imagejpeg( $image_blob, NULL, $download_image_quality );
-
-				} elseif( $download_filetype == 'png' && $image->type_supported('png') ) {
-
-					//header( 'Content-Type: image/png' );
-					imagepng( $image_blob );
-
-				} elseif( $download_filetype == 'webp' && $image->type_supported('webp') ) {
-
-					//header( 'Content-Type: image/webp' );
-					imagewebp( $image_blob, null, $download_image_quality );
-
-				} elseif( $download_filetype == 'avif' && $image->type_supported('avif') ) {
-
-					//header( 'Content-Type: image/avif' );
-					imageavif( $image_blob, null, $download_image_quality );
-
-				} elseif( $download_filetype == 'gif' && $image->type_supported('gif') ) {
-
-					imagetruecolortopalette($image_blob, true, 256);
-
-					//header( 'Content-Type: image/gif' );
-					imagegif( $image_blob, null );
-
+				if( $image_data !== false ) {
+					$zip->addFromString( $image_filename, $image_data );
 				}
 
-				$image_data = ob_get_contents();
-				ob_end_clean();
-
-				$zip->addFromString( $image_filename, $image_data );
-
-				imagedestroy($image_blob);
 				unset($image_data);
 
 			} else {
