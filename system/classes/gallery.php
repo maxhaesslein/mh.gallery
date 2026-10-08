@@ -229,7 +229,7 @@ class Gallery {
 		$hash = get_hash($this->get_slug());
 		if( isset($secrets[$hash]) && is_array($secrets[$hash]) ) {
 			foreach( $secrets[$hash] as $secret ) {
-				if( $secret == $this->secret ) return true;
+				if( $secret === $this->secret ) return true;
 			}
 		}
 
@@ -295,7 +295,7 @@ class Gallery {
 
 		if( ! password_verify( $password, $this->password ) ) return false;
 
-		$cache_id = uniqid();
+		$cache_id = bin2hex(random_bytes(16));
 		$cache_data = password_hash( $this->password, PASSWORD_DEFAULT );
 		$cache = new Cache( 'session', $cache_id );
 		$cache->add_data( $cache_data );

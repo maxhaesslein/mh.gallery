@@ -69,7 +69,7 @@ class Core {
 			$rewrite_base = $this->basefolder;
 			if( $rewrite_base == '' ) $rewrite_base = '/';
 
-			$content = "# BEGIN mh.gallery\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$rewrite_base."\r\n\r\nRewriteRule ^zip/(.*).zip$ cache/zip/$1 [L]\r\n\r\nRewriteRule ^custom/assets/(.*)$ - [L]\r\nRewriteRule ^system/site/assets/(.*)$ - [L]\r\nRewriteRule ^content/(.*)$ index.php [L]\r\nRewriteRule ^system/(.*) index.php [L]\r\n\r\nRewriteRule ^img/(.*)$ cache/image/$1\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule . index.php [L]\r\n</IfModule>\r\n# END mh.gallery\r\n";
+			$content = "# BEGIN mh.gallery\r\n<IfModule mod_rewrite.c>\r\nRewriteEngine on\r\nRewriteBase ".$rewrite_base."\r\n\r\nRewriteRule ^cache/zip/ - [L]\r\nRewriteRule ^cache/image/ - [L]\r\nRewriteRule ^cache/ - [F]\r\n\r\nRewriteRule ^zip/(.*).zip$ cache/zip/$1 [L]\r\n\r\nRewriteRule ^custom/assets/(.*)$ - [L]\r\nRewriteRule ^system/site/assets/(.*)$ - [L]\r\nRewriteRule ^content/(.*)$ index.php [L]\r\nRewriteRule ^system/(.*) index.php [L]\r\n\r\nRewriteRule ^img/(.*)$ cache/image/$1\r\n\r\nRewriteCond %{REQUEST_FILENAME} !-d\r\nRewriteCond %{REQUEST_FILENAME} !-f\r\nRewriteRule . index.php [L]\r\n</IfModule>\r\n# END mh.gallery\r\n";
 				if( file_put_contents( $this->get_abspath('.htaccess'), $content ) === false ) {
 					debug( 'could not create ".htaccess" file; aborting.' );
 					exit;
@@ -179,12 +179,13 @@ class Core {
 
 		$current_time = time();
 
+
 		foreach( $files as $file ) {
 
 			if( is_dir($file) ) continue;
-		
+
 			$file_exp = explode( '/', $file );
-			$type = $file_exp[1]; // type is deduced from the filepath: cache/{type}/...
+			$type = $file_exp[1];
 
 			$lifetime = get_config( $type.'_cache_lifetime' );
 			if( ! $lifetime ) {
@@ -195,8 +196,8 @@ class Core {
 
 			$timestamp = filemtime( get_abspath($file) );
 
-			if( $timestamp > $timestamp_limit ) { // cachefile too old
-				@unlink(get_abspath($file)); // delete old cache file; fail silently
+			if( $timestamp > $timestamp_limit ) {
+				@unlink(get_abspath($file));
 			}
 
 		}

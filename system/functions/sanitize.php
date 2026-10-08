@@ -33,12 +33,3 @@ function sanitize_post( $key, $default = null, $filter = FILTER_DEFAULT ) {
 	$value = $_POST[$key];
 	return sanitize_value( $value, $default, $filter );
 }
-
-function sanitize_request( $key, $default = null, $filter = FILTER_DEFAULT ) {
-	if( ! isset($_REQUEST[$key]) ) {
-		return $default;
-	}
-	
-	$value = $_REQUEST[$key];
-	return sanitize_value( $value, $default, $filter );
-}

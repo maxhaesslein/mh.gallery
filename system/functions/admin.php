@@ -15,7 +15,7 @@ function admin_login( $input_password ) {
 
 	if( password_verify($input_password, $stored_password) ) {
 
-		$cache_id = uniqid();
+		$cache_id = bin2hex(random_bytes(16));
 
 		$cache_data = password_hash( get_config('admin_password'), PASSWORD_DEFAULT );
 
@@ -24,6 +24,7 @@ function admin_login( $input_password ) {
 
 		if( $cache->exists() && $cache->get_data() == $cache_data ) {
 			$_SESSION['admin-auth'] = $cache_id;
+			session_regenerate_id(true);
 			return true;
 		}
 

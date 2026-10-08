@@ -20,7 +20,7 @@ if( doing_ajax() ) return;
  |_|_|_|_||_(_)__, \__,_|_|_\___|_|  \_, |
               |___/                  |__/ 
 -->
-<html lang="<?= get_language_code() ?>">
+<html lang="<?= escape_html(get_language_code()) ?>">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0">

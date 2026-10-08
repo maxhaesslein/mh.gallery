@@ -17,8 +17,6 @@ class Route {
 
 		$request_string = $_SERVER['REQUEST_URI'];
 		$request_string = preg_replace( '/^'.preg_quote(get_basefolder(), '/').'/', '', $request_string );
-		
-		$request_string = urldecode($request_string);
 
 		$request = explode( '?', $request_string );
 		$request = $request[0];
@@ -117,6 +115,7 @@ class Route {
 
 					if( $gallery->check_password($input_password) ) {
 						reset_rate_limit($rate_limit_key);
+						session_regenerate_id(true);
 						header('Location: '.get_current_url());
 						exit;
 					} else {
@@ -145,27 +144,45 @@ class Route {
 
 				if( ! empty($query_parameters['secret']) ) {
 
-					$hash = get_hash($gallery->get_slug());
+					$rate_limit_key = 'gallery-secret-'.$gallery->get_slug();
 
-					$secret = $query_parameters['secret'];
+					if( ! check_rate_limit($rate_limit_key) ) {
+						$core->gallery_rate_limit_exceeded = $gallery->get_slug();
+					} else {
 
-					if( ! isset($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
+						$secret = $query_parameters['secret'];
 
-					if( ! array_key_exists($hash, $_SESSION['secrets']) ) $_SESSION['secrets'][$hash] = [];
+						if( $gallery->has_secret($secret) ) {
+							reset_rate_limit($rate_limit_key);
+						} else {
+							record_failed_attempt($rate_limit_key);
+						}
 
-					if( ! in_array($secret, $_SESSION['secrets'][$hash]) ) {
-						$_SESSION['secrets'][$hash][] = $secret;
+						if( is_same_site_referer() ) {
+
+							$hash = get_hash($gallery->get_slug());
+
+							if( ! isset($_SESSION['secrets']) || ! is_array($_SESSION['secrets']) ) $_SESSION['secrets'] = [];
+
+							if( ! array_key_exists($hash, $_SESSION['secrets']) ) $_SESSION['secrets'][$hash] = [];
+
+							if( ! in_array($secret, $_SESSION['secrets'][$hash], true) ) {
+								$_SESSION['secrets'][$hash][] = $secret;
+							}
+
+						}
+
+						$reload_url = explode_url(get_current_url());
+						
+						unset($reload_url['query']['secret']);
+						
+						$reload_url = implode_url($reload_url);
+
+						// remove the secret query parameter from the URL:
+						header('Location: '.$reload_url);
+						exit;
 					}
 
-					$reload_url = explode_url(get_current_url());
-					
-					unset($reload_url['query']['secret']);
-					
-					$reload_url = implode_url($reload_url);
-
-					// remove the secret query parameter from the URL:
-					header('Location: '.$reload_url);
-					exit;
 				}
 
 				$template_name = '401-secret';
@@ -177,72 +194,91 @@ class Route {
 
 		if( $mode == 'img' ) {
 
-			$template_name = '404';
+			if( $gallery && $gallery->is_password_protected() && ! $gallery->password_provided() ) {
+				$template_name = '401-password';
+			} elseif( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+				$template_name = '401-secret';
+			} else {
+
+				$template_name = '404';
 			
-			if( $gallery ) {
+				if( $gallery ) {
 
-				$image_name = array_pop($request);
+					$image_name = array_pop($request);
 
-				$image_name = explode('.', $image_name);
-				$type = array_pop($image_name);
-				$image_name = implode('.', $image_name);
-				$image_name = explode('_', $image_name);
-				$image_args = array_pop($image_name);
-				$image_name = implode('_', $image_name);
+					$image_name = explode('.', $image_name);
+					$type = array_pop($image_name);
+					$image_name = implode('.', $image_name);
+					$image_name = explode('_', $image_name);
+					$image_args = array_pop($image_name);
+					$image_name = implode('_', $image_name);
 
-				$image = $gallery->get_image($image_name);
-				if( $image ) {
+					$image = $gallery->get_image($image_name);
+					if( $image ) {
 
-					$image_args = explode('-', $image_args);
+						$image_args = explode('-', $image_args);
 
-					$size = array_shift($image_args);
-					$size = explode('x', $size);
+						$size = array_shift($image_args);
+						$size = explode('x', $size);
 
-					$width = (int) $size[0];
-					$height = (int) $size[1];
+						$width = (int) $size[0];
+						$height = (int) $size[1];
 
-					$crop = array_shift($image_args);
-					$fit = false;
-					if( $crop == 'crop' ) {
-						$fit = array_shift($image_args);
-						$quality = array_pop($image_args);
-						$crop = true;
-					} else {
-						$quality = $crop;
-						$crop = false;
+						$crop = array_shift($image_args);
+						$fit = false;
+						if( $crop == 'crop' ) {
+							$fit = array_shift($image_args);
+							$quality = array_pop($image_args);
+							$crop = true;
+						} else {
+							$quality = $crop;
+							$crop = false;
+						}
+
+						$quality = (int) $quality;
+						if( $quality <= 0 ) $quality = false;
+
+						$args = [
+							'width' => $width,
+							'height' => $height,
+							'crop' => $crop,
+							'fit' => $fit,
+							'quality' => $quality,
+							'type' => $type,
+						];
+
+						$template_name = 'img-output';
 					}
 
-					$quality = (int) $quality;
-					if( $quality <= 0 ) $quality = false;
-
-					$args = [
-						'width' => $width,
-						'height' => $height,
-						'crop' => $crop,
-						'fit' => $fit,
-						'quality' => $quality,
-						'type' => $type,
-					];
-
-					$template_name = 'img-output';
 				}
 
 			}
 
 		} elseif( $mode == 'download' ) {
 
-			$template_name = '404';
-			
-			if( $gallery && $gallery->is_download_gallery_enabled() ) {
-				$template_name = 'download';
+			if( $gallery && $gallery->is_password_protected() && ! $gallery->password_provided() ) {
+				$template_name = '401-password';
+			} elseif( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+				$template_name = '401-secret';
+			} else {
+				$template_name = '404';
+				if( $gallery && $gallery->is_download_gallery_enabled() ) {
+					$template_name = 'download';
+				}
 			}
 
 		} elseif( $mode == 'api' ) {
 			
-			$template_name = '404';
+			if( $gallery && $gallery->is_password_protected() && ! $gallery->password_provided() ) {
+				$template_name = '401-password';
+			} elseif( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+				$template_name = '401-secret';
+			} else {
+				$template_name = '404';
 
-			if( $image ) {
-				$template_name = 'api-output';
+				if( $image ) {
+					$template_name = 'api-output';
+				}
 			}
 
 		} elseif( $mode == 'admin' ) {
@@ -275,7 +311,11 @@ class Route {
 			}
 
 			if( ! empty($request[0]) && $request[0] == 'create-hash' ) {
-				$template_name = 'admin_create-hash';
+				if( get_config('admin_password') && ! admin_verify() ) {
+					$template_name = 'admin';
+				} else {
+					$template_name = 'admin_create-hash';
+				}
 			} elseif( get_config('admin_password') ) {
 				// NOTE: only allow admin area, if a login password is set
 				$template_name = 'admin';

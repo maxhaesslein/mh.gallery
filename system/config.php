@@ -65,6 +65,8 @@ return [
 	'zip_cache_lifetime' => 60*60*24*7, // gallery zip files; 7 days in seconds
 	'admin_cache_lifetime' => 60*60*24, // admin login cache; 1 day in seconds
 	'session_cache_lifetime' => 60*60*24, // gallery password session cache; 1 day in seconds
+'rate-limit_cache_lifetime' => 60*15, // rate limit cache; 15 minutes in seconds
+	'rate-limit_max_attempts' => 5, // max login attempts, before this ip address gets blocked
 
 	'rate-limit_cache_lifetime' => 60*15, // rate limit cache; 15 minutes in seconds
 	'rate-limit_max_attempts' => 5, // max login attempts, before this ip address gets blocked
@@ -114,5 +116,8 @@ return [
 
 	// set a hashed password as a string to enable the admin area, under the /admin path or set to false to disable the admin area. use the /admin/create-hash path to create a hashed password. see 'admin area' in the README.md for details
 	'admin_password' => false,
+
+	// which server variable to use for the client IP address; 'REMOTE_ADDR' uses the direct connection IP (safest), 'HTTP_X_FORWARDED_FOR' uses the X-Forwarded-For header (only use behind a trusted reverse proxy), 'HTTP_CF_CONNECTING_IP' for Cloudflare, 'HTTP_X_REAL_IP' for nginx
+	'client_ip_source' => 'REMOTE_ADDR',
 
 ];
