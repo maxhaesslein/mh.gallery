@@ -165,6 +165,12 @@ The admin area is disabled by default. To enable it, add `'admin_area' => '{pass
 
 After adding this config option, the admin area is available at the `/admin` path of your website.
 
+## AI Assistance
+
+All versions up to and including `v.0.11.0` were developed entirely without the use of large language models or other AI tools.
+
+Starting with `v.0.12.0`, LLMs are used to assist with the development of this project, for example for code, documentation and translations. All AI-assisted changes are reviewed and tested by a human before they are released. The tool and model used for a change is noted in the corresponding commit message.
+
 ## Update
 
 ### manually
