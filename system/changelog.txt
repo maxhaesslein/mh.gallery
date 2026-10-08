@@ -8,6 +8,15 @@ security improvements. this update is recommended for all users.
 - rate limiting for forms
 - made PHP Sessions more secure
 - improve directory traversal protection
+- harden `.htaccess` rules to protect the image and zip cache files
+- protect `img`, `download` and `api` routes behind the password and secret gates
+- add rate limiting for secret key attempts
+- use cryptographically secure session cache ids and regenerate the session id on login
+- verify secrets with strict comparison and check the referer before storing secrets
+- escape debug output, site titles and sharing meta tags
+- remove the insecure `sanitize_request()` helper
+- limit generated image dimensions to prevent memory exhaustion
+- new config option `client_ip_source` to configure the client ip detection (only use forwarded headers behind a trusted reverse proxy)
 
 
 v.0.11.0
