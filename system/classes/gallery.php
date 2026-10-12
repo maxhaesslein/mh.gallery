@@ -979,6 +979,7 @@ class Gallery {
 		if( $download_filetype ) {
 			$download_image_quality = get_config( 'image_quality_'.$download_filetype ) ?? get_config( 'image_quality_jpg' );
 		}
+		$download_keep_date = $this->get_config( 'download_keep_date', true, true );
 		foreach( $missing_images as $image ) {
 
 			$image_filename = $image->get_original_filename();
@@ -996,6 +997,8 @@ class Gallery {
 
 				if( $image_data !== false ) {
 					$zip->addFromString( $image_filename, $image_data );
+
+					$this->set_zip_file_date( $zip, $image_filename, $image, $download_keep_date );
 				}
 
 				unset($image_data);
@@ -1005,6 +1008,8 @@ class Gallery {
 				$image_path = $image->get_original_filepath();
 				$zip->addFile( $image_path, $image_filename );
 
+				$this->set_zip_file_date( $zip, $image_filename, $image, $download_keep_date );
+
 			}
 
 		}
@@ -1012,6 +1017,22 @@ class Gallery {
 		$zip->close();
 
 		return $this->get_missing_image_count();
+	}
+
+
+	private function set_zip_file_date( $zip, $image_filename, $image, $keep_date ) {
+
+		// NOTE: setMtimeName() needs PHP 8.0 and zip extension 1.16 or newer
+
+		if( ! method_exists($zip, 'setMtimeName') ) return;
+
+		if( $keep_date ) {
+			$timestamp = $image->get_download_date();
+		} else {
+			$timestamp = time(); // use the download time
+		}
+
+		$zip->setMtimeName( $image_filename, $timestamp );
 	}
 
 

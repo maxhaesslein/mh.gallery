@@ -103,6 +103,9 @@ return [
 	// the format for image and gallery downloads; set to false to serve the original files as they are on the server, including all metadata
 	'download_filetype' => 'jpg',
 
+	// downloads keep the original date/time (the exif date, or the file modification date if no exif date is available); set to false to use the download time instead; this affects the date inside .zip downloads and the Last-Modified header of single image downloads; can be overwritten via gallery.txt
+	'download_keep_date' => true,
+
 	// add OpenGraph sharing tags to HTML head, for better link previews
 	'site_sharing_tags' => true,
 

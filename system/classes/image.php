@@ -175,6 +175,23 @@ class Image {
 	}
 
 
+	function get_download_date() {
+
+		// NOTE: use the exif date if available, otherwise fall back to the file modification date
+
+		$date = $this->get_exif_data('DateTimeOriginal');
+		if( ! $date ) $date = $this->get_exif_data('DateTime');
+		if( ! $date ) $date = $this->get_exif_data('DateTimeDigitized');
+
+		if( $date ) {
+			$timestamp = strtotime( $date );
+			if( $timestamp ) return $timestamp;
+		}
+
+		return $this->get_filedate();
+	}
+
+
 	function get_exif_data( $field_key, $group_key = 'EXIF' ) {
 
 		if( $this->exif_data === NULL ) {
@@ -766,6 +783,14 @@ class Image {
 	}
 
 
+	private function output_last_modified_header() {
+
+		if( ! $this->get_gallery_config('download_keep_date') ) return;
+
+		header( 'Last-Modified: '.gmdate('D, d M Y H:i:s', $this->get_download_date()).' GMT' );
+	}
+
+
 	function output_original() {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
@@ -778,6 +803,8 @@ class Image {
 		}
 
 		header( 'Content-Length: '.$this->get_original_filesize() );
+
+		$this->output_last_modified_header();
 
 		readfile( $this->path );
 		exit;
@@ -832,6 +859,8 @@ class Image {
 		} else {
 			header( 'Content-Type: image/jpeg' );
 		}
+
+		$this->output_last_modified_header();
 
 		echo $data;
 		exit;
