@@ -44,6 +44,9 @@ return [
 	// the default image width in the single view
 	'default_image_width' => 2000,
 
+	// maximum width/height of generated images to prevent memory exhaustion; downloads and zip files are generated in original size, but scaled down proportionally if they exceed this value
+	'max_image_dimension' => 4000,
+
 	// use a small preview image to speed up perceived loading times
 	'preview_image' => true,
 
