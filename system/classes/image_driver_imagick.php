@@ -54,7 +54,29 @@ class Image_Driver_Imagick extends Image_Driver {
 	}
 
 
-	function load( $path, $image_type ) {
+	private function get_jpeg_size_hint( $path, $max_width, $max_height ) {
+
+		$source_size = @getimagesize( $path );
+		if( ! $source_size ) return false;
+
+		// NOTE: libjpeg can decode jpeg images with a reduced scale (steps of 1/8); we use the smallest step that still covers the requested dimensions; this is much faster and needs less memory for large source images
+
+		for( $step = 1; $step <= 7; $step++ ) {
+
+			$width = (int) ceil( $source_size[0] * $step / 8 );
+			$height = (int) ceil( $source_size[1] * $step / 8 );
+
+			if( $width >= $max_width && $height >= $max_height ) {
+				return $width.'x'.$height;
+			}
+
+		}
+
+		return false;
+	}
+
+
+	function load( $path, $image_type, $max_width = 0, $max_height = 0 ) {
 
 		$source_type = $this->get_source_type( $image_type );
 
@@ -71,6 +93,16 @@ class Image_Driver_Imagick extends Image_Driver {
 
 		try {
 			$this->image = new Imagick();
+
+			if( $source_type == 'jpg' && $max_width > 0 && $max_height > 0 ) {
+
+				$jpeg_size_hint = $this->get_jpeg_size_hint( $path, $max_width, $max_height );
+				if( $jpeg_size_hint ) {
+					$this->image->setOption( 'jpeg:size', $jpeg_size_hint );
+				}
+
+			}
+
 			$this->image->readImage( $path.$scene );
 		} catch( Exception $e ) {
 			debug( 'could not load image', $e->getMessage() );

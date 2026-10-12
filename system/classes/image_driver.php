@@ -60,7 +60,7 @@ abstract class Image_Driver {
 
 	abstract function type_supported( $type );
 
-	abstract function load( $path, $image_type );
+	abstract function load( $path, $image_type, $max_width = 0, $max_height = 0 );
 
 	abstract function rotate( $degrees );
 

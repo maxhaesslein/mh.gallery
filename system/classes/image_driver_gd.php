@@ -52,7 +52,9 @@ class Image_Driver_GD extends Image_Driver {
 	}
 
 
-	function load( $path, $image_type ) {
+	function load( $path, $image_type, $max_width = 0, $max_height = 0 ) {
+
+		// NOTE: the gd driver cannot decode with a reduced scale, so we just ignore the max dimensions
 
 		$source_type = $this->get_source_type( $image_type );
 

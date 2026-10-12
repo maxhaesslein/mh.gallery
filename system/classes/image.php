@@ -907,7 +907,8 @@ class Image {
 
 		$driver = $this->get_image_driver();
 
-		if( ! $driver->load($this->path, $this->image_type) ) {
+		// NOTE: the requested dimensions are passed as a hint, so the driver can decode the source image with a reduced scale
+		if( ! $driver->load($this->path, $this->image_type, $args['width'], $args['height']) ) {
 			return false;
 		}
 
