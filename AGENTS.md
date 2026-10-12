@@ -16,7 +16,7 @@ This is a simple and lightweight PHP gallery without dependencies. The project f
 No build process required. This is a pure PHP application.
 
 ### Running the Application
-Access via web server. PHP 8.0+ required with mbstring and gd extensions.
+Access via web server. PHP 8.0+ required with mbstring and gd extensions; the imagick extension is optional (imagick image driver).
 
 ### Code Validation
 Since this is a PHP project without a formal test suite:
@@ -46,7 +46,7 @@ To test a specific functionality:
 
 ### PHP Version
 Target: PHP 8.0+
-Use typed properties, return types, and proper namespace declarations where applicable.
+The codebase does not use namespaces; keep signatures and property declarations consistent with the existing code.
 
 ### File Organization
 - PHP files should end with `?>` only when necessary (omitted preferred for pure PHP files)
@@ -57,7 +57,7 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Use tabs for indentation (not spaces)
 - Opening braces for functions/classes on same line
 - Closing braces on their own line
-- Maximum line length: 120 characters
+- Maximum line length: 120 characters for code; long config comments and changelog entries are fine
 - One statement per line
 - Blank lines to separate logical sections
 
@@ -77,11 +77,8 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Custom configs override system configs
 
 ### Type Declarations
-- Use return type declarations when beneficial
-- Use parameter type declarations for public APIs
-- Accept iterable types where appropriate (PHP 7.1+)
-- Use union types when needed (PHP 8.0+)
-- Avoid mixed types when more specific types apply
+- Use type declarations sparingly; most of the codebase uses untyped signatures
+- Follow the style of the file you are editing (a few newer class methods use return types like `: bool`)
 
 ### Error Handling
 - Use exceptions for exceptional conditions
@@ -92,12 +89,11 @@ Use typed properties, return types, and proper namespace declarations where appl
 - Display user-friendly messages, not raw errors
 
 ### Security Practices
-- Sanitize all user inputs (GET, POST, COOKIE)
-- Use prepared statements if/when database is introduced
-- Escape output for HTML context (use `htmlspecialchars()`)
+- Sanitize all user inputs (GET, POST, COOKIE) via the `sanitize_get()` / `sanitize_post()` helpers
+- Escape output for HTML context via the `escape_html()` helper
 - Validate file paths to prevent directory traversal
 - Use proper password hashing (already implemented in admin area)
-- Validate file uploads (though none currently exist)
+- Use prepared statements if/when a database is introduced
 
 ### Documentation
 - Only use comments when necessary to understand the code
@@ -116,16 +112,13 @@ Use typed properties, return types, and proper namespace declarations where appl
 ### Git Practices
 - Commit messages should be descriptive and in English
 - Separate commits for functional changes vs formatting
-- Don't commit cache/ directory contents
-- Content/ directory is user-managed, be careful with commits
-- Custom/ directory is for user overrides, document changes
+- `cache/`, `content/` and `custom/` are gitignored and user-managed; never commit their contents
 - Don't push, only commit!
-- Always use `--no-gpg-sign` flag (no PGP signing)
-- Append the name of your tool and LLM model to the commit message in the format: "Implemented by [TOOL_NAME] with [LLM_MODEL]"
-- Replace [TOOL_NAME] with the actual name of the tool you are using (e.g., opencode)
-- Replace [LLM_MODEL] with the actual name of the LLM model you are using (e.g., minimax-m2.5-free)
-- Example: "Implemented by opencode with minimax-m2.5-free"
-- Author attribution: Keep commits under the user's name/email; add tool and LLM info only in the commit message to indicate AI assistance
+- Append tool and LLM model to the commit message in the format: `by [TOOL] with [MODEL]` (e.g. `by OpenCode with deepseek-v4.1-flash`)
+- Keep commits under the user's name/email; the tool/model note in the commit message marks the AI assistance
+
+## Deployment
+The live/production server is read-only for agents: never change files there, even when debugging. Only inspect it (if access was granted). Deployments are performed by the user.
 
 ## Additional Notes
 This project prioritizes simplicity and compatibility over modern PHP frameworks.

@@ -27,15 +27,20 @@ $download_image_url = false;
 if( $gallery->is_download_image_enabled() ) {
 	$download_filetype = get_config( 'download_filetype' ) ?? 'jpg';
 	$original_filename = $image->get_original_filename();
-	$download_image = new Image( $original_filename, $gallery );
-	$download_image_quality = get_config( 'image_quality_'.$download_filetype ) ?? get_config( 'image_quality_jpg' );
-	$query = [];
+
 	if( $download_filetype ) {
-		$query['type'] = $download_filetype;
-		$query['quality'] = $download_image_quality;
+		$download_image = new Image( $original_filename, $gallery );
+		$download_image_quality = get_config( 'image_quality_'.$download_filetype ) ?? get_config( 'image_quality_jpg' );
+		$query = [
+			'type' => $download_filetype,
+			'quality' => $download_image_quality,
+		];
+		$download_image_url = $download_image->get_image_url( $query );
+		$download_image_filename = remove_fileextension($original_filename).'.'.$download_filetype;
+	} else {
+		$download_image_url = $image->get_original_url();
+		$download_image_filename = $original_filename;
 	}
-	$download_image_url = $download_image->get_image_url( $query );
-	$download_image_filename = remove_fileextension($original_filename).'.'.$download_filetype;
 }
 
 $download_gallery_url = false;

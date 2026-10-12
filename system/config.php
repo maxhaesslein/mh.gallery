@@ -57,6 +57,9 @@ return [
 	// the default image width in the single view
 	'default_image_width' => 2000,
 
+	// maximum width/height of generated images to prevent memory exhaustion; downloads and zip files are generated in original size, but scaled down proportionally if they exceed this value
+	'max_image_dimension' => 4000,
+
 	// use a small preview image to speed up perceived loading times
 	'preview_image' => true,
 
@@ -97,7 +100,7 @@ return [
 	// set to false to disable download of the whole gallery
 	'download_gallery' => true,
 
-	// the format for image and gallery downloads; set to false to use original filetype
+	// the format for image and gallery downloads; set to false to serve the original files as they are on the server, including all metadata
 	'download_filetype' => 'jpg',
 
 	// add OpenGraph sharing tags to HTML head, for better link previews

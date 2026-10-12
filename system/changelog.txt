@@ -3,6 +3,13 @@ v.0.13.0-dev
 - new optional `imagick` image driver (config option `image_driver`); with this driver, the ICC color profile is kept by default (`keep_colorprofile`), and exif data can optionally be kept (`keep_exif`); the two `keep_*` options can also be set per gallery via `gallery.txt`; you need to clear the image cache after changing these options
 
 
+v.0.12.1
+
+- fix single image downloads
+- new config option `max_image_dimension` to limit the dimensions of generated images; default is 4000px, larger images are scaled down proportionally (replaces the hardcoded 5000px limit from v.0.12.0)
+- single image downloads now serve the original file as it is on the server, including all metadata, if `download_filetype` is set to `false` (zip downloads already behaved this way)
+
+
 v.0.12.0
 
 security improvements. this update is recommended for all users.

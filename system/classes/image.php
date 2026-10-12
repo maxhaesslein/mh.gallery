@@ -12,6 +12,7 @@ class Image {
 	
 	private $filename;
 	private $file_extension;
+	private $mime_type;
 	private $path;
 	private $gallery;
 	private $slug; // this is the slug for the url
@@ -32,8 +33,6 @@ class Image {
 	private $image_meta_loaded = false;
 
 	private $filesize = NULL;
-
-	private static $max_image_dimension = 5000;
 
 
 	function __construct( $filename, $gallery ) {
@@ -341,6 +340,16 @@ class Image {
 	}
 
 
+	function get_original_url() {
+
+		if( ! $this->gallery ) return false;
+
+		$url = get_baseurl('original/').trailing_slash_it($this->gallery->get_url(false)).$this->slug;
+
+		return $url;
+	}
+
+
 	function get_index() {
 
 		if( ! $this->gallery ) return false;
@@ -405,6 +414,26 @@ class Image {
 	}
 
 
+	private function get_max_image_dimension() {
+
+		return get_config( 'max_image_dimension', 4000 );
+	}
+
+
+	private function get_scaled_image_dimensions( $width, $height ) {
+
+		$max_image_dimension = $this->get_max_image_dimension();
+
+		if( $width > $max_image_dimension || $height > $max_image_dimension ) {
+			$scale = min( $max_image_dimension / $width, $max_image_dimension / $height );
+			$width = round( $width * $scale );
+			$height = round( $height * $scale );
+		}
+
+		return [ $width, $height ];
+	}
+
+
 	private function get_default_args() {
 
 		$this->load_image_meta();
@@ -457,10 +486,16 @@ class Image {
 		} elseif( ! empty($args['height']) && empty($args['width']) ) {
 			$this->load_image_meta();
 			$args['width'] = round($args['height'] * $this->width/$this->height);
+		} elseif( empty($args['width']) && empty($args['height']) ) {
+			// no dimensions requested (e.g. single image downloads): use the original size, scaled down to the max image dimension if needed
+			$this->load_image_meta();
+			[ $args['width'], $args['height'] ] = $this->get_scaled_image_dimensions( $this->width, $this->height );
 		}
 
-		$args['width'] = min($args['width'] ?? $this->width, self::$max_image_dimension);
-		$args['height'] = min($args['height'] ?? $this->height, self::$max_image_dimension);
+		$max_image_dimension = $this->get_max_image_dimension();
+
+		$args['width'] = min($args['width'] ?? $this->width, $max_image_dimension);
+		$args['height'] = min($args['height'] ?? $this->height, $max_image_dimension);
 
 		$this->create_placeholder_file($args);
 
@@ -731,6 +766,24 @@ class Image {
 	}
 
 
+	function output_original() {
+		// NOTE: this assumes we did not output any headers or HTML yet!
+
+		$this->load_image_meta();
+
+		if( isset($this->mime_type) ) {
+			header( 'Content-Type: '.$this->mime_type );
+		} else {
+			header( 'Content-Type: application/octet-stream' );
+		}
+
+		header( 'Content-Length: '.$this->get_original_filesize() );
+
+		readfile( $this->path );
+		exit;
+	}
+
+
 	function output( $args = [] ) {
 		// NOTE: this assumes we did not output any headers or HTML yet!
 
@@ -743,8 +796,10 @@ class Image {
 
 		$args = array_merge($this->get_default_args(), $args);
 
-		$args['width'] = min($args['width'], self::$max_image_dimension);
-		$args['height'] = min($args['height'], self::$max_image_dimension);
+		$max_image_dimension = $this->get_max_image_dimension();
+
+		$args['width'] = min($args['width'], $max_image_dimension);
+		$args['height'] = min($args['height'], $max_image_dimension);
 
 		$type = $args['type'];
 
@@ -785,10 +840,26 @@ class Image {
 
 	function get_image_data( $args = [] ) {
 
+		$original_size_requested = empty($args['width']) && empty($args['height']);
+
+		if( empty($args['width']) ) unset($args['width']);
+		if( empty($args['height']) ) unset($args['height']);
+
 		$args = array_merge($this->get_default_args(), $args);
 
-		$args['width'] = min($args['width'], self::$max_image_dimension);
-		$args['height'] = min($args['height'], self::$max_image_dimension);
+		$max_image_dimension = $this->get_max_image_dimension();
+
+		if( $original_size_requested ) {
+
+			// no dimensions requested (e.g. zip files): use the original size, scaled down to the max image dimension if needed
+			[ $args['width'], $args['height'] ] = $this->get_scaled_image_dimensions( $args['width'], $args['height'] );
+
+		} else {
+
+			$args['width'] = min($args['width'], $max_image_dimension);
+			$args['height'] = min($args['height'], $max_image_dimension);
+
+		}
 
 		$type = $args['type'];
 		$crop = $args['crop'] ?? false;
