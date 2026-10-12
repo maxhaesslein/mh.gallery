@@ -165,19 +165,73 @@ class Image_Driver_Imagick extends Image_Driver {
 	}
 
 
+	private function get_colorprofile() {
+
+		$colorprofile = false;
+
+		try {
+			$colorprofile = $this->image->getImageProfile('icc');
+			if( ! $colorprofile ) $colorprofile = $this->image->getImageProfile('icm');
+		} catch( Exception $e ) {
+			// no color profile; nothing to keep or convert
+		}
+
+		return $colorprofile;
+	}
+
+
+	private function convert_to_srgb() {
+
+		try {
+
+			// NOTE: profileImage() only converts the image if the current color profile is stored as 'icc'
+			if( ! $this->image->getImageProfile('icc') ) {
+				$this->image->setImageProfile( 'icc', $this->image->getImageProfile('icm') );
+			}
+
+			$srgb_profile = @file_get_contents( get_abspath('system/data/sRGB.icc') );
+			if( ! $srgb_profile ) {
+				debug( 'could not load the sRGB color profile' );
+				return false;
+			}
+
+			$this->image->profileImage( 'icc', $srgb_profile );
+
+		} catch( Exception $e ) {
+			debug( 'could not convert image to sRGB', $e->getMessage() );
+			return false;
+		}
+
+		return true;
+	}
+
+
+	private function remove_colorprofile() {
+
+		foreach( [ 'icc', 'icm' ] as $name ) {
+			try {
+				$this->image->removeImageProfile( $name );
+			} catch( Exception $e ) {
+				// profile does not exist; nothing to remove
+			}
+		}
+	}
+
+
 	function apply_metadata_policy( $keep_exif, $keep_colorprofile ) {
 
 		try {
 
-			if( ! $keep_exif ) {
+			$colorprofile = $this->get_colorprofile();
 
-				$colorprofile = false;
-				try {
-					$colorprofile = $this->image->getImageProfile('icc');
-					if( ! $colorprofile ) $colorprofile = $this->image->getImageProfile('icm');
-				} catch( Exception $e ) {
-					// no color profile; nothing to keep
+			if( $colorprofile && ! $keep_colorprofile ) {
+				// NOTE: convert to sRGB before removing the color profile, so wide gamut images keep their colors
+				if( $this->convert_to_srgb() ) {
+					$colorprofile = false;
 				}
+			}
+
+			if( ! $keep_exif ) {
 
 				$this->image->stripImage();
 
@@ -187,12 +241,7 @@ class Image_Driver_Imagick extends Image_Driver {
 
 			} elseif( ! $keep_colorprofile ) {
 
-				try {
-					$this->image->removeImageProfile('icc');
-					$this->image->removeImageProfile('icm');
-				} catch( Exception $e ) {
-					// no color profile; nothing to remove
-				}
+				$this->remove_colorprofile();
 
 			}
 

@@ -50,7 +50,7 @@ return [
 	// you need to clear the image cache after changing this value
 	'keep_exif' => false,
 
-	// keep the ICC color profile in generated images; only supported by the 'imagick' driver; can be overwritten via gallery.txt
+	// keep the ICC color profile in generated images; only supported by the 'imagick' driver; if set to false, the image is converted to sRGB before the profile is removed; can be overwritten via gallery.txt
 	// you need to clear the image cache after changing this value
 	'keep_colorprofile' => true,
 
