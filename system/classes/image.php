@@ -154,12 +154,16 @@ class Image {
 	function get_width() {
 		$this->load_image_meta();
 
+		if( $this->rotated ) return $this->height;
+
 		return $this->width;
 	}
 
 
 	function get_height() {
 		$this->load_image_meta();
+
+		if( $this->rotated ) return $this->width;
 
 		return $this->height;
 	}
@@ -451,6 +455,20 @@ class Image {
 	}
 
 
+	private function get_display_dimensions() {
+
+		// NOTE: the stored image dimensions need to be swapped, if the image is rotated by its exif orientation
+
+		$this->load_image_meta();
+
+		if( $this->rotated ) {
+			return [ $this->height, $this->width ];
+		}
+
+		return [ $this->width, $this->height ];
+	}
+
+
 	private function get_default_args() {
 
 		$this->load_image_meta();
@@ -498,15 +516,15 @@ class Image {
 	function get_image_url( $args = [] ) {
 
 		if( ! empty($args['width']) && empty($args['height']) ) {
-			$this->load_image_meta();
-			$args['height'] = round($args['width'] * $this->height/$this->width);
+			[ $display_width, $display_height ] = $this->get_display_dimensions();
+			$args['height'] = round($args['width'] * $display_height/$display_width);
 		} elseif( ! empty($args['height']) && empty($args['width']) ) {
-			$this->load_image_meta();
-			$args['width'] = round($args['height'] * $this->width/$this->height);
+			[ $display_width, $display_height ] = $this->get_display_dimensions();
+			$args['width'] = round($args['height'] * $display_width/$display_height);
 		} elseif( empty($args['width']) && empty($args['height']) ) {
 			// no dimensions requested (e.g. single image downloads): use the original size, scaled down to the max image dimension if needed
-			$this->load_image_meta();
-			[ $args['width'], $args['height'] ] = $this->get_scaled_image_dimensions( $this->width, $this->height );
+			[ $display_width, $display_height ] = $this->get_display_dimensions();
+			[ $args['width'], $args['height'] ] = $this->get_scaled_image_dimensions( $display_width, $display_height );
 		}
 
 		$max_image_dimension = $this->get_max_image_dimension();
@@ -676,6 +694,8 @@ class Image {
 
 		$picture = $this->get_picture_srcset( $width );
 
+		[ $display_width, $display_height ] = $this->get_display_dimensions();
+
 		$main_src = $this->get_image_url([
 			'width' => $width,
 			'height' => $height,
@@ -713,7 +733,7 @@ class Image {
 						$image_url_args['crop'] = true;
 						$image_url_args['fit'] = $fit;
 					} else {
-						$image_url_args['height'] = round($image_url_args['width']*$this->height/$this->width);
+						$image_url_args['height'] = round($image_url_args['width']*$display_height/$display_width);
 						$image_url_args['crop'] = false;
 					}
 
@@ -817,7 +837,12 @@ class Image {
 		$this->load_image_meta();
 
 		if( $args['width'] && ! $args['height'] ) {
-			$args['height'] = $args['width']*$this->height/$this->width;
+			[ $display_width, $display_height ] = $this->get_display_dimensions();
+			$args['height'] = round($args['width'] * $display_height/$display_width);
+			$args['crop'] = false;
+		} elseif( $args['height'] && ! $args['width'] ) {
+			[ $display_width, $display_height ] = $this->get_display_dimensions();
+			$args['width'] = round($args['height'] * $display_width/$display_height);
 			$args['crop'] = false;
 		}
 
@@ -881,6 +906,7 @@ class Image {
 		if( $original_size_requested ) {
 
 			// no dimensions requested (e.g. zip files): use the original size, scaled down to the max image dimension if needed
+			[ $args['width'], $args['height'] ] = $this->get_display_dimensions();
 			[ $args['width'], $args['height'] ] = $this->get_scaled_image_dimensions( $args['width'], $args['height'] );
 
 		} else {
@@ -893,12 +919,9 @@ class Image {
 		$type = $args['type'];
 		$crop = $args['crop'] ?? false;
 
+		// NOTE: the driver rotates the image before resizing, so the target dimensions are in display orientation
 		$width = $args['width'];
 		$height = $args['height'];
-		if( $this->rotated && ! $crop ) {
-			$width = $args['height'];
-			$height = $args['width'];
-		}
 
 		$fit = 'cover';
 		if( $crop ) {
