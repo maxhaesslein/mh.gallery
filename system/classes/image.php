@@ -12,6 +12,7 @@ class Image {
 	
 	private $filename;
 	private $file_extension;
+	private $mime_type;
 	private $path;
 	private $gallery;
 	private $slug; // this is the slug for the url
@@ -325,6 +326,16 @@ class Image {
 		if( ! $this->gallery ) return false;
 
 		$url = trailing_slash_it($this->gallery->get_url().$this->slug);
+
+		return $url;
+	}
+
+
+	function get_original_url() {
+
+		if( ! $this->gallery ) return false;
+
+		$url = get_baseurl('original/').trailing_slash_it($this->gallery->get_url(false)).$this->slug;
 
 		return $url;
 	}
@@ -842,6 +853,24 @@ class Image {
 		$cache = new Cache( 'image', $cache_filename, true, true );
 
 		return $cache;
+	}
+
+
+	function output_original() {
+		// NOTE: this assumes we did not output any headers or HTML yet!
+
+		$this->load_image_meta();
+
+		if( isset($this->mime_type) ) {
+			header( 'Content-Type: '.$this->mime_type );
+		} else {
+			header( 'Content-Type: application/octet-stream' );
+		}
+
+		header( 'Content-Length: '.$this->get_original_filesize() );
+
+		readfile( $this->path );
+		exit;
 	}
 
 

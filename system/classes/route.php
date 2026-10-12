@@ -46,7 +46,7 @@ class Route {
 
 
 		$mode = false;
-		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'admin' ]) ) {
+		if( count($request) > 0 && in_array($request[0], [ 'img', 'api', 'download', 'original', 'admin' ]) ) {
 			$mode = array_shift($request);
 		}
 
@@ -264,6 +264,25 @@ class Route {
 				$template_name = '404';
 				if( $gallery && $gallery->is_download_gallery_enabled() ) {
 					$template_name = 'download';
+				}
+			}
+
+		} elseif( $mode == 'original' ) {
+
+			if( $gallery && $gallery->is_password_protected() && ! $gallery->password_provided() ) {
+				$template_name = '401-password';
+			} elseif( $gallery && $gallery->is_secret() && ! $gallery->secret_provided() ) {
+				$template_name = '401-secret';
+			} else {
+				$template_name = '404';
+
+				if( $gallery && $gallery->is_download_image_enabled() && count($request) ) {
+					$image_name = array_pop($request);
+
+					$image = $gallery->get_image($image_name);
+					if( $image ) {
+						$template_name = 'original-output';
+					}
 				}
 			}
 
