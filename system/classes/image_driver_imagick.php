@@ -26,9 +26,6 @@ class Image_Driver_Imagick extends Image_Driver {
 
 		if( $type == 'jpeg' ) $type = 'jpg';
 
-		// config can have 'webp_enabled', 'avif_enabled' and so on ..
-		if( $type != 'jpg' && ! get_config($type.'_enabled') ) return false;
-
 		$format = strtoupper($type);
 		if( $type == 'jpg' ) $format = 'JPEG';
 

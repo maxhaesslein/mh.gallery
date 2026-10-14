@@ -27,9 +27,6 @@ class Image_Driver_GD extends Image_Driver {
 
 		if( $type == 'jpg' || $type == 'jpeg' ) return true;
 
-		// config can have 'webp_enabled', 'avif_enabled' and so on ..
-		if( ! get_config($type.'_enabled') ) return false;
-
 		if( ! defined('IMAGETYPE_'.strtoupper($type)) ) return false;
 
 		if( ! function_exists('imagecreatefrom'.$type) ) return false;

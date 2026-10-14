@@ -544,7 +544,8 @@ class Image {
 
 		$args = [
 			'width' => 150,
-			'quality' => 50
+			'quality' => 50,
+			'type' => 'jpg'
 		];
 
 		return $this->get_image_url($args);
@@ -663,6 +664,34 @@ class Image {
 	}
 
 
+	private function get_srcset_urls( $type, $sources, $width, $height, $crop, $fit ) {
+
+		[ $display_width, $display_height ] = $this->get_display_dimensions();
+
+		$srcset = [];
+
+		foreach( $sources as $size => $image_url_args ) {
+
+			$image_url_args['type'] = $type;
+
+			if( $crop ) {
+				$image_url_args['height'] = round($image_url_args['width']*$height/$width);
+				$image_url_args['crop'] = true;
+				$image_url_args['fit'] = $fit;
+			} else {
+				$image_url_args['height'] = round($image_url_args['width']*$display_height/$display_width);
+				$image_url_args['crop'] = false;
+			}
+
+			$image_url = $this->get_image_url($image_url_args);
+
+			$srcset[] = $image_url.' '.$size;
+		}
+
+		return implode(', ', $srcset);
+	}
+
+
 	function get_html( $args = [], $sizes = false, $lazyloading = true ) {
 
 		$this->load_image_meta();
@@ -694,8 +723,6 @@ class Image {
 
 		$picture = $this->get_picture_srcset( $width );
 
-		[ $display_width, $display_height ] = $this->get_display_dimensions();
-
 		$main_src = $this->get_image_url([
 			'width' => $width,
 			'height' => $height,
@@ -716,53 +743,37 @@ class Image {
 		$html .= '<div class="image-container" style="'.$style.'">';
 			$html .= '<picture'.get_class_attribute($classes).' style="aspect-ratio: '.$width.'/'.$height.';">';
 
-			foreach( $picture as $type => $sources ) {
+			$srcset_formats = get_config('srcset');
+			if( ! is_array($srcset_formats) ) $srcset_formats = [];
+
+			foreach( $srcset_formats as $type ) {
+
+				// NOTE: jpg is the mandatory fallback of the <picture> element and is always output as <img> below, no matter its position in the 'srcset' option
+				if( $type == 'jpg' ) continue;
+
+				if( ! isset($picture[$type]) ) {
+					debug( 'unknown image type in the srcset option', $type );
+					continue;
+				}
 
 				if( ! $this->type_supported($type) ) {
 					continue;
 				}
 
-				$srcset = [];
-
-				foreach( $sources as $size => $image_url_args ) {
-
-					$image_url_args['type'] = $type;
-
-					if( $crop ) {
-						$image_url_args['height'] = round($image_url_args['width']*$height/$width);
-						$image_url_args['crop'] = true;
-						$image_url_args['fit'] = $fit;
-					} else {
-						$image_url_args['height'] = round($image_url_args['width']*$display_height/$display_width);
-						$image_url_args['crop'] = false;
-					}
-
-					$image_url = $this->get_image_url($image_url_args);
-
-					$srcset[] = $image_url.' '.$size;
-				}
-
-				$srcset = implode(', ', $srcset);
-
-
-				if( $type == 'jpg' ) { 
-
-					$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
-						if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
-						else $html .= ' fetchpriority="high" decoding="sync"';
-					if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-					$html .= 'srcset="'.$srcset.'">';
-
-				} else { // webp/avif/...
-
-					$html .= '<source ';
-					if( $sizes ) $html .= 'sizes="'.$sizes.'" ';
-					$html .= 'srcset="'.$srcset.'" type="image/'.$type.'">';
-
-				}
-
+				$html .= '<source';
+				if( $sizes ) $html .= ' sizes="'.$sizes.'"';
+				$html .= ' srcset="'.$this->get_srcset_urls( $type, $picture[$type], $width, $height, $crop, $fit ).'" type="image/'.$type.'">';
 
 			}
+
+			$html .= '<img src="'.$main_src.'" width="'.$width.'" height="'.$height.'"';
+				if( $lazyloading ) $html .= ' loading="lazy" decoding="async"';
+				else $html .= ' fetchpriority="high" decoding="sync"';
+			if( in_array('jpg', $srcset_formats, true) ) {
+				if( $sizes ) $html .= ' sizes="'.$sizes.'"';
+				$html .= ' srcset="'.$this->get_srcset_urls( 'jpg', $picture['jpg'], $width, $height, $crop, $fit ).'"';
+			}
+			$html .= '>';
 
 			$html .= '</picture>';
 		$html .= '</div>'; // .image-container

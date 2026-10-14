@@ -150,7 +150,7 @@ All thumbnails and images will be resized on view. The resized images will be au
 
 ### Modern image formats (WEBP/AVIF)
 
-WEBP and AVIF support are enabled by default. You can disable them by adding `'webp_enabled' => false` and `'avif_enabled' => false` to the `custom/config.php`.
+The config option `srcset` controls which formats are offered as `<source>` elements in the generated `<picture>` element, and in which priority order: `'srcset' => [ 'avif', 'webp', 'jpg' ]` (the default). Remove a format to stop offering it, for example `'srcset' => [ 'webp', 'jpg' ]` to disable avif. To exclude filetypes as source images in galleries, remove them from the `image_extensions` option.
 
 There is still an additional step, that checks if your server environment supports WEBP or AVIF. For AVIF, you need at least `PHP 8.1`, `GD` compiled with AVIF support and `libavif v.0.8.2` or higher (or the `imagick` image driver with AVIF support).
 
