@@ -1,8 +1,10 @@
-v.0.13.0-dev
+# Changelog
 
-breaking change: the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option)
+## v.0.13.0-dev
 
-you should delete the content of the 'cache/' folder after this update, to cleanly regenerate all images and zip archives.
+**breaking change:** the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option)
+
+you should delete the content of the `cache/` folder after this update, to cleanly regenerate all images and zip archives.
 
 - fix transposed dimensions of images with an exif orientation (5-8): the detail image was cropped, and previews, srcset and download files did not match the dimensions in their filenames
 - new optional `imagick` image driver (config option `image_driver`); with this driver, the ICC color profile is kept by default (`keep_colorprofile`), and exif data can optionally be kept (`keep_exif`); the two `keep_*` options can also be set per gallery via `gallery.txt`
@@ -12,14 +14,14 @@ you should delete the content of the 'cache/' folder after this update, to clean
 - the navigation arrows on the single image page now automatically switch between a light and dark color, based on the brightness of the image behind them
 
 
-v.0.12.1
+## v.0.12.1
 
 - fix single image downloads
 - new config option `max_image_dimension` to limit the dimensions of generated images; default is 4000px, larger images are scaled down proportionally (replaces the hardcoded 5000px limit from v.0.12.0)
 - single image downloads now serve the original file as it is on the server, including all metadata, if `download_filetype` is set to `false` (zip downloads already behaved this way)
 
 
-v.0.12.0
+## v.0.12.0
 
 security improvements. this update is recommended for all users.
 
@@ -40,20 +42,20 @@ security improvements. this update is recommended for all users.
 - new config option `client_ip_source` to configure the client ip detection (only use forwarded headers behind a trusted reverse proxy)
 
 
-v.0.11.0
+## v.0.11.0
 
 - very small preview image, that gets generated and loaded first; this will be shown in the overview, and while loading the full size image in the detail view
 - reworked js navigation in the detail view, this should now be much faster, especially if fullsize images are not generated yet
 
 
-v.0.10.2
+## v.0.10.2
 
 - added `thumbnail_fit` option; this defaults to `cover`, but can also be set to `contain`
 - updated german translation
 - small bug fixes and improvements
 
 
-v.0.10.1
+## v.0.10.1
 
 - change HTML title to 'loading …' while waiting for ajax response
 - allow custom language files in `/custom/languages/{language}.php` (see `README.md` for details)
@@ -63,25 +65,25 @@ v.0.10.1
 - if ajax request fails, the complete target page gets loaded instead
 
 
-v.0.10.0
+## v.0.10.0
 
 - added language support
 - added german translation (set the config option `site_lang` to `de`)
 - bugfix for 'download' submenu on touch devices
 
 
-v.0.9.0
+## v.0.9.0
 
-breaking change: new 'information' overlay, which is enabled by default
+**breaking change:** new 'information' overlay, which is enabled by default
 
 - image view: new 'information' icon that shows some information like camera model, aperture, focal length, and other, if exif information is available. disable via config option `'camera_information' => false`
 - small design enhancements
 - bugfix: 'overview' button is hidden, if root gallery is disabled
 
 
-v.0.8.0
+## v.0.8.0
 
-breaking change: renamed some config options (see below). if you use them, you need to update your `custom/config.php` or `gallery.txt` files. you can also delete all files inside `cache/zip/`, because all zip files will be re-created with this update
+**breaking change:** renamed some config options (see below). if you use them, you need to update your `custom/config.php` or `gallery.txt` files. you can also delete all files inside `cache/zip/`, because all zip files will be re-created with this update
 
 - renamed the config option `default_image_quality` to `image_quality_jpg` and `default_modern_image_quality` to `image_quality_webp` and `image_quality_avif`
 - renamed config options `download_image_enabled` to `download_image` and `download_gallery_enabled` to `download_gallery`
@@ -91,16 +93,16 @@ breaking change: renamed some config options (see below). if you use them, you n
 - small design enhancements
 
 
-v.0.7.1
+## v.0.7.1
 
 - added password protected galleries; see 'Password Protected Galleries' in the `README.md`
 - admin session handling is now based on cache files, so we can delete the (admin-)cache to terminate all sessions
 - new config options `admin_cache_lifetime` and `session_cache_lifetime` which both default to 1 day
 
 
-v.0.7.0
+## v.0.7.0
 
-breaking change: secret galleries will now be visible in the overview; add `hidden: true` to the `gallery.txt` to hide them again. sub-galleries of secret galleries will now automatically inherit the secret of their parent, if they don't have their own secret.
+**breaking change:** secret galleries will now be visible in the overview; add `hidden: true` to the `gallery.txt` to hide them again. sub-galleries of secret galleries will now automatically inherit the secret of their parent, if they don't have their own secret.
 
 - basic admin area, that lists all available galleries with their sub-galleries, even hidden and secret galleries; see 'admin area' in the README.md for details
 - changed the behaviour of secret galleries: they will now be visible in the overview (if they are not set to `hidden: true`), but their thumbnail will be blank; after the gallery is unlocked by visiting the secret link, the thumbnail will be visible
@@ -109,7 +111,7 @@ breaking change: secret galleries will now be visible in the overview; add `hidd
 - bugfix: don't hide galleries that have sub-galleries, but no images
 
 
-v.0.6.8
+## v.0.6.8
 
 - default to jpg for main source image, even if source file format is something else
 - icons are now implemented as masks, and the color is set via CSS
@@ -117,7 +119,7 @@ v.0.6.8
 - small design tweaks
 
 
-v.0.6.7
+## v.0.6.7
 
 - the config option `avif_enabled` now defaults to `true`; the additional checks for server compatibility seem to work correctly, so even if avif is not supported, nothing should break; if you have problems, add `'avif_enabled' => false` to your `custom/config.php`
 - source images can now be of type `avif`
@@ -127,13 +129,13 @@ v.0.6.7
 - updated some descriptions and comments
 
 
-v.0.6.6
+## v.0.6.6
 
 - fixed spacing for lightmode-toggle, if image and gallery download is disabled
 - now released under the GNU General Public License (see LICENSE.md for details)
 
 
-v.0.6.5
+## v.0.6.5
 
 - removed swipe navigation (has problems with image zoom)
 - don't hide elements, if device has a touchscreen
@@ -141,7 +143,7 @@ v.0.6.5
 - bugfix: show loading indicator in lightmode
 
 
-v.0.6.4
+## v.0.6.4
 
 you may want to delete all avif and webp files inside the `cache/image/` folder to regenerate those files with the correct quality
 
@@ -151,7 +153,7 @@ you may want to delete all avif and webp files inside the `cache/image/` folder 
 - updated thumbnail hover effect
 
 
-v.0.6.3
+## v.0.6.3
 
 - design update
 - the image preloader now selects the correct image when the aspect ratio changes from one image to the next
@@ -159,7 +161,7 @@ v.0.6.3
 - added favicon
 
 
-v.0.6.2
+## v.0.6.2
 
 - when using a random image sort order, the sort order is now kept for the session, so that image navigation works correctly
 - allow setting cache lifetime by type; the obsolete config option `zip_lifetime` is re-added as `zip_cache_lifetime`
@@ -167,7 +169,7 @@ v.0.6.2
 - small bug fixes
 
 
-v.0.6.1
+## v.0.6.1
 
 - added simple footer menu; use config option `footer_menu` to add entries
 - refresh lifetime of cached images, so resized images that are still in use do not expire
@@ -175,7 +177,7 @@ v.0.6.1
 - small bug fixes & enhancements
 
 
-v.0.6.0
+## v.0.6.0
 
 all cache files will be re-created with this update. old cache files should be cleaned out automatically after 30 days, but you can also manually delete everything in the `cache/` folder when updating to save some space.
 
@@ -188,7 +190,7 @@ all cache files will be re-created with this update. old cache files should be c
 - small bug fixes & enhancements
 
 
-v.0.5.4
+## v.0.5.4
 
 if you depend on automatically generated slugs, this update may introduce breaking changes (depending on your folder names)
 
@@ -202,14 +204,14 @@ if you depend on automatically generated slugs, this update may introduce breaki
 - when returning from a gallery overview to the parent overview, scroll the previous (sub-)gallery into view
 
 
-v.0.5.3
+## v.0.5.3
 
 - new sort option `random` to sort galleries randomly on every load
 - bugfix for inheritance of the download image & gallery options
 - code cleanup
 
 
-v.0.5.2
+## v.0.5.2
 
 - updated hash algorithm to murmur3, if available
 - internally, use leading `img-` instead of trailing `.` for image keys
@@ -217,13 +219,13 @@ v.0.5.2
 - when returning to overview, jump to last open image
 
 
-v.0.5.1
+## v.0.5.1
 
 - allow `_` in sanitized URIs
 - bugfix for thumbnail inheritance for sub-galleries
 
 
-v.0.5.0
+## v.0.5.0
 
 if you use the option `sort_order`, update it to `image_sort_order`
 
@@ -233,7 +235,7 @@ if you use the option `sort_order`, update it to `image_sort_order`
 - you can now add a `secret` to a gallery, to protect the link; see 'Hidden and Secret Galleries' in the `README.md`
 
 
-v.0.4.0
+## v.0.4.0
 
 when updating to this version, make sure to rename all `collection.txt` to `gallery.txt`
 
@@ -241,7 +243,7 @@ when updating to this version, make sure to rename all `collection.txt` to `gall
 - the aspect ratio of thumbnails can now be set via the new config option `thumbnail_aspect_ratio`
 
 
-v.0.3.1
+## v.0.3.1
 
 - new config option `chmod_folder` to control the permissions of folders created by this script (like the `cache` or `content` folder)
 - avif is now disabled by default; there is a new config option, `avif_enabled`, to enable avif support. There is still an additional check in the code, if avif is available in the server environment; you need to be at least on PHP 8.1 to use avif
@@ -249,7 +251,7 @@ v.0.3.1
 - if root `collection.txt` exists, but has no title, fall back to the site title
 
 
-v.0.3.0
+## v.0.3.0
 
 when updating to this version, make sure to delete all files in the `cache/image/` directory, as well as the `.htaccess` file in the root directory and then open the root URL to generate the new, updated `.htaccess` file.
 
@@ -261,19 +263,19 @@ when updating to this version, make sure to delete all files in the `cache/image
 - the avif `source` in the `picture` element does not get included, if the server does not support generating avif files
 
 
-v.0.2.1
+## v.0.2.1
 
 - bugfix for images rotated via exif
 - added robots.txt to .gitignore
 
 
-v.0.2.0
+## v.0.2.0
 
 - added collections, that can group multiple galleries into one 'subfolder' (see README.md)
 - social sharing images will now be automatically cropped
 
 
-v.0.1.5
+## v.0.1.5
 
 - try to preload the next image
 - added some prev/next image hints for the browser
@@ -281,7 +283,7 @@ v.0.1.5
 - use PHPs build-in autoloader to load class files (thanks to @pwaldhauer for pointing me in that direction)
 
 
-v.0.1.4
+## v.0.1.4
 
 - design tweaks
 - bugfix for image navigation in some galleries
@@ -289,21 +291,21 @@ v.0.1.4
 - gallery title & description: remove HTML tags that are not allowed; use 'allowed_tags' config option to re-define allowed tags (or set to false to allow all tags)
 
 
-v.0.1.3
+## v.0.1.3
 
 - allow sorting of images by filename, file modification date, exif date or .BridgeSort file (via config.php or gallery.txt; see README.md)
 - layout and design tweaks
 - enhanced navigation on mobile devices / touchscreens
 
 
-v.0.1.2
+## v.0.1.2
 
 - add gallery name to HTML title tag
 - add social sharing tags (Open Graph tags) to HTML head (can be disabled via 'site_sharing_tags' config option)
 - galleries can now have descriptions (add 'description: Lorem Ipsum ..' to a gallery.txt file); descriptions appear in the gallery overview and are added to the social sharing tags
 
 
-v.0.1.1
+## v.0.1.1
 
 - text updates
 - in image view, use Escape key to go back to the image overview
@@ -311,7 +313,7 @@ v.0.1.1
 - bugfix for opening generated zipfiles in Windows Explorer
 
 
-v.0.1.0
+## v.0.1.0
 
 initial release.
 
