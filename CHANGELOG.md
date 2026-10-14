@@ -1,8 +1,8 @@
 v.0.13.0-dev
 
-you should delete the content of the 'cache/' folder after this update, to cleanly regenerate all images and zip archives.
+breaking change: the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option)
 
-the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option)
+you should delete the content of the 'cache/' folder after this update, to cleanly regenerate all images and zip archives.
 
 - fix transposed dimensions of images with an exif orientation (5-8): the detail image was cropped, and previews, srcset and download files did not match the dimensions in their filenames
 - new optional `imagick` image driver (config option `image_driver`); with this driver, the ICC color profile is kept by default (`keep_colorprofile`), and exif data can optionally be kept (`keep_exif`); the two `keep_*` options can also be set per gallery via `gallery.txt`
