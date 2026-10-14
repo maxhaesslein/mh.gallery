@@ -714,14 +714,17 @@ body.template-image {
 			min-width: 50px;
 			height: 100%;
 			z-index: 42;
+			--arrow-width: 20px;
+			--arrow-height: 40px;
+			--arrow-offset: 40px;
 		}
 		
 			.template-image .navigation a:after {
 				content: "";
 				display: block;
-				width: 20px;
-				height: 40px;
-				margin-top: -20px;
+				width: var(--arrow-width);
+				height: var(--arrow-height);
+				margin-top: calc(var(--arrow-height) / -2);
 				position: absolute;
 				top: 50%;
 				background-color: var(--color-icon);
@@ -732,8 +735,9 @@ body.template-image {
 			}
 				
 				.template-image .navigation a.navigate-prev:after {
-					left: 40px;
+					left: var(--arrow-offset);
 					mask: url(../img/arrow-left.svg) no-repeat center center / contain;
+					background-color: var(--arrow-color-prev, var(--color-icon));
 				}
 
 			.template-image .navigation a.navigate-next {
@@ -741,8 +745,9 @@ body.template-image {
 			}
 
 				.template-image .navigation a.navigate-next:after {
-					right: 40px;
+					right: var(--arrow-offset);
 					mask: url(../img/arrow-right.svg) no-repeat center center / contain;
+					background-color: var(--arrow-color-next, var(--color-icon));
 				}
 
 			@media( hover: hover ) { /* has mouse */
@@ -764,18 +769,10 @@ body.template-image {
 
 			@media( max-width: 480px ) {
 
-				.template-image .navigation a:after {
-					width: 15px;
-					height: 20px;
-					margin-top: -10px;
-				}
-
-				.template-image .navigation a.navigate-prev:after {
-					left: 10px;
-				}
-
-				.template-image .navigation a.navigate-next:after {
-					right: 10px;
+				.template-image .navigation a {
+					--arrow-width: 15px;
+					--arrow-height: 20px;
+					--arrow-offset: 10px;
 				}
 
 			}

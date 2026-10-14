@@ -12,6 +12,7 @@
 function init() {
 	Lightmode.init();
 	Ajax.init();
+	ArrowContrast.init();
 	HideCursor.init();
 	KeyboardNavigation.init();
 	FullscreenButton.init();
@@ -232,6 +233,173 @@ const Ajax = {
 
 	updateTitle: function( newTitle ) {
 		document.title = newTitle;
+	}
+
+};
+
+
+const ArrowContrast = {
+
+	token: 0,
+
+	init: function(){
+
+		if( ! document.body.classList.contains('template-image') ) return;
+
+		ArrowContrast.update();
+
+		if( ! ArrowContrast.hasResizeListener ) {
+			ArrowContrast.hasResizeListener = true;
+
+			window.addEventListener( 'resize', function(){
+				ArrowContrast.update();
+			});
+		}
+
+	},
+
+	update: function(){
+
+		const token = ++ArrowContrast.token;
+
+		document.body.style.removeProperty('--arrow-color-prev');
+		document.body.style.removeProperty('--arrow-color-next');
+
+		const image = document.querySelector('.image-wrapper img');
+		const previewImage = Ajax.images && Ajax.images[Ajax.currentImageIndex];
+
+		if( ! image || ! previewImage ) return;
+
+		const contentRect = ArrowContrast.get_content_rect( image );
+
+		const prev = document.getElementById('navigate-prev');
+		const next = document.getElementById('navigate-next');
+
+		const preview = new Image();
+
+		preview.addEventListener( 'load', function(){
+
+			if( token !== ArrowContrast.token ) return;
+
+			if( prev ) ArrowContrast.apply( '--arrow-color-prev', preview, contentRect, ArrowContrast.get_arrow_rect(prev) );
+			if( next ) ArrowContrast.apply( '--arrow-color-next', preview, contentRect, ArrowContrast.get_arrow_rect(next) );
+
+		} );
+
+		preview.src = previewImage.preview_src;
+
+	},
+
+	get_content_rect: function( image ) {
+
+		// the image is displayed with object-fit: contain; calculate the rect of the visible image content
+		const rect = image.getBoundingClientRect();
+
+		const naturalWidth = image.naturalWidth || image.width;
+		const naturalHeight = image.naturalHeight || image.height;
+
+		if( ! naturalWidth || ! naturalHeight ) return rect;
+
+		const scale = Math.min( rect.width / naturalWidth, rect.height / naturalHeight );
+
+		const width = naturalWidth * scale;
+		const height = naturalHeight * scale;
+
+		return {
+			left: rect.left + (rect.width - width) / 2,
+			top: rect.top + (rect.height - height) / 2,
+			width: width,
+			height: height
+		};
+
+	},
+
+	get_arrow_rect: function( el ) {
+
+		// the arrow is a masked pseudo element; its geometry is defined as custom properties in the css
+		const style = getComputedStyle( el );
+
+		const width = parseFloat( style.getPropertyValue('--arrow-width') );
+		const height = parseFloat( style.getPropertyValue('--arrow-height') );
+		const offset = parseFloat( style.getPropertyValue('--arrow-offset') );
+
+		if( ! width || ! height || ! offset ) return false;
+
+		const rect = el.getBoundingClientRect();
+		const centerY = rect.top + rect.height / 2;
+
+		const centerX = el.classList.contains('navigate-prev') ? rect.left + offset + width / 2 : rect.right - offset - width / 2;
+
+		return {
+			left: centerX - width / 2,
+			top: centerY - height / 2,
+			width: width,
+			height: height
+		};
+
+	},
+
+	apply: function( property, preview, contentRect, arrowRect ) {
+
+		if( ! arrowRect ) return;
+
+		// only recolor the arrow if it overlaps the image enough; otherwise keep the theme color
+		const intersectionWidth = Math.min( arrowRect.left + arrowRect.width, contentRect.left + contentRect.width ) - Math.max( arrowRect.left, contentRect.left );
+		const intersectionHeight = Math.min( arrowRect.top + arrowRect.height, contentRect.top + contentRect.height ) - Math.max( arrowRect.top, contentRect.top );
+
+		if( intersectionWidth <= 0 || intersectionHeight <= 0 ) return;
+		if( intersectionWidth * intersectionHeight < arrowRect.width * arrowRect.height * 0.25 ) return;
+
+		// sample the area around the arrow, limited to the image
+		const left = Math.max( arrowRect.left - arrowRect.width, contentRect.left );
+		const top = Math.max( arrowRect.top - arrowRect.height, contentRect.top );
+		const right = Math.min( arrowRect.left + arrowRect.width * 2, contentRect.left + contentRect.width );
+		const bottom = Math.min( arrowRect.top + arrowRect.height * 2, contentRect.top + contentRect.height );
+
+		if( right - left < 1 || bottom - top < 1 ) return;
+
+		const canvas = document.createElement('canvas');
+		canvas.width = preview.naturalWidth;
+		canvas.height = preview.naturalHeight;
+
+		const context = canvas.getContext('2d');
+		if( ! context ) return;
+
+		context.drawImage( preview, 0, 0 );
+
+		const scaleX = preview.naturalWidth / contentRect.width;
+		const scaleY = preview.naturalHeight / contentRect.height;
+
+		const x = Math.floor( (left - contentRect.left) * scaleX );
+		const y = Math.floor( (top - contentRect.top) * scaleY );
+		const width = Math.max( 1, Math.ceil( (right - left) * scaleX ) );
+		const height = Math.max( 1, Math.ceil( (bottom - top) * scaleY ) );
+
+		let data;
+
+		try {
+			data = context.getImageData( x, y, width, height ).data;
+		} catch( e ) {
+			return;
+		}
+
+		let luminance = 0;
+
+		for( let i = 0; i < data.length; i += 4 ) {
+
+			const channels = [ data[i] / 255, data[i+1] / 255, data[i+2] / 255 ].map( function( value ) {
+				return value <= 0.03928 ? value / 12.92 : Math.pow( (value + 0.055) / 1.055, 2.4 );
+			} );
+
+			luminance += 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2];
+
+		}
+
+		luminance /= data.length / 4;
+
+		// 0.179 is the luminance where black and white have the same contrast ratio (WCAG)
+		document.body.style.setProperty( property, luminance > 0.179 ? '#000' : '#fff' );
+
 	}
 
 };

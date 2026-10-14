@@ -10,8 +10,6 @@
 	- at the beginning and end of gallery, wiggle the image to show that there are no more images
 	- fadeout and fadein images while loading?
 
-- prev/next arrows: add inverted outline to make them more visible on very bright (or dark) images
-
 - lightmode/darkmode toggle should be a dropdown, with 'lightmode', 'darkmode' and 'system preference'
 
 - theme support
