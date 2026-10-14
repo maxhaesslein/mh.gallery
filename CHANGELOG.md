@@ -2,7 +2,7 @@
 
 ## v.0.13.0-dev
 
-**breaking change:** the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option)
+**breaking change:** the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option); the avif srcset is now disabled by default to provide faster image generation
 
 you should delete the content of the `cache/` folder after this update, to cleanly regenerate all images and zip archives.
 
@@ -10,7 +10,7 @@ you should delete the content of the `cache/` folder after this update, to clean
 - new optional `imagick` image driver (config option `image_driver`); with this driver, the ICC color profile is kept by default (`keep_colorprofile`), and exif data can optionally be kept (`keep_exif`); the two `keep_*` options can also be set per gallery via `gallery.txt`
 - with the `imagick` image driver, images are converted to sRGB before the ICC color profile is removed, if `keep_colorprofile` is set to `false`; this way, wide gamut images keep their correct colors; the conversion requires `lcms` support, otherwise the color profile is just removed
 - downloads now keep the original date/time instead of the download time; the date is stored in .zip downloads as the entry date (exif date, or file modification date if no exif date is available) and sent as `Last-Modified` header for single image downloads; new config option `download_keep_date` (set to `false` to use the download time instead) which can also be set per gallery via `gallery.txt`
-- the `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` options were removed: source images of these formats are now always handled, as long as the image driver supports them (to exclude filetypes as gallery images, remove them from `image_extensions`); instead, the new option `srcset` controls which formats are offered in the `<picture>` srcset and in which priority order (default: `'srcset' => [ 'avif', 'webp', 'jpg' ]`); removing a format no longer affects source images, previews or downloads, so replace e.g. `'avif_enabled' => false` by removing `'avif'` from the `srcset` array; preview images are now always generated as jpg
+- the `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` options were removed: source images of these formats are now always handled, as long as the image driver supports them (to exclude filetypes as gallery images, remove them from `image_extensions`); instead, the new option `srcset` controls which formats are offered in the `<picture>` srcset and in which priority order; removing a format no longer affects source images, previews or downloads, so replace e.g. `'avif_enabled' => false` by removing `'avif'` from the `srcset` array; preview images are now always generated as jpg
 - the navigation arrows on the single image page now automatically switch between a light and dark color, based on the brightness of the image behind them
 
 

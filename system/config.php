@@ -109,8 +109,9 @@ return [
 	// add OpenGraph sharing tags to HTML head, for better link previews
 	'site_sharing_tags' => true,
 
-	// image formats that are offered as <source> elements in the generated <picture> srcset; the order defines the priority, because browsers use the first supported format; remove a format to stop offering it in the generated html; 'jpg' is always output as the fallback <img>, no matter its position here, but without a responsive srcset if 'jpg' is missing; images of these formats can still be used as source files, previews and downloads are not affected; to exclude filetypes as gallery images, remove them from 'image_extensions'; for webp & avif see 'modern image formats' in README.md for more details
-	'srcset' => [ 'avif', 'webp', 'jpg' ],
+	// image formats that are offered as <source> elements in the generated <picture> srcset; the order defines the priority; remove a format to stop offering it in the generated html
+	// avif is disabled by default, because it takes some time to generate
+	'srcset' => [ /*'avif',*/ 'webp', 'jpg' ],
 
 	// sort images by this option; can be 'filename', 'filedate' (file modification date), 'exifdate' (date recorderd in the exif metadata if available, or file modification date otherwise), 'bridge' (sort by a .BridgeSort file, created by Adobe Bridge) or 'random' (sort randomly on every visit); can be overwritten via gallery.txt
 	'image_sort_order' => 'filename',
