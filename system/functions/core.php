@@ -40,7 +40,7 @@ function get_baseurl( $path = false ) {
 function get_version() {
 	global $core;
 
-	$path = $core->get_abspath('system/version.txt');
+	$path = $core->get_abspath('VERSION');
 
 	return trim(file_get_contents($path));
 }
