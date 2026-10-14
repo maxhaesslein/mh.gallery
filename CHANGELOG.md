@@ -1,6 +1,6 @@
 # Changelog
 
-## v.0.13.0-dev
+## v.0.13.0
 
 **breaking change:** the options `png_enabled`, `gif_enabled`, `webp_enabled` and `avif_enabled` were removed and replaced by the `srcset` option (and the existing `image_extensions` option); the avif srcset is now disabled by default to provide faster image generation
 
